@@ -1,0 +1,70 @@
+{
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "seq_lengths": [
+    512,
+    1024,
+    2048
+  ],
+  "per_seq_len": {
+    "512": {
+      "seq_len": 512,
+      "tq_compress_1token_ms": 0.33972000000126457,
+      "sq_compress_1token_ms": 0.18645249999948987,
+      "tq_attention_ms": 0.22659400000080154,
+      "sq_attention_ms": 0.07081800000108274,
+      "tq_per_step_ms": 0.5663140000020661,
+      "sq_per_step_ms": 0.2572705000005726,
+      "sq_faster_than_tq": true,
+      "sq_speedup_over_tq": 2.2012395513702723,
+      "attn_speedup_sq_over_tq": 3.199666751353288
+    },
+    "1024": {
+      "seq_len": 1024,
+      "tq_compress_1token_ms": 0.36733449999815093,
+      "sq_compress_1token_ms": 0.21343349999902728,
+      "tq_attention_ms": 0.2097899999995434,
+      "sq_attention_ms": 0.06910799999992889,
+      "tq_per_step_ms": 0.5771244999976943,
+      "sq_per_step_ms": 0.28254149999895617,
+      "sq_faster_than_tq": true,
+      "sq_speedup_over_tq": 2.042618517987009,
+      "attn_speedup_sq_over_tq": 3.0356832783434515
+    },
+    "2048": {
+      "seq_len": 2048,
+      "tq_compress_1token_ms": 0.3535519999999792,
+      "sq_compress_1token_ms": 0.1862745000007493,
+      "tq_attention_ms": 0.2148120000011744,
+      "sq_attention_ms": 0.06680249999924115,
+      "tq_per_step_ms": 0.5683640000011536,
+      "sq_per_step_ms": 0.25307699999999045,
+      "sq_faster_than_tq": true,
+      "sq_speedup_over_tq": 2.2458145149546387,
+      "attn_speedup_sq_over_tq": 3.2156281576829397
+    }
+  },
+  "crossover_seq_len": 512,
+  "attn_speedup_sq_over_tq_at_max_seqlen": 3.2156281576829397,
+  "sq_compress_slowdown_vs_tq": 0.5268659207153693,
+  "narrative": "At sequence lengths beyond 512 tokens, SpectralQuant's per-step latency is lower than TurboQuant's despite 0.5x slower compression, because the 3.2x attention speedup amortizes over the growing cache.",
+  "timing_table": [
+    {
+      "seq_len": 512,
+      "tq_per_step_ms": 0.5663140000020661,
+      "sq_per_step_ms": 0.2572705000005726,
+      "sq_faster": true
+    },
+    {
+      "seq_len": 1024,
+      "tq_per_step_ms": 0.5771244999976943,
+      "sq_per_step_ms": 0.28254149999895617,
+      "sq_faster": true
+    },
+    {
+      "seq_len": 2048,
+      "tq_per_step_ms": 0.5683640000011536,
+      "sq_per_step_ms": 0.25307699999999045,
+      "sq_faster": true
+    }
+  ]
+}

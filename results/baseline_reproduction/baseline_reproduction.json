@@ -1,0 +1,46 @@
+{
+  "phase": "phase0_baseline",
+  "seed": 42,
+  "device": "cuda",
+  "quick_mode": true,
+  "model_name": "Qwen/Qwen2.5-1.5B",
+  "targets": {
+    "compression_ratio": 5.02,
+    "cosine_similarity": 0.985,
+    "throughput_tok_per_s": 144.7
+  },
+  "tolerance": 0.05,
+  "turboquant_dir": "/root/spectralquant/turboquant_cutile",
+  "required_files_present": [
+    "host.py",
+    "compress.py",
+    "decompress.py",
+    "attention.py",
+    "codebook.py",
+    "constants.py"
+  ],
+  "n_calibration_samples": 50,
+  "checks": {
+    "compression_ratio": {
+      "actual": 5.3333,
+      "target": 5.02,
+      "within_tolerance": false
+    },
+    "cosine_similarity": {
+      "actual": 0.9525,
+      "target": 0.985,
+      "within_tolerance": true
+    },
+    "throughput_tok_per_s": {
+      "actual": 41.64,
+      "target": 144.7,
+      "within_tolerance": false
+    }
+  },
+  "all_within_tolerance": false,
+  "status": "FAILED_REPRODUCTION",
+  "failed_metrics": [
+    "compression_ratio",
+    "throughput_tok_per_s"
+  ]
+}

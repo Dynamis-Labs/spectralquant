@@ -1,0 +1,6 @@
+{
+  "n_layers": 28,
+  "n_kv_heads": 2,
+  "model": "Qwen/Qwen2.5-1.5B",
+  "format": "per_layer_head_npz"
+}

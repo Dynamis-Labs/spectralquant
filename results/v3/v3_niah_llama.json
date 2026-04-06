@@ -1,0 +1,295 @@
+{
+  "model": "meta-llama/Llama-3.1-8B-Instruct",
+  "records": [
+    {
+      "ctx_len": 4096,
+      "depth": 0.1,
+      "method": "fp16",
+      "correct": false,
+      "response": " than previously believed by mainstream historians.\n\nThe history of artificial intelligence spans decades of research and innovation across multiple disciplines. Scientists and engineers have worked t",
+      "actual_tokens": 4096
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.1,
+      "method": "tq",
+      "correct": false,
+      "response": " than previously believed by mainstream historians.\n\nThe magic number  The history of artificial intelligence spans decades of artificial intelligence spans decades of artificial intelligence spans de",
+      "actual_tokens": 4096
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.1,
+      "method": "sq",
+      "correct": false,
+      "response": " than previously believed by mainstream historians.\n\nThe magic number  The history of artificial intelligence spans decades of artificial intelligence spans decades of artificial intelligence spans de",
+      "actual_tokens": 4096
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.25,
+      "method": "fp16",
+      "correct": false,
+      "response": " older than previously believed by mainstream historians.\n\nThe history of artificial intelligence spans decades of research and innovation across multiple disciplines. Scientists and engineers have wo",
+      "actual_tokens": 4096
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.25,
+      "method": "tq",
+      "correct": false,
+      "response": " older than previously believed by mainstream historians.\n\nThe history of the magic number of artificial intelligence spans decades of artificial intelligence spans decades of artificial intelligence ",
+      "actual_tokens": 4096
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.25,
+      "method": "sq",
+      "correct": false,
+      "response": " older than previously believed by mainstream historians.\n\nThe history of the magic number of artificial intelligence spans decades of artificial intelligence spans decades of artificial intelligence ",
+      "actual_tokens": 4096
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.5,
+      "method": "fp16",
+      "correct": false,
+      "response": " believed by mainstream historians.\n\nThe history of artificial intelligence spans decades of research and innovation across multiple disciplines. Scientists and engineers have worked tirelessly to dev",
+      "actual_tokens": 4096
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.5,
+      "method": "tq",
+      "correct": false,
+      "response": " believed by mainstream historians.",
+      "actual_tokens": 4096
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.5,
+      "method": "sq",
+      "correct": false,
+      "response": " believed by mainstream historians.",
+      "actual_tokens": 4096
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.75,
+      "method": "fp16",
+      "correct": false,
+      "response": " spans decades of research and innovation across multiple disciplines. Scientists and engineers have worked tirelessly to develop systems capable of reasoning, learning, and solving complex problems t",
+      "actual_tokens": 4096
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.75,
+      "method": "tq",
+      "correct": false,
+      "response": " spans decades of artificial intelligence spans decades of artificial intelligence spans decades of artificial intelligence spans decades of artificial intelligence spans decades of artificial intelli",
+      "actual_tokens": 4096
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.75,
+      "method": "sq",
+      "correct": false,
+      "response": " spans decades of artificial intelligence spans decades of artificial intelligence spans decades of artificial intelligence spans decades of artificial intelligence spans decades of artificial intelli",
+      "actual_tokens": 4096
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.9,
+      "method": "fp16",
+      "correct": false,
+      "response": " spans decades of research and innovation across multiple disciplines. Scientists and engineers have worked tirelessly to develop systems capable of reasoning, learning, and solving complex problems t",
+      "actual_tokens": 4096
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.9,
+      "method": "tq",
+      "correct": false,
+      "response": " spans decades of artificial intelligence spans decades of artificial intelligence spans decades of artificial intelligence spans decades of artificial intelligence spans decades of artificial intelli",
+      "actual_tokens": 4096
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.9,
+      "method": "sq",
+      "correct": false,
+      "response": " spans decades of artificial intelligence spans decades of artificial intelligence spans decades of artificial intelligence spans decades of artificial intelligence spans decades of artificial intelli",
+      "actual_tokens": 4096
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.1,
+      "method": "fp16",
+      "correct": false,
+      "response": " and solving complex problems that were once thought to be exclusively within the domain of human cognition. The field has seen remarkable transformations from early symbolic approaches to modern",
+      "actual_tokens": 8192
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.1,
+      "method": "tq",
+      "correct": false,
+      "response": " and solving complex problems that were once thought to the magic number of the magic number of the magic number of the history of the magic number of the magic",
+      "actual_tokens": 8192
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.1,
+      "method": "sq",
+      "correct": false,
+      "response": " and solving complex problems that were once thought to the magic number of the magic number of the magic number of the history of the magic number of the magic",
+      "actual_tokens": 8192
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.25,
+      "method": "fp16",
+      "correct": false,
+      "response": ", and solving complex problems that were once thought to be exclusively within the domain of human cognition. The field has seen remarkable transformations from early symbolic approaches to",
+      "actual_tokens": 8192
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.25,
+      "method": "tq",
+      "correct": false,
+      "response": ", and solving complex problems that were once thought to create more",
+      "actual_tokens": 8192
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.25,
+      "method": "sq",
+      "correct": false,
+      "response": ", and solving complex problems that were once thought to create more",
+      "actual_tokens": 8192
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.5,
+      "method": "fp16",
+      "correct": false,
+      "response": " and solving complex problems that were once thought to be exclusively within the domain of human cognition. The field has seen remarkable transformations from early symbolic approaches to modern",
+      "actual_tokens": 8192
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.5,
+      "method": "tq",
+      "correct": false,
+      "response": " and solving complex problems that were once thought to the history of the history of the history of the history of the history of the history of the history of",
+      "actual_tokens": 8192
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.5,
+      "method": "sq",
+      "correct": false,
+      "response": " and solving complex problems that were once thought to the history of the history of the history of the history of the history of the history of the history of",
+      "actual_tokens": 8192
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.75,
+      "method": "fp16",
+      "correct": false,
+      "response": " within the domain of human cognition. The field has seen remarkable transformations from early symbolic approaches to modern deep learning paradigms.\n\nModern agriculture relies on a",
+      "actual_tokens": 8192
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.75,
+      "method": "tq",
+      "correct": false,
+      "response": " within the domain of human cognition.",
+      "actual_tokens": 8192
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.75,
+      "method": "sq",
+      "correct": false,
+      "response": " within the domain of human cognition.",
+      "actual_tokens": 8192
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.9,
+      "method": "fp16",
+      "correct": false,
+      "response": " within the domain of human cognition. The field has seen remarkable transformations from early symbolic approaches to modern deep learning paradigms.\n\nModern agriculture relies on a",
+      "actual_tokens": 8192
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.9,
+      "method": "tq",
+      "correct": false,
+      "response": " within the domain of human cognition.",
+      "actual_tokens": 8192
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.9,
+      "method": "sq",
+      "correct": false,
+      "response": " within the domain of human cognition.",
+      "actual_tokens": 8192
+    }
+  ],
+  "heatmap": {
+    "fp16": {
+      "4096": {
+        "0.1": false,
+        "0.25": false,
+        "0.5": false,
+        "0.75": false,
+        "0.9": false
+      },
+      "8192": {
+        "0.1": false,
+        "0.25": false,
+        "0.5": false,
+        "0.75": false,
+        "0.9": false
+      }
+    },
+    "tq": {
+      "4096": {
+        "0.1": false,
+        "0.25": false,
+        "0.5": false,
+        "0.75": false,
+        "0.9": false
+      },
+      "8192": {
+        "0.1": false,
+        "0.25": false,
+        "0.5": false,
+        "0.75": false,
+        "0.9": false
+      }
+    },
+    "sq": {
+      "4096": {
+        "0.1": false,
+        "0.25": false,
+        "0.5": false,
+        "0.75": false,
+        "0.9": false
+      },
+      "8192": {
+        "0.1": false,
+        "0.25": false,
+        "0.5": false,
+        "0.75": false,
+        "0.9": false
+      }
+    }
+  }
+}

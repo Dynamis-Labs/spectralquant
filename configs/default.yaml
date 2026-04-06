@@ -1,0 +1,107 @@
+# SpectralQuant Default Configuration
+# Full experiment run on B200 GPU
+
+# ---------------------------------------------------------------------------
+# Model config
+# ---------------------------------------------------------------------------
+model:
+  name: "Qwen/Qwen2.5-1.5B-Instruct"
+  torch_dtype: "auto"
+  device_map: "auto"
+  # Set to "Llama-3.1-8B" if compute permits for additional ablation
+  secondary_model: null
+
+# ---------------------------------------------------------------------------
+# Calibration config
+# ---------------------------------------------------------------------------
+calibration:
+  dataset: "wikitext"
+  subset: "wikitext-103-raw-v1"
+  split: "train"
+  n_samples: 1000
+  max_length: 2048
+  seed: 42
+  # Save calibrated rotation matrices to disk for reuse
+  save_path: "results/calibration/"
+
+# ---------------------------------------------------------------------------
+# Quantization config
+# ---------------------------------------------------------------------------
+quantization:
+  avg_bits: 3.0
+  # Bit widths to sweep in experiments
+  bit_widths: [2.0, 2.5, 3.0, 4.0]
+  # Lloyd-Max convergence parameters
+  lloyd_max_iterations: 50
+  lloyd_max_tolerance: 1.0e-6
+  # Non-uniform allocation: bits for semantic (top d_eff) vs tail dimensions
+  # These are computed automatically from avg_bits and d_eff, but can be overridden
+  b_high: null  # null = auto-computed
+  b_low: null   # null = auto-computed
+  # Whether to apply QJL correction selectively (only top d_eff) or fully
+  selective_qjl: true
+
+# ---------------------------------------------------------------------------
+# Experiment config
+# ---------------------------------------------------------------------------
+experiment:
+  n_seeds: 3
+  sequence_lengths: [512, 1024, 2048, 4096, 8192, 16384]
+  # Number of layers to sample for attention quality tests (same as cuTile repo)
+  sampled_layers: 5
+  # Number of query probes per head (same as cuTile repo)
+  query_probes_per_head: 8
+  # Output directory for all results
+  output_dir: "results/"
+  # Whether to save intermediate results (useful for debugging)
+  save_intermediates: true
+
+# ---------------------------------------------------------------------------
+# Eigenspectral analysis config (Phase 1)
+# ---------------------------------------------------------------------------
+eigenspectral:
+  # Participation ratio threshold (proportion of variance for d_eff)
+  variance_threshold_95: 0.95
+  variance_threshold_99: 0.99
+  # Minimum spectral gap to consider "strong"
+  gap_threshold_strong: 10.0
+  gap_threshold_moderate: 5.0
+  # Whether to use per-head, per-layer, or global d_eff
+  granularity: "per_head"  # options: "global", "per_layer", "per_head"
+
+# ---------------------------------------------------------------------------
+# Benchmarks config (Phase 3, Experiment 4)
+# ---------------------------------------------------------------------------
+benchmarks:
+  tasks:
+    - "longbench"
+    - "needle_in_haystack"
+  longbench_datasets:
+    - "qasper"
+    - "multifieldqa_en"
+    - "hotpotqa"
+    - "2wikimqa"
+  niah_max_length: 32768
+  niah_depths: [0.1, 0.25, 0.5, 0.75, 0.9]
+
+# ---------------------------------------------------------------------------
+# Vector search config (Phase 3, Experiment 5)
+# ---------------------------------------------------------------------------
+vector_search:
+  embedding_model: "BAAI/bge-large-en-v1.5"
+  benchmark: "beir"
+  datasets:
+    - "nfcorpus"
+    - "fiqa"
+    - "scifact"
+  metrics: ["recall@1", "recall@10", "ndcg@10"]
+  bit_widths: [2, 3, 4, 8]
+
+# ---------------------------------------------------------------------------
+# Logging config
+# ---------------------------------------------------------------------------
+logging:
+  level: "INFO"
+  save_logs: true
+  log_dir: "results/logs/"
+  use_rich: true

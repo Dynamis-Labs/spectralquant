@@ -1,0 +1,176 @@
+{
+  "model_name": "Qwen/Qwen2.5-1.5B-Instruct",
+  "total_bits": 3,
+  "tq_mean_cosine_sim": 0.970284141600132,
+  "sq_mean_cosine_sim": 0.41865663044154644,
+  "mean_improvement": -0.5516275111585855,
+  "std_improvement": 0.06247296813579288,
+  "win_rate": 0.0,
+  "mean_d_eff": 3.0,
+  "mean_kappa": 1.3887730613350868,
+  "n_samples": 16,
+  "skipped": 14,
+  "elapsed_s": 9.35150671005249,
+  "per_head_results": [
+    {
+      "layer": 9,
+      "head": 0,
+      "seq_len": 167,
+      "d_eff": 4,
+      "kappa": 1.0467602014541626,
+      "tq_cosine_sim": 0.9802731275558472,
+      "sq_cosine_sim": 0.4382861256599426,
+      "improvement": -0.5419870018959045
+    },
+    {
+      "layer": 9,
+      "head": 1,
+      "seq_len": 167,
+      "d_eff": 4,
+      "kappa": 1.1357688903808594,
+      "tq_cosine_sim": 0.9856376647949219,
+      "sq_cosine_sim": 0.5686593055725098,
+      "improvement": -0.4169783592224121
+    },
+    {
+      "layer": 18,
+      "head": 0,
+      "seq_len": 167,
+      "d_eff": 3,
+      "kappa": 1.9968470335006714,
+      "tq_cosine_sim": 0.9696091413497925,
+      "sq_cosine_sim": 0.34676510095596313,
+      "improvement": -0.6228440403938293
+    },
+    {
+      "layer": 18,
+      "head": 1,
+      "seq_len": 167,
+      "d_eff": 2,
+      "kappa": 1.4991048574447632,
+      "tq_cosine_sim": 0.9776302576065063,
+      "sq_cosine_sim": 0.33041369915008545,
+      "improvement": -0.6472165584564209
+    },
+    {
+      "layer": 9,
+      "head": 0,
+      "seq_len": 110,
+      "d_eff": 4,
+      "kappa": 1.2670575380325317,
+      "tq_cosine_sim": 0.9516105651855469,
+      "sq_cosine_sim": 0.3671788275241852,
+      "improvement": -0.5844317376613617
+    },
+    {
+      "layer": 9,
+      "head": 1,
+      "seq_len": 110,
+      "d_eff": 4,
+      "kappa": 1.2890925407409668,
+      "tq_cosine_sim": 0.986377477645874,
+      "sq_cosine_sim": 0.47977232933044434,
+      "improvement": -0.5066051483154297
+    },
+    {
+      "layer": 18,
+      "head": 0,
+      "seq_len": 110,
+      "d_eff": 2,
+      "kappa": 1.4168301820755005,
+      "tq_cosine_sim": 0.9477008581161499,
+      "sq_cosine_sim": 0.3521304130554199,
+      "improvement": -0.59557044506073
+    },
+    {
+      "layer": 18,
+      "head": 1,
+      "seq_len": 110,
+      "d_eff": 2,
+      "kappa": 1.4760226011276245,
+      "tq_cosine_sim": 0.9657856225967407,
+      "sq_cosine_sim": 0.33294713497161865,
+      "improvement": -0.6328384876251221
+    },
+    {
+      "layer": 9,
+      "head": 0,
+      "seq_len": 116,
+      "d_eff": 3,
+      "kappa": 1.4460607767105103,
+      "tq_cosine_sim": 0.972820520401001,
+      "sq_cosine_sim": 0.44146206974983215,
+      "improvement": -0.5313584506511688
+    },
+    {
+      "layer": 9,
+      "head": 1,
+      "seq_len": 116,
+      "d_eff": 3,
+      "kappa": 1.282211184501648,
+      "tq_cosine_sim": 0.986901044845581,
+      "sq_cosine_sim": 0.5016953349113464,
+      "improvement": -0.4852057099342346
+    },
+    {
+      "layer": 18,
+      "head": 0,
+      "seq_len": 116,
+      "d_eff": 2,
+      "kappa": 1.4590476751327515,
+      "tq_cosine_sim": 0.9528703689575195,
+      "sq_cosine_sim": 0.46930450201034546,
+      "improvement": -0.4835658669471741
+    },
+    {
+      "layer": 18,
+      "head": 1,
+      "seq_len": 116,
+      "d_eff": 2,
+      "kappa": 1.4898903369903564,
+      "tq_cosine_sim": 0.9433419704437256,
+      "sq_cosine_sim": 0.3586053252220154,
+      "improvement": -0.5847366452217102
+    },
+    {
+      "layer": 9,
+      "head": 0,
+      "seq_len": 230,
+      "d_eff": 4,
+      "kappa": 1.421291708946228,
+      "tq_cosine_sim": 0.9770504832267761,
+      "sq_cosine_sim": 0.4148682951927185,
+      "improvement": -0.5621821880340576
+    },
+    {
+      "layer": 9,
+      "head": 1,
+      "seq_len": 230,
+      "d_eff": 4,
+      "kappa": 1.127036213874817,
+      "tq_cosine_sim": 0.9859482049942017,
+      "sq_cosine_sim": 0.512063205242157,
+      "improvement": -0.4738849997520447
+    },
+    {
+      "layer": 18,
+      "head": 0,
+      "seq_len": 230,
+      "d_eff": 3,
+      "kappa": 1.507434368133545,
+      "tq_cosine_sim": 0.968360424041748,
+      "sq_cosine_sim": 0.40128907561302185,
+      "improvement": -0.5670713484287262
+    },
+    {
+      "layer": 18,
+      "head": 1,
+      "seq_len": 230,
+      "d_eff": 2,
+      "kappa": 1.3599128723144531,
+      "tq_cosine_sim": 0.9726285338401794,
+      "sq_cosine_sim": 0.3830653429031372,
+      "improvement": -0.5895631909370422
+    }
+  ]
+}

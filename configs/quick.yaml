@@ -1,0 +1,88 @@
+# SpectralQuant Quick/Debug Configuration
+# Reduced sizes for fast iteration and debugging — not for final experiments
+# Inherits structure from default.yaml; values here override defaults.
+
+# ---------------------------------------------------------------------------
+# Model config
+# ---------------------------------------------------------------------------
+model:
+  name: "Qwen/Qwen2.5-1.5B-Instruct"
+  torch_dtype: "auto"
+  device_map: "auto"
+  secondary_model: null
+
+# ---------------------------------------------------------------------------
+# Calibration config (REDUCED)
+# ---------------------------------------------------------------------------
+calibration:
+  dataset: "wikitext"
+  subset: "wikitext-103-raw-v1"
+  split: "train"
+  n_samples: 50         # was 1000
+  max_length: 512       # was 2048
+  seed: 42
+  save_path: "results/calibration_quick/"
+
+# ---------------------------------------------------------------------------
+# Quantization config
+# ---------------------------------------------------------------------------
+quantization:
+  avg_bits: 3.0
+  bit_widths: [3.0]     # was [2.0, 2.5, 3.0, 4.0]
+  lloyd_max_iterations: 20   # was 50
+  lloyd_max_tolerance: 1.0e-5
+  b_high: null
+  b_low: null
+  selective_qjl: true
+
+# ---------------------------------------------------------------------------
+# Experiment config (REDUCED)
+# ---------------------------------------------------------------------------
+experiment:
+  n_seeds: 1            # was 3
+  sequence_lengths: [512, 1024]   # was [512, 1024, 2048, 4096, 8192, 16384]
+  sampled_layers: 2     # was 5
+  query_probes_per_head: 2   # was 8
+  output_dir: "results/quick/"
+  save_intermediates: true
+
+# ---------------------------------------------------------------------------
+# Eigenspectral analysis config
+# ---------------------------------------------------------------------------
+eigenspectral:
+  variance_threshold_95: 0.95
+  variance_threshold_99: 0.99
+  gap_threshold_strong: 10.0
+  gap_threshold_moderate: 5.0
+  granularity: "per_head"
+
+# ---------------------------------------------------------------------------
+# Benchmarks config (REDUCED / SKIPPED)
+# ---------------------------------------------------------------------------
+benchmarks:
+  tasks:
+    - "needle_in_haystack"   # only one for quick run
+  longbench_datasets:
+    - "qasper"
+  niah_max_length: 4096      # was 32768
+  niah_depths: [0.5]         # was [0.1, 0.25, 0.5, 0.75, 0.9]
+
+# ---------------------------------------------------------------------------
+# Vector search config (REDUCED)
+# ---------------------------------------------------------------------------
+vector_search:
+  embedding_model: "BAAI/bge-large-en-v1.5"
+  benchmark: "beir"
+  datasets:
+    - "nfcorpus"             # smallest BEIR dataset
+  metrics: ["recall@10"]
+  bit_widths: [3]
+
+# ---------------------------------------------------------------------------
+# Logging config
+# ---------------------------------------------------------------------------
+logging:
+  level: "DEBUG"             # was INFO
+  save_logs: true
+  log_dir: "results/quick/logs/"
+  use_rich: true

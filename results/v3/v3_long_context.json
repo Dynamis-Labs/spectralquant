@@ -1,0 +1,77 @@
+{
+  "512": {
+    "tq_cos_sim": 0.8663764650374651,
+    "sq_cos_sim": 0.8977333220839501,
+    "n": 100,
+    "memory": {
+      "fp16_bytes": 29360128,
+      "tq_bytes": 4816896,
+      "sq_bytes": 4816896,
+      "tq_savings_pct": 83.6,
+      "sq_savings_pct": 83.6,
+      "fp16_mb": 29.36,
+      "tq_mb": 4.82,
+      "sq_mb": 4.82
+    }
+  },
+  "1024": {
+    "tq_cos_sim": 0.8663764650374651,
+    "sq_cos_sim": 0.8977333220839501,
+    "n": 100,
+    "memory": {
+      "fp16_bytes": 58720256,
+      "tq_bytes": 9633792,
+      "sq_bytes": 9633792,
+      "tq_savings_pct": 83.6,
+      "sq_savings_pct": 83.6,
+      "fp16_mb": 58.72,
+      "tq_mb": 9.63,
+      "sq_mb": 9.63
+    }
+  },
+  "2048": {
+    "tq_cos_sim": 0.8663764650374651,
+    "sq_cos_sim": 0.8977333220839501,
+    "n": 100,
+    "memory": {
+      "fp16_bytes": 117440512,
+      "tq_bytes": 19267584,
+      "sq_bytes": 19267584,
+      "tq_savings_pct": 83.6,
+      "sq_savings_pct": 83.6,
+      "fp16_mb": 117.44,
+      "tq_mb": 19.27,
+      "sq_mb": 19.27
+    }
+  },
+  "4096": {
+    "tq_cos_sim": 0.8663764650374651,
+    "sq_cos_sim": 0.8977333220839501,
+    "n": 100,
+    "memory": {
+      "fp16_bytes": 234881024,
+      "tq_bytes": 38535168,
+      "sq_bytes": 38535168,
+      "tq_savings_pct": 83.6,
+      "sq_savings_pct": 83.6,
+      "fp16_mb": 234.88,
+      "tq_mb": 38.54,
+      "sq_mb": 38.54
+    }
+  },
+  "8192": {
+    "tq_cos_sim": 0.8663764650374651,
+    "sq_cos_sim": 0.8977333220839501,
+    "n": 100,
+    "memory": {
+      "fp16_bytes": 469762048,
+      "tq_bytes": 77070336,
+      "sq_bytes": 77070336,
+      "tq_savings_pct": 83.6,
+      "sq_savings_pct": 83.6,
+      "fp16_mb": 469.76,
+      "tq_mb": 77.07,
+      "sq_mb": 77.07
+    }
+  }
+}

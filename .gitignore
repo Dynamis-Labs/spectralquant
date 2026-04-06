@@ -1,0 +1,110 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+.installed.cfg
+MANIFEST
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Distribution / packaging
+.Python
+develop-eggs/
+lib/
+lib64/
+.eggs/
+
+# Testing
+.tox/
+.nox/
+.pytest_cache/
+.cache/
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+*.py,cover
+nosetests.xml
+
+# Type checking
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+
+# Jupyter
+.ipynb_checkpoints
+*.ipynb
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Weights & Biases
+wandb/
+
+# Model weights and large binary files
+*.pt
+*.bin
+*.safetensors
+*.gguf
+*.onnx
+*.h5
+*.pkl
+
+# Results (large image/binary outputs)
+results/**/*.png
+results/**/*.jpg
+results/**/*.pdf
+results/**/*.npz
+results/**/*.npy
+
+# Results JSON files are tracked for reproducibility
+# results/**/*.json
+
+# Paper output intermediates
+paper_output/*.aux
+paper_output/*.log
+paper_output/*.bbl
+paper_output/*.blg
+paper_output/*.out
+paper_output/*.toc
+paper_output/*.fls
+paper_output/*.fdb_latexmk
+paper_output/*.synctex.gz
+
+# Baseline clone (large)
+baseline/turboquant_cutile/
+
+# HuggingFace cache
+.cache/huggingface/
+
+# Environment files
+.env
+.env.local

@@ -1,0 +1,34 @@
+{
+  "wiki\u2192wiki": {
+    "calib_domain": "wiki",
+    "eval_domain": "wiki",
+    "sq_cos_sim": 0.8683563429117203,
+    "tq_cos_sim": 0.8470075619220734,
+    "delta_vs_tq": 0.021348780989646876,
+    "n_samples": 150
+  },
+  "wiki\u2192code": {
+    "calib_domain": "wiki",
+    "eval_domain": "code",
+    "sq_cos_sim": 0.8651488020022711,
+    "tq_cos_sim": 0.8315682253241539,
+    "delta_vs_tq": 0.0335805766781172,
+    "n_samples": 150
+  },
+  "code\u2192wiki": {
+    "calib_domain": "code",
+    "eval_domain": "wiki",
+    "sq_cos_sim": 0.8718822508056958,
+    "tq_cos_sim": 0.8470075619220734,
+    "delta_vs_tq": 0.02487468888362243,
+    "n_samples": 150
+  },
+  "code\u2192code": {
+    "calib_domain": "code",
+    "eval_domain": "code",
+    "sq_cos_sim": 0.8678529214859009,
+    "tq_cos_sim": 0.8315682253241539,
+    "delta_vs_tq": 0.03628469616174701,
+    "n_samples": 150
+  }
+}

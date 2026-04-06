@@ -1,0 +1,264 @@
+{
+  "records": [
+    {
+      "ctx_len": 4096,
+      "depth": 0.1,
+      "method": "fp16",
+      "correct": false,
+      "response": "7"
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.1,
+      "method": "tq",
+      "correct": false,
+      "response": "an"
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.1,
+      "method": "sq",
+      "correct": false,
+      "response": "<nav"
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.25,
+      "method": "fp16",
+      "correct": false,
+      "response": "7 was 7 to develop"
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.25,
+      "method": "tq",
+      "correct": false,
+      "response": "an"
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.25,
+      "method": "sq",
+      "correct": false,
+      "response": "that7\nassistant"
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.5,
+      "method": "fp16",
+      "correct": false,
+      "response": "7"
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.5,
+      "method": "tq",
+      "correct": false,
+      "response": "ic The7   question9"
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.5,
+      "method": "sq",
+      "correct": false,
+      "response": "<nav"
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.75,
+      "method": "fp16",
+      "correct": false,
+      "response": "7"
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.75,
+      "method": "tq",
+      "correct": false,
+      "response": "the"
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.75,
+      "method": "sq",
+      "correct": false,
+      "response": "toredni,"
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.9,
+      "method": "fp16",
+      "correct": false,
+      "response": "7 was the special"
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.9,
+      "method": "tq",
+      "correct": false,
+      "response": "the"
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.9,
+      "method": "sq",
+      "correct": false,
+      "response": "to beilde of"
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.1,
+      "method": "fp16",
+      "correct": false,
+      "response": "7"
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.1,
+      "method": "tq",
+      "correct": false,
+      "response": "7\n77 thoughtger"
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.1,
+      "method": "sq",
+      "correct": false,
+      "response": ""
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.25,
+      "method": "fp16",
+      "correct": false,
+      "response": "7"
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.25,
+      "method": "tq",
+      "correct": false,
+      "response": "7\nThe ared\n  question"
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.25,
+      "method": "sq",
+      "correct": false,
+      "response": "{7 that"
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.5,
+      "method": "fp16",
+      "correct": false,
+      "response": "7"
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.5,
+      "method": "tq",
+      "correct": false,
+      "response": "7\nThe can3,.  7"
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.5,
+      "method": "sq",
+      "correct": false,
+      "response": "to"
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.75,
+      "method": "fp16",
+      "correct": false,
+      "response": "7"
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.75,
+      "method": "tq",
+      "correct": false,
+      "response": "7erThe is \n AI7\n  7 the. 7 The  to be the. to accelerate\n\n number. The\n\n  answer need."
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.75,
+      "method": "sq",
+      "correct": false,
+      "response": "to be"
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.9,
+      "method": "fp16",
+      "correct": false,
+      "response": "7"
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.9,
+      "method": "tq",
+      "correct": false,
+      "response": "73\n7\nThe\n7icwen2\nlya that. with the number: 7\n7   are \n\n\u96f6\n time need."
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.9,
+      "method": "sq",
+      "correct": false,
+      "response": "ewn"
+    }
+  ],
+  "heatmap": {
+    "fp16": {
+      "4096": {
+        "0.1": false,
+        "0.25": false,
+        "0.5": false,
+        "0.75": false,
+        "0.9": false
+      },
+      "8192": {
+        "0.1": false,
+        "0.25": false,
+        "0.5": false,
+        "0.75": false,
+        "0.9": false
+      }
+    },
+    "tq": {
+      "4096": {
+        "0.1": false,
+        "0.25": false,
+        "0.5": false,
+        "0.75": false,
+        "0.9": false
+      },
+      "8192": {
+        "0.1": false,
+        "0.25": false,
+        "0.5": false,
+        "0.75": false,
+        "0.9": false
+      }
+    },
+    "sq": {
+      "4096": {
+        "0.1": false,
+        "0.25": false,
+        "0.5": false,
+        "0.75": false,
+        "0.9": false
+      },
+      "8192": {
+        "0.1": false,
+        "0.25": false,
+        "0.5": false,
+        "0.75": false,
+        "0.9": false
+      }
+    }
+  }
+}

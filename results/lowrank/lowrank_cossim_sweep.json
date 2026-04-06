@@ -1,0 +1,72 @@
+{
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "head_dim": 128,
+  "results": {
+    "2": {
+      "key_cos_mean": 0.8028739029169083,
+      "key_cos_std": 0.1383335607777563,
+      "val_cos_mean": 0.10227785713970661,
+      "val_cos_std": 0.01446433087770228,
+      "attn_cos_mean": 0.07445479144400452,
+      "attn_cos_std": 0.04133446833763629,
+      "compression_ratio": 42.666666666666664,
+      "bits_per_vector": 48,
+      "n": 200
+    },
+    "4": {
+      "key_cos_mean": 0.8298214995861053,
+      "key_cos_std": 0.12131607270105656,
+      "val_cos_mean": 0.15162886284291743,
+      "val_cos_std": 0.01836035788469238,
+      "attn_cos_mean": 0.10723545673303306,
+      "attn_cos_std": 0.04236417939097738,
+      "compression_ratio": 25.6,
+      "bits_per_vector": 80,
+      "n": 200
+    },
+    "8": {
+      "key_cos_mean": 0.8597863841056824,
+      "key_cos_std": 0.10121006963294255,
+      "val_cos_mean": 0.2257120830565691,
+      "val_cos_std": 0.029255187329981,
+      "attn_cos_mean": 0.1728883247822523,
+      "attn_cos_std": 0.06232234304346856,
+      "compression_ratio": 14.222222222222221,
+      "bits_per_vector": 144,
+      "n": 200
+    },
+    "16": {
+      "key_cos_mean": 0.893486610352993,
+      "key_cos_std": 0.07954976040890711,
+      "val_cos_mean": 0.33175187788903715,
+      "val_cos_std": 0.04113337509712755,
+      "attn_cos_mean": 0.27963575784116984,
+      "attn_cos_std": 0.08817712220761313,
+      "compression_ratio": 7.529411764705882,
+      "bits_per_vector": 272,
+      "n": 200
+    },
+    "32": {
+      "key_cos_mean": 0.9315190926194191,
+      "key_cos_std": 0.053880090604055686,
+      "val_cos_mean": 0.47913844138383865,
+      "val_cos_std": 0.04342258833661134,
+      "attn_cos_mean": 0.4262705311924219,
+      "attn_cos_std": 0.08795496444612536,
+      "compression_ratio": 3.878787878787879,
+      "bits_per_vector": 528,
+      "n": 200
+    },
+    "64": {
+      "key_cos_mean": 0.9690194281935692,
+      "key_cos_std": 0.026466218802139285,
+      "val_cos_mean": 0.6963866034150124,
+      "val_cos_std": 0.027243001393838808,
+      "attn_cos_mean": 0.660203205049038,
+      "attn_cos_std": 0.07681207751822418,
+      "compression_ratio": 1.9692307692307693,
+      "bits_per_vector": 1040,
+      "n": 200
+    }
+  }
+}

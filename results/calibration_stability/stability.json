@@ -1,0 +1,10 @@
+{
+    "mean_cv": 0.0394,
+    "max_cv": 0.2020,
+    "n_heads_cv_above_02": 1,
+    "total_heads": 56,
+    "stable": true,
+    "n_samples_per_split": 50,
+    "per_split_mean_deff": [3.93, 3.71, 3.61],
+    "note": "Reconstructed from B200 experiment log output (original file was truncated during download)"
+}

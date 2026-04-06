@@ -1,0 +1,19 @@
+{
+  "model": "mistralai/Mistral-7B-Instruct-v0.3",
+  "n_layers": 32,
+  "n_kv_heads": 8,
+  "head_dim": 128,
+  "mean_d_eff": 4.1796875,
+  "mean_kappa": 1.2222571205347776,
+  "cos_sim": {
+    "tq_cos_sim_mean": 0.9592045652866363,
+    "tq_cos_sim_std": 0.02697287682891386,
+    "sq_cos_sim_mean": 0.9713213742524386,
+    "sq_cos_sim_std": 0.01755331621578087,
+    "n": 800
+  },
+  "compression_ratio": {
+    "sq": 6.095238095238095,
+    "tq": 5.12
+  }
+}

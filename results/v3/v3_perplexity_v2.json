@@ -1,0 +1,23 @@
+{
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "dataset": "wikitext-2-raw-v1",
+  "max_length": 1024,
+  "token_by_token": true,
+  "results": {
+    "fp16": {
+      "ppl": 9.509980534121931,
+      "time_s": 56.13030123710632,
+      "n_tokens": 1023
+    },
+    "tq": {
+      "ppl": 9.509980534121931,
+      "time_s": 16.873944997787476,
+      "n_tokens": 1023
+    },
+    "sq": {
+      "ppl": 9.509980534121931,
+      "time_s": 16.887033462524414,
+      "n_tokens": 1023
+    }
+  }
+}

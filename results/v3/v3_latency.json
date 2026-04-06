@@ -1,0 +1,20 @@
+{
+  "512": {
+    "tq": {
+      "compression_ms_mean": 0.39903219999928297,
+      "compression_ms_std": 0.020578681016949523,
+      "attention_ms_mean": 0.22737699999879624,
+      "attention_ms_std": 0.011271882632691294,
+      "calibration_ms_mean": null,
+      "calibration_ms_std": null
+    },
+    "sq": {
+      "compression_ms_mean": 21.04302000000189,
+      "compression_ms_std": 0.6149209501302098,
+      "attention_ms_mean": 0.050958600002104504,
+      "attention_ms_std": 0.0012433957735665565,
+      "calibration_ms_mean": 2.1995252000010623,
+      "calibration_ms_std": 0.010141796952081814
+    }
+  }
+}

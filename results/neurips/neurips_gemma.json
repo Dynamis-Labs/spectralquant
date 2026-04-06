@@ -1,0 +1,22 @@
+{
+  "model": "google/gemma-2-9b-it",
+  "n_layers": 42,
+  "n_kv_heads": 8,
+  "head_dim": 256,
+  "mean_d_eff_keys": 8.196428571428571,
+  "mean_d_eff_vals": 55.95238095238095,
+  "d_eff_over_head_dim": 0.032017299107142856,
+  "mean_kappa": 1.1137494345506032,
+  "cos_sim": {
+    "tq_cos_sim_mean": 0.9762602957338095,
+    "tq_cos_sim_std": 0.013482268304461422,
+    "sq_cos_sim_mean": 0.9834743995964527,
+    "sq_cos_sim_std": 0.009017145558256346,
+    "n": 800
+  },
+  "compression_ratio": {
+    "sq": 6.2439024390243905,
+    "tq": 5.224489795918367
+  },
+  "note": "head_dim=256 dimensionality generalization test"
+}

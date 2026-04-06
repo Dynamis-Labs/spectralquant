@@ -1,0 +1,295 @@
+{
+  "model": "meta-llama/Llama-3.1-8B-Instruct",
+  "records": [
+    {
+      "ctx_len": 4096,
+      "depth": 0.1,
+      "method": "fp16",
+      "correct": true,
+      "response": "7392",
+      "actual_tokens": 4088
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.1,
+      "method": "tq",
+      "correct": true,
+      "response": "7392",
+      "actual_tokens": 4088
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.1,
+      "method": "sq",
+      "correct": true,
+      "response": "7392",
+      "actual_tokens": 4088
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.25,
+      "method": "fp16",
+      "correct": true,
+      "response": "7392",
+      "actual_tokens": 4089
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.25,
+      "method": "tq",
+      "correct": true,
+      "response": "7392",
+      "actual_tokens": 4089
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.25,
+      "method": "sq",
+      "correct": true,
+      "response": "7392",
+      "actual_tokens": 4089
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.5,
+      "method": "fp16",
+      "correct": true,
+      "response": "7392",
+      "actual_tokens": 4090
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.5,
+      "method": "tq",
+      "correct": true,
+      "response": "7392",
+      "actual_tokens": 4090
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.5,
+      "method": "sq",
+      "correct": true,
+      "response": "7392",
+      "actual_tokens": 4090
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.75,
+      "method": "fp16",
+      "correct": true,
+      "response": "7392",
+      "actual_tokens": 4089
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.75,
+      "method": "tq",
+      "correct": true,
+      "response": "7392",
+      "actual_tokens": 4089
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.75,
+      "method": "sq",
+      "correct": true,
+      "response": "7392",
+      "actual_tokens": 4089
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.9,
+      "method": "fp16",
+      "correct": true,
+      "response": "7392",
+      "actual_tokens": 4089
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.9,
+      "method": "tq",
+      "correct": true,
+      "response": "7392",
+      "actual_tokens": 4089
+    },
+    {
+      "ctx_len": 4096,
+      "depth": 0.9,
+      "method": "sq",
+      "correct": true,
+      "response": "7392",
+      "actual_tokens": 4089
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.1,
+      "method": "fp16",
+      "correct": true,
+      "response": "7392",
+      "actual_tokens": 8183
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.1,
+      "method": "tq",
+      "correct": true,
+      "response": "7392",
+      "actual_tokens": 8183
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.1,
+      "method": "sq",
+      "correct": true,
+      "response": "7392",
+      "actual_tokens": 8183
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.25,
+      "method": "fp16",
+      "correct": true,
+      "response": "7392",
+      "actual_tokens": 8185
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.25,
+      "method": "tq",
+      "correct": true,
+      "response": "7392",
+      "actual_tokens": 8185
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.25,
+      "method": "sq",
+      "correct": true,
+      "response": "7392",
+      "actual_tokens": 8185
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.5,
+      "method": "fp16",
+      "correct": true,
+      "response": "7392",
+      "actual_tokens": 8184
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.5,
+      "method": "tq",
+      "correct": true,
+      "response": "7392",
+      "actual_tokens": 8184
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.5,
+      "method": "sq",
+      "correct": true,
+      "response": "7392",
+      "actual_tokens": 8184
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.75,
+      "method": "fp16",
+      "correct": true,
+      "response": "7392",
+      "actual_tokens": 8185
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.75,
+      "method": "tq",
+      "correct": true,
+      "response": "7392",
+      "actual_tokens": 8185
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.75,
+      "method": "sq",
+      "correct": true,
+      "response": "7392",
+      "actual_tokens": 8185
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.9,
+      "method": "fp16",
+      "correct": true,
+      "response": "7392",
+      "actual_tokens": 8185
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.9,
+      "method": "tq",
+      "correct": true,
+      "response": "7392",
+      "actual_tokens": 8185
+    },
+    {
+      "ctx_len": 8192,
+      "depth": 0.9,
+      "method": "sq",
+      "correct": true,
+      "response": "7392",
+      "actual_tokens": 8185
+    }
+  ],
+  "heatmap": {
+    "fp16": {
+      "4096": {
+        "0.1": true,
+        "0.25": true,
+        "0.5": true,
+        "0.75": true,
+        "0.9": true
+      },
+      "8192": {
+        "0.1": true,
+        "0.25": true,
+        "0.5": true,
+        "0.75": true,
+        "0.9": true
+      }
+    },
+    "tq": {
+      "4096": {
+        "0.1": true,
+        "0.25": true,
+        "0.5": true,
+        "0.75": true,
+        "0.9": true
+      },
+      "8192": {
+        "0.1": true,
+        "0.25": true,
+        "0.5": true,
+        "0.75": true,
+        "0.9": true
+      }
+    },
+    "sq": {
+      "4096": {
+        "0.1": true,
+        "0.25": true,
+        "0.5": true,
+        "0.75": true,
+        "0.9": true
+      },
+      "8192": {
+        "0.1": true,
+        "0.25": true,
+        "0.5": true,
+        "0.75": true,
+        "0.9": true
+      }
+    }
+  }
+}
