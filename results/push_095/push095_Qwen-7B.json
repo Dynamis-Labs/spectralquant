@@ -1,0 +1,114 @@
+{
+  "model": "Qwen/Qwen2.5-7B-Instruct",
+  "short_name": "Qwen-7B",
+  "head_dim": 128,
+  "mean_d_eff_keys": 4.2,
+  "mean_d_eff_values": 53.5,
+  "configs": {
+    "1bit-K_3bit-V": {
+      "attn_cos_sim": 0.747,
+      "key_cos_sim": 0.9014,
+      "val_cos_sim": 0.8009,
+      "total_bits": 544,
+      "total_compress": 7.5
+    },
+    "1bit-K_4bit-V": {
+      "attn_cos_sim": 0.8022,
+      "key_cos_sim": 0.9014,
+      "val_cos_sim": 0.8631,
+      "total_bits": 672,
+      "total_compress": 6.1
+    },
+    "1bit-K_5bit-V": {
+      "attn_cos_sim": 0.8701,
+      "key_cos_sim": 0.9014,
+      "val_cos_sim": 0.94,
+      "total_bits": 800,
+      "total_compress": 5.1
+    },
+    "1bit-K_6bit-V": {
+      "attn_cos_sim": 0.9031,
+      "key_cos_sim": 0.9014,
+      "val_cos_sim": 0.9747,
+      "total_bits": 928,
+      "total_compress": 4.4
+    },
+    "2bit-K_3bit-V": {
+      "attn_cos_sim": 0.7517,
+      "key_cos_sim": 0.9014,
+      "val_cos_sim": 0.8009,
+      "total_bits": 672,
+      "total_compress": 6.1
+    },
+    "2bit-K_4bit-V": {
+      "attn_cos_sim": 0.8071,
+      "key_cos_sim": 0.9014,
+      "val_cos_sim": 0.8631,
+      "total_bits": 800,
+      "total_compress": 5.1
+    },
+    "2bit-K_5bit-V": {
+      "attn_cos_sim": 0.8755,
+      "key_cos_sim": 0.9014,
+      "val_cos_sim": 0.94,
+      "total_bits": 928,
+      "total_compress": 4.4
+    },
+    "1bit-K_optV-400": {
+      "attn_cos_sim": 0.7316,
+      "key_cos_sim": 0.9014,
+      "val_cos_sim": 0.7924,
+      "total_bits": 560,
+      "total_compress": 7.3
+    },
+    "1bit-K_optV-500": {
+      "attn_cos_sim": 0.7992,
+      "key_cos_sim": 0.9014,
+      "val_cos_sim": 0.8633,
+      "total_bits": 660,
+      "total_compress": 6.2
+    },
+    "1bit-K_optV-600": {
+      "attn_cos_sim": 0.8645,
+      "key_cos_sim": 0.9014,
+      "val_cos_sim": 0.9328,
+      "total_bits": 760,
+      "total_compress": 5.4
+    },
+    "1bit-K_optV-700": {
+      "attn_cos_sim": 0.8949,
+      "key_cos_sim": 0.9014,
+      "val_cos_sim": 0.9659,
+      "total_bits": 860,
+      "total_compress": 4.8
+    },
+    "1bit-K_optV-800": {
+      "attn_cos_sim": 0.9031,
+      "key_cos_sim": 0.9014,
+      "val_cos_sim": 0.9747,
+      "total_bits": 928,
+      "total_compress": 4.4
+    },
+    "2bit-K_optV-500": {
+      "attn_cos_sim": 0.8043,
+      "key_cos_sim": 0.9014,
+      "val_cos_sim": 0.8633,
+      "total_bits": 788,
+      "total_compress": 5.2
+    },
+    "2bit-K_optV-600": {
+      "attn_cos_sim": 0.8696,
+      "key_cos_sim": 0.9014,
+      "val_cos_sim": 0.9328,
+      "total_bits": 888,
+      "total_compress": 4.6
+    },
+    "uniform-3bit": {
+      "attn_cos_sim": 0.7593,
+      "key_cos_sim": 0.9015,
+      "val_cos_sim": 0.8009,
+      "total_bits": 800,
+      "total_compress": 5.1
+    }
+  }
+}
