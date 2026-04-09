@@ -41,6 +41,85 @@ By identifying these dimensions through a one-time **15-second calibration** and
 
 4. **KV spectral asymmetry.** Keys: d_eff ≈ 4. Values: d_eff ≈ 40–55 (10–15× larger). This explains why low-rank compression fails for values while SQ succeeds.
 
+### Representation Note
+
+Throughout these experiments, "`1-bit keys`" should be read narrowly: one bit per rotated key dimension in the calibrated spectral basis, plus a separately stored vector norm. It is not a raw sign-only key in the original basis.
+
+### Small-Model Sanity Checks
+
+To check how much of the reported `1-bit keys` quality depends on the benchmark itself, I ran a reduced local MPS comparison on three small open models using the same compression configs but two different evaluation modes.
+
+The two modes were:
+
+1. `Proxy Q=K`
+   - queries are replaced with keys (`Q = K`)
+   - attention is evaluated with a non-causal self-attention proxy
+   - this is the more favorable setup
+
+2. `Real Q + causal`
+   - queries are captured from the actual attention module during a forward pass
+   - the same compressed keys/values are evaluated with causal attention
+   - this is closer to the intended decoding setting
+
+Important scope note:
+- this is not a pure `Q=K` ablation, because the comparison changes two variables at once:
+  - query source: proxy `Q=K` vs true captured `Q`
+  - attention pattern: non-causal vs causal
+- the result is still useful because it measures the gap between an optimistic proxy and a more realistic decoding-style evaluation
+- but it does not by itself identify how much of the gap comes from `Q=K` specifically versus the causal mask
+
+What stayed fixed between the two runs:
+- same model
+- same reduced coverage
+- same sampled layers and heads
+- same compression config
+- same key/value reconstruction path
+
+Coverage used for all rows below:
+- `n_calib=8`
+- `n_eval=4`
+- `seq_len=512`
+- `max_cached_vectors=256`
+- sampled layers / sampled KV heads
+
+Interpretation:
+- `Proxy Q=K` and `Real Q + causal` have the same key/value reconstruction numbers for a given config.
+- The gap is therefore caused by the evaluation setup, not by a different quantizer.
+- A negative delta means the favorable proxy made the config look better than it does under real queries.
+
+For the representative `1bit-K_6bit-V` setting, replacing the proxy with true captured queries and causal attention lowers attention cosine substantially:
+
+| Model | Config | Proxy `Q=K` | Real Q + causal | Delta |
+|---|---|---:|---:|---:|
+| Qwen 2.5 1.5B | `1bit-K_6bit-V` | 0.7451 | 0.5250 | -0.2201 |
+| TinyLlama 1.1B | `1bit-K_6bit-V` | 0.8644 | 0.4954 | -0.3690 |
+| Qwen 2.5 0.5B | `1bit-K_6bit-V` | 0.8676 | 0.6070 | -0.2606 |
+
+Files:
+- `results/push_095/push095_Qwen-1.5B-proxy-small.json`
+- `results/push_095/push095_Qwen-1.5B-realq-small.json`
+- `results/push_095/push095_TinyLlama-1.1B-proxy-small.json`
+- `results/push_095/push095_TinyLlama-1.1B-realq-small.json`
+- `results/push_095/push095_Qwen-0.5B-proxy-small.json`
+- `results/push_095/push095_Qwen-0.5B-realq-small.json`
+- `results/push_095/qwen1p5b_1bit_claim_check_small.md`
+
+Recommended follow-up for a cleaner attribution:
+- run the full `2 x 2` evaluation matrix:
+  - `Q=K + non-causal`
+  - `Q=K + causal`
+  - `Real Q + non-causal`
+  - `Real Q + causal`
+- that would isolate whether the optimism is driven more by proxy queries, by removing the causal mask, or by both
+- the `Real Q + non-causal` setting has now been run for `Qwen 2.5 1.5B`
+  - file: `results/push_095/push095_Qwen-1.5B-realq-noncausal-small.json`
+  - for `1bit-K_6bit-V`, the three observed values are:
+    - `Q=K + non-causal`: `0.7451`
+    - `Real Q + non-causal`: `0.4124`
+    - `Real Q + causal`: `0.5250`
+  - on this reduced run, most of the optimism comes from the `Q=K` proxy rather than from removing the causal mask
+  - this means the current evidence supports the narrower statement "proxy queries are the main confound here"; the `Q=K + causal` corner is still missing if a full `2 x 2` attribution is needed
+
 ---
 
 ## Quick Start
