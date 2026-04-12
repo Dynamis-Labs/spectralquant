@@ -1,0 +1,141 @@
+{
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "short_name": "Qwen-1.5B",
+  "device": "mps",
+  "seq_len": 512,
+  "n_calib": 4,
+  "n_eval": 1,
+  "layer_indices": [
+    7,
+    14,
+    21
+  ],
+  "head_indices": [
+    0,
+    1
+  ],
+  "primary_setup": {
+    "query_mode": "real_q",
+    "attention_mode": "causal"
+  },
+  "grid": {
+    "pca:1bit-K_6bit-V": {
+      "primary": {
+        "attn_cos_sim": 0.5148191054662069,
+        "attn_kl_fp16_to_compressed": 6.7447101672490435,
+        "key_cos_sim": 0.9022328853607178,
+        "val_cos_sim": 0.9695455233256022,
+        "key_bits": 144.0,
+        "val_bits": 784.0,
+        "total_bits": 928.0,
+        "total_compress": 4.413793103448277,
+        "n_evals": 6
+      }
+    },
+    "wht_only:1bit-K_6bit-V": {
+      "primary": {
+        "attn_cos_sim": 0.7726523627837499,
+        "attn_kl_fp16_to_compressed": 0.4972422619660695,
+        "key_cos_sim": 0.8634132544199625,
+        "val_cos_sim": 0.9996187587579092,
+        "key_bits": 144.0,
+        "val_bits": 784.0,
+        "total_bits": 928.0,
+        "total_compress": 4.413793103448277,
+        "n_evals": 6
+      }
+    },
+    "wht_polarquant:1bit-K_6bit-V": {
+      "primary": {
+        "attn_cos_sim": 0.6769297073284785,
+        "attn_kl_fp16_to_compressed": 0.8791843752066294,
+        "key_cos_sim": 0.8083983163038889,
+        "val_cos_sim": 0.9996177156766256,
+        "key_bits": 144.0,
+        "val_bits": 784.0,
+        "total_bits": 928.0,
+        "total_compress": 4.413793103448277,
+        "n_evals": 6
+      }
+    },
+    "pca:1bit-K_4bit-V": {
+      "primary": {
+        "attn_cos_sim": 0.4883749981721242,
+        "attn_kl_fp16_to_compressed": 6.7447101672490435,
+        "key_cos_sim": 0.9022328853607178,
+        "val_cos_sim": 0.8709203004837036,
+        "key_bits": 144.0,
+        "val_bits": 528.0,
+        "total_bits": 672.0,
+        "total_compress": 6.095238095238095,
+        "n_evals": 6
+      }
+    },
+    "wht_only:1bit-K_4bit-V": {
+      "primary": {
+        "attn_cos_sim": 0.7725071658690771,
+        "attn_kl_fp16_to_compressed": 0.4972422619660695,
+        "key_cos_sim": 0.8634132544199625,
+        "val_cos_sim": 0.9955720206101736,
+        "key_bits": 144.0,
+        "val_bits": 528.0,
+        "total_bits": 672.0,
+        "total_compress": 6.095238095238095,
+        "n_evals": 6
+      }
+    },
+    "wht_polarquant:1bit-K_4bit-V": {
+      "primary": {
+        "attn_cos_sim": 0.6753434439500173,
+        "attn_kl_fp16_to_compressed": 0.8791843752066294,
+        "key_cos_sim": 0.8083983163038889,
+        "val_cos_sim": 0.9955001274744669,
+        "key_bits": 144.0,
+        "val_bits": 528.0,
+        "total_bits": 672.0,
+        "total_compress": 6.095238095238095,
+        "n_evals": 6
+      }
+    },
+    "pca:2bit-K_6bit-V": {
+      "primary": {
+        "attn_cos_sim": 0.5289537558952967,
+        "attn_kl_fp16_to_compressed": 5.93880836168925,
+        "key_cos_sim": 0.9022488196690878,
+        "val_cos_sim": 0.9695455233256022,
+        "key_bits": 272.0,
+        "val_bits": 784.0,
+        "total_bits": 1056.0,
+        "total_compress": 3.878787878787879,
+        "n_evals": 6
+      }
+    },
+    "wht_only:2bit-K_6bit-V": {
+      "primary": {
+        "attn_cos_sim": 0.8993311822414398,
+        "attn_kl_fp16_to_compressed": 0.3452441009382407,
+        "key_cos_sim": 0.9455097516377767,
+        "val_cos_sim": 0.9996187587579092,
+        "key_bits": 272.0,
+        "val_bits": 784.0,
+        "total_bits": 1056.0,
+        "total_compress": 3.878787878787879,
+        "n_evals": 6
+      }
+    },
+    "wht_polarquant:2bit-K_6bit-V": {
+      "primary": {
+        "attn_cos_sim": 0.8964364727338155,
+        "attn_kl_fp16_to_compressed": 0.27388445536295575,
+        "key_cos_sim": 0.9439115822315216,
+        "val_cos_sim": 0.9996177156766256,
+        "key_bits": 272.0,
+        "val_bits": 784.0,
+        "total_bits": 1056.0,
+        "total_compress": 3.878787878787879,
+        "n_evals": 6
+      }
+    }
+  },
+  "elapsed_seconds": 506.95751333236694
+}
