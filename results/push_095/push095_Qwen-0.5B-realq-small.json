@@ -1,0 +1,75 @@
+{
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "short_name": "Qwen-0.5B-small",
+  "coverage": {
+    "n_calib": 8,
+    "n_eval": 4,
+    "seq_len": 512,
+    "layer_mode": "sampled",
+    "head_mode": "sampled",
+    "max_cached_vectors": 256,
+    "coverage_preset": "small"
+  },
+  "query_capture": {
+    "mode": "true_model_queries",
+    "head_mapping": "first_query_head_per_kv_group",
+    "attention_mode": "causal_self_attention"
+  },
+  "configs": {
+    "1bit-K_3bit-V": {
+      "attn_cos_sim": 0.5295048902432123,
+      "attn_cos_sim_std": 0.046038966891283103,
+      "key_cos_sim": 0.9039093752702078,
+      "val_cos_sim": 0.8488263885180155,
+      "key_bits": 80,
+      "val_bits": 208,
+      "total_bits": 288,
+      "total_compress": 7.111111111111111,
+      "n_evals": 6
+    },
+    "1bit-K_4bit-V": {
+      "attn_cos_sim": 0.5828911165396372,
+      "attn_cos_sim_std": 0.05879976582914788,
+      "key_cos_sim": 0.9039093752702078,
+      "val_cos_sim": 0.9384434620539347,
+      "key_bits": 80,
+      "val_bits": 272,
+      "total_bits": 352,
+      "total_compress": 5.818181818181818,
+      "n_evals": 6
+    },
+    "1bit-K_5bit-V": {
+      "attn_cos_sim": 0.6017550925413767,
+      "attn_cos_sim_std": 0.06387837533517161,
+      "key_cos_sim": 0.9039093752702078,
+      "val_cos_sim": 0.979455441236496,
+      "key_bits": 80,
+      "val_bits": 336,
+      "total_bits": 416,
+      "total_compress": 4.923076923076923,
+      "n_evals": 6
+    },
+    "1bit-K_6bit-V": {
+      "attn_cos_sim": 0.6070036987463633,
+      "attn_cos_sim_std": 0.06712388329158356,
+      "key_cos_sim": 0.9039093752702078,
+      "val_cos_sim": 0.9915579358736674,
+      "key_bits": 80,
+      "val_bits": 400,
+      "total_bits": 480,
+      "total_compress": 4.266666666666667,
+      "n_evals": 6
+    },
+    "uniform-3bit": {
+      "attn_cos_sim": 0.5817577640215555,
+      "attn_cos_sim_std": 0.04111165374240058,
+      "key_cos_sim": 0.9044231275717417,
+      "val_cos_sim": 0.8488263885180155,
+      "key_bits": 208,
+      "val_bits": 208,
+      "total_bits": 416,
+      "total_compress": 4.923076923076923,
+      "n_evals": 6
+    }
+  }
+}
