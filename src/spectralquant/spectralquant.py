@@ -28,6 +28,7 @@ from spectralquant.nonuniform_quantization import (
     LloydMaxQuantizer,
     NonUniformQuantizer,
     CompressedVector,
+    WaterfillAllocation,
 )
 from spectralquant.selective_qjl import SelectiveQJL, FullQJL
 from spectralquant.metrics import (
@@ -68,6 +69,16 @@ class EngineConfig:
         fitting.  Used when calling :meth:`SpectralQuantEngine.fit_quantizers`.
     use_value_rotation:
         If ``True``, rotate value vectors as well as keys.
+    use_water_fill:
+        v2 flag.  When ``True``, semantic-regime bits are allocated per-dim
+        via the water-filling rule in :mod:`spectralquant.waterfill`.  When
+        ``False`` (default), behaviour matches v1 exactly.
+    wf_min_bits:
+        Lower bound on per-semantic-dim bit width passed to the water-fill
+        allocator.  Ignored when ``use_water_fill`` is False.
+    wf_max_bits:
+        Upper bound on per-semantic-dim bit width, or ``None`` for no cap.
+        Ignored when ``use_water_fill`` is False.
     """
 
     avg_bits: float = 4.0
@@ -77,6 +88,31 @@ class EngineConfig:
     rotation_seed: int = 42
     n_calibration_tokens: int = 10_000
     use_value_rotation: bool = True
+    # --- v2 water-filling controls (default off → v1 behaviour) ---
+    use_water_fill: bool = False
+    wf_min_bits: int = 0
+    wf_max_bits: Optional[int] = None
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.use_water_fill, bool):
+            raise TypeError("EngineConfig.use_water_fill must be a bool")
+        if not isinstance(self.wf_min_bits, int) or isinstance(self.wf_min_bits, bool):
+            raise TypeError("EngineConfig.wf_min_bits must be an int")
+        if self.wf_min_bits < 0:
+            raise ValueError(
+                f"EngineConfig.wf_min_bits must be >= 0, got {self.wf_min_bits}"
+            )
+        if self.wf_max_bits is not None:
+            if (
+                not isinstance(self.wf_max_bits, int)
+                or isinstance(self.wf_max_bits, bool)
+            ):
+                raise TypeError("EngineConfig.wf_max_bits must be an int or None")
+            if self.wf_max_bits < self.wf_min_bits:
+                raise ValueError(
+                    f"EngineConfig.wf_max_bits ({self.wf_max_bits}) must be >= "
+                    f"wf_min_bits ({self.wf_min_bits})"
+                )
 
 
 # ---------------------------------------------------------------------------
@@ -185,6 +221,9 @@ class SpectralQuantEngine:
                 avg_bits=self._config.avg_bits,
                 max_lloyd_iter=self._config.lloyd_max_iter,
                 seed=self._config.lloyd_seed,
+                use_water_fill=self._config.use_water_fill,
+                wf_min_bits=self._config.wf_min_bits,
+                wf_max_bits=self._config.wf_max_bits,
             ).fit(data, d_eff=hcd.d_eff)
             self._quantizers[(layer_idx, head_idx, head_type)] = quant
         self._is_fitted = True
@@ -200,6 +239,74 @@ class SpectralQuantEngine:
                 f"type='{head_type}'.  Call fit_quantizers() first."
             )
         return self._quantizers[key]
+
+    # ------------------------------------------------------------------
+    # v2 metadata accessors
+    # ------------------------------------------------------------------
+
+    @property
+    def config(self) -> EngineConfig:
+        """Active :class:`EngineConfig` for this engine instance."""
+        return self._config
+
+    @property
+    def use_water_fill(self) -> bool:
+        """Whether v2 water-filling is enabled at the engine config level."""
+        return self._config.use_water_fill
+
+    @property
+    def is_fitted(self) -> bool:
+        return self._is_fitted
+
+    def waterfill_allocations(
+        self,
+    ) -> Dict[Tuple[int, int, str], Optional[WaterfillAllocation]]:
+        """Return per-head water-fill allocation metadata.
+
+        The dict is keyed by ``(layer_idx, head_idx, head_type)`` and the
+        value is the quantizer's
+        :attr:`~spectralquant.nonuniform_quantization.NonUniformQuantizer.waterfill_allocation`.
+        Useful for the v2 three-way benchmark JSONs (spec §11.2).
+        """
+        return {
+            key: q.waterfill_allocation for key, q in self._quantizers.items()
+        }
+
+    def allocation_metadata(self) -> Dict[str, Any]:
+        """JSON-safe summary of bit allocation across all fitted quantizers.
+
+        Returns a dict with:
+            ``use_water_fill``: bool from the engine config.
+            ``wf_min_bits`` / ``wf_max_bits``: ints (or None) from config.
+            ``formula_version``: ``"waterfill-v1"`` if any head used
+                water-filling, else ``"uniform-v1"``.
+            ``per_head``: list of per-head dicts produced by
+                :meth:`WaterfillAllocation.to_dict`, identified by
+                ``(layer_idx, head_idx, head_type)``.
+        """
+        per_head: List[Dict[str, Any]] = []
+        any_wf = False
+        for (layer_idx, head_idx, head_type), q in self._quantizers.items():
+            wfa = q.waterfill_allocation
+            entry: Dict[str, Any] = {
+                "layer_idx": int(layer_idx),
+                "head_idx": int(head_idx),
+                "head_type": str(head_type),
+            }
+            if wfa is not None:
+                entry["allocation"] = wfa.to_dict()
+                if wfa.use_water_fill:
+                    any_wf = True
+            per_head.append(entry)
+        return {
+            "use_water_fill": bool(self._config.use_water_fill),
+            "wf_min_bits": int(self._config.wf_min_bits),
+            "wf_max_bits": (
+                None if self._config.wf_max_bits is None else int(self._config.wf_max_bits)
+            ),
+            "formula_version": "waterfill-v1" if any_wf else "uniform-v1",
+            "per_head": per_head,
+        }
 
     # ------------------------------------------------------------------
     # Public compression API

@@ -1,0 +1,11 @@
+{
+  "completed": 50,
+  "elapsed_s": 1976.375,
+  "kind": "longbench_partial_task",
+  "method": "spectralquant_v2",
+  "paper_valid": false,
+  "partial": true,
+  "status": "ended",
+  "task": "narrativeqa",
+  "total": 50
+}

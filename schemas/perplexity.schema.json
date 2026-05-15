@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://niashwin.github.io/spectralquant-v2/schemas/perplexity.schema.json",
+  "title": "SpectralQuant v2 Perplexity Result",
+  "description": "Schema for JSON files produced by experiments/run_perplexity.py. Each file holds one (model, bits, seed, eval_corpus) tuple and per-method perplexity rows.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "family",
+    "run_id",
+    "timestamp",
+    "repo",
+    "commit",
+    "command",
+    "mode",
+    "paper_valid",
+    "model",
+    "hardware",
+    "software",
+    "data",
+    "methods",
+    "evidence_ids",
+    "caveats"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "schema_version": { "type": "string", "minLength": 1 },
+    "family":         { "type": "string", "const": "perplexity" },
+    "run_id":         { "type": "string", "minLength": 1 },
+    "timestamp":      { "type": "string", "minLength": 1 },
+    "repo":           { "type": "string", "minLength": 1 },
+    "commit":         { "type": "string", "minLength": 7 },
+    "command":        { "type": "string", "minLength": 1 },
+    "mode":           {
+      "type": "string",
+      "enum": ["full", "synthetic_smoke", "inline_corpus_smoke", "dry_run"]
+    },
+    "paper_valid":    { "type": "boolean" },
+    "model": {
+      "type": "object",
+      "required": ["name"],
+      "additionalProperties": true,
+      "properties": {
+        "name":      { "type": "string", "minLength": 1 },
+        "layers":    { "type": "integer", "minimum": 1 },
+        "head_dim":  { "type": "integer", "minimum": 1 }
+      }
+    },
+    "hardware": {
+      "type": "object",
+      "required": ["gpu", "cuda"],
+      "additionalProperties": true
+    },
+    "software": {
+      "type": "object",
+      "required": ["python", "torch"],
+      "additionalProperties": true
+    },
+    "data": {
+      "type": "object",
+      "required": [
+        "eval_corpus",
+        "n_eval_sequences",
+        "max_eval_tokens",
+        "stride"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "eval_corpus":        { "type": "string", "minLength": 1 },
+        "n_eval_sequences":   { "type": "integer", "minimum": 1 },
+        "max_eval_tokens":    { "type": "integer", "minimum": 8 },
+        "stride":             { "type": "integer", "minimum": 1 }
+      }
+    },
+    "methods": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "$ref": "#/$defs/method_record" }
+    },
+    "evidence_ids": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "caveats": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "status": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "$defs": {
+    "method_record": {
+      "type": "object",
+      "required": ["label", "perplexity", "nll_per_token", "n_tokens"],
+      "additionalProperties": true,
+      "properties": {
+        "label":         { "type": "string", "minLength": 1 },
+        "perplexity":    { "type": "number", "exclusiveMinimum": 0 },
+        "nll_per_token": { "type": "number" },
+        "n_tokens":      { "type": "integer", "minimum": 1 },
+        "avg_bits":      { "type": "number" },
+        "evidence_ids": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

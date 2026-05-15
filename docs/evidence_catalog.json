@@ -1,0 +1,1162 @@
+{
+  "schema_version": "1",
+  "repo": "niashwin/spectralquant-v2",
+  "baseline_repo": "Dynamis-Labs/spectralquant",
+  "generated_at": "2026-04-29",
+  "generated_by": "Phase 1 evidence catalog scaffold (auto-walked v1 artifacts; numbers extracted from JSON when present)",
+  "notes": [
+    "Every entry has a stable evidence_id. v2 scripts and the v2 report must reference these IDs rather than typing numbers.",
+    "Every numeric value listed here is copied from the cited file or marked `caveat`; do not trust an entry that lacks `source_file`.",
+    "Caveats are part of the evidence. Do not paper over them in the report.",
+    "Caveats listed as 'V1-GAP-*' are blocking for v2 publication unless explicitly demoted in docs/claims_discipline.md."
+  ],
+  "entries": [
+    {
+      "id": "V1-PAPER-001",
+      "kind": "paper_source",
+      "path": "paper_output/spectralquant.tex",
+      "supports": ["v1 narrative", "method description", "figure list"],
+      "caveats": ["Treat as authored claims, not validated evidence — every empirical sentence must be re-traced to a JSON file before reuse in v2 report."]
+    },
+    {
+      "id": "V1-PAPER-002",
+      "kind": "paper_compiled",
+      "path": "paper_output/spectralquant.pdf",
+      "supports": ["compiled v1 report"],
+      "caveats": ["Compiled output. Source of truth is the .tex plus the JSON files behind every empirical sentence."]
+    },
+    {
+      "id": "V1-PAPER-003",
+      "kind": "paper_bib",
+      "path": "paper_output/spectralquant_refs.bib",
+      "supports": ["citation list"],
+      "caveats": []
+    },
+    {
+      "id": "V1-PAPER-004",
+      "kind": "paper_figures_dir",
+      "path": "paper_output/figures/",
+      "supports": ["v1 published figures (eigenvalue spectrum, memory savings, pareto, scaling, seqlen)"],
+      "files": [
+        "paper_output/figures/fig_eigenvalue_spectrum.pdf",
+        "paper_output/figures/fig_memory_savings.pdf",
+        "paper_output/figures/fig_pareto.pdf",
+        "paper_output/figures/fig_scaling.pdf",
+        "paper_output/figures/fig_seqlen.pdf"
+      ],
+      "caveats": ["v2 must regenerate any figure it reuses from the underlying JSON, not by importing the PDF."]
+    },
+    {
+      "id": "V1-PAPER-005",
+      "kind": "figure_generator",
+      "path": "paper_output/generate_figures.py",
+      "supports": ["script that generated v1 paper figures"],
+      "caveats": []
+    },
+    {
+      "id": "V1-README-001",
+      "kind": "readme_claims_table",
+      "path": "README.md",
+      "supports": ["canonical v1 claim → script → JSON mapping (Headline Results table; Paper Claims table)"],
+      "caveats": [
+        "README headline says SQ 0.9485 vs TQ 0.9226 on Qwen2.5-14B with 5.95x vs 5.02x. These match results/memory_efficiency/all_models.json (V1-RESULT-001) — but only the 14B Instruct row.",
+        "README claims `2.2x faster latency` at 512 tokens; this conflicts with V1-RESULT-003 (V1-GAP-003)."
+      ]
+    },
+    {
+      "id": "V1-IMPL-001",
+      "kind": "code_module",
+      "path": "src/spectralquant/calibration.py",
+      "supports": ["per-layer/per-head key collector", "PCA / covariance / d_eff (participation ratio)"],
+      "caveats": ["v2 must verify which d_eff convention is used (normalized vs unnormalized — see V1-GAP-004) before extending."]
+    },
+    {
+      "id": "V1-IMPL-002",
+      "kind": "code_module",
+      "path": "src/spectralquant/spectral_rotation.py",
+      "supports": ["calibrated eigenbasis rotation vs Haar/random rotation baseline"],
+      "caveats": []
+    },
+    {
+      "id": "V1-IMPL-003",
+      "kind": "code_module",
+      "path": "src/spectralquant/nonuniform_quantization.py",
+      "supports": ["Lloyd-Max quantizer", "uniform-bit semantic codebook (v1)"],
+      "caveats": ["v2 must extend this for per-dimension codebooks driven by water-filling. v1 uniform behavior must remain reachable via use_water_fill=False."]
+    },
+    {
+      "id": "V1-IMPL-004",
+      "kind": "code_module",
+      "path": "src/spectralquant/selective_qjl.py",
+      "supports": ["semantic-only QJL residual correction"],
+      "caveats": []
+    },
+    {
+      "id": "V1-IMPL-005",
+      "kind": "code_module",
+      "path": "src/spectralquant/engine.py",
+      "supports": ["SpectralQuantEngine (extends TurboQuantEngine)"],
+      "caveats": ["Two engine classes coexist (this file and src/spectralquant/spectralquant.py). v2 must pick one canonical engine — see V1-GAP-010."]
+    },
+    {
+      "id": "V1-IMPL-006",
+      "kind": "code_module",
+      "path": "src/spectralquant/spectralquant.py",
+      "supports": ["legacy standalone SpectralQuant pipeline"],
+      "caveats": ["Duplicate engine surface vs V1-IMPL-005. v2 must consolidate or clearly document which is the supported entrypoint (V1-GAP-010)."]
+    },
+    {
+      "id": "V1-IMPL-007",
+      "kind": "code_module",
+      "path": "src/spectralquant/metrics.py",
+      "supports": ["cosine similarity, MSE, compression-ratio helpers"],
+      "caveats": []
+    },
+    {
+      "id": "V1-IMPL-008",
+      "kind": "code_module",
+      "path": "src/spectralquant/utils.py",
+      "supports": ["seeding, model config, data loading"],
+      "caveats": []
+    },
+    {
+      "id": "V1-IMPL-009",
+      "kind": "code_module",
+      "path": "src/spectralquant/__init__.py",
+      "supports": ["public namespace"],
+      "caveats": ["Public exports must be audited for the duplicate-engine issue (V1-GAP-010)."]
+    },
+    {
+      "id": "V1-EXP-001",
+      "kind": "experiment_script",
+      "path": "experiments/run_memory_efficiency.py",
+      "supports": ["main 4-model results table"],
+      "produces": ["results/memory_efficiency/all_models.json"],
+      "caveats": ["README claims 4 models; on-disk all_models.json contains only 3 Qwen sizes (V1-GAP-002)."]
+    },
+    {
+      "id": "V1-EXP-002",
+      "kind": "experiment_script",
+      "path": "experiments/neurips_models_asymmetry.py",
+      "supports": ["Mistral + Gemma + cross-model KV asymmetry"],
+      "produces": ["results/neurips/neurips_mistral.json", "results/neurips/neurips_gemma.json", "results/neurips/neurips_kv_asymmetry.json"],
+      "caveats": ["Gemma row in neurips_kv_asymmetry.json is an HF gated-repo 403 error, not a measurement (V1-GAP-011)."]
+    },
+    {
+      "id": "V1-EXP-003",
+      "kind": "experiment_script",
+      "path": "experiments/neurips_seeds_latency.py",
+      "supports": ["seeds CI", "latency crossover", "Qwen 7B PPL"],
+      "produces": ["results/neurips/neurips_10seed.json", "results/neurips/neurips_latency_crossover.json", "results/neurips/neurips_qwen7b_ppl.json"],
+      "caveats": ["File is named '10seed' but contains 5 seeds on disk (V1-GAP-001)."]
+    },
+    {
+      "id": "V1-EXP-004",
+      "kind": "experiment_script",
+      "path": "experiments/neurips_llama_full.py",
+      "supports": ["LongBench n=5", "NIAH on Llama-3.1-8B"],
+      "produces": ["results/v3/v3_longbench.json", "results/v3/v3_niah_llama_v2.json", "results/neurips/neurips_llama_niah.json", "results/neurips/neurips_llama_ppl.json"],
+      "caveats": ["LongBench n=5 is too small to support generalization claims (V1-GAP-008)."]
+    },
+    {
+      "id": "V1-EXP-005",
+      "kind": "experiment_script",
+      "path": "experiments/lowrank_cossim_sweep.py",
+      "supports": ["low-rank SVD projection sweep r=2..64"],
+      "produces": ["results/lowrank/lowrank_cossim_sweep.json"],
+      "caveats": []
+    },
+    {
+      "id": "V1-EXP-006",
+      "kind": "experiment_script",
+      "path": "experiments/run_v3_perplexity_crossarch.py",
+      "supports": ["cross-architecture PPL"],
+      "produces": ["results/v3/v3_crossarch.json", "results/v3/v3_perplexity.json"],
+      "caveats": []
+    },
+    {
+      "id": "V1-EXP-007",
+      "kind": "experiment_script",
+      "path": "experiments/run_v3_ppl_niah_v2.py",
+      "supports": ["PPL parity", "NIAH v2"],
+      "produces": ["results/v3/v3_perplexity_v2.json", "results/v3/v3_niah_llama_v2.json"],
+      "caveats": ["fp16 / TQ / SQ all show identical PPL=9.5099805... at 1023 tokens — verified, but the equality may indicate the test is too short to differentiate methods (V1-GAP-004b)."]
+    },
+    {
+      "id": "V1-EXP-008",
+      "kind": "experiment_script",
+      "path": "experiments/run_v3_deff_distshift_latency.py",
+      "supports": ["d_eff sweep, distribution shift, latency"],
+      "produces": ["results/v3/v3_distribution_shift.json", "results/v3/v3_deff_sweep.json", "results/v3/v3_latency.json"],
+      "caveats": ["v3_latency.json reports SQ compression at 21.04 ms vs TQ at 0.40 ms at 512 tokens — this directly contradicts neurips_latency_crossover.json (V1-GAP-003)."]
+    },
+    {
+      "id": "V1-EXP-009",
+      "kind": "experiment_script",
+      "path": "experiments/run_calibration_stability.py",
+      "supports": ["calibration stability (CV)"],
+      "produces": ["results/calibration_stability/stability.json"],
+      "caveats": ["The on-disk JSON is annotated 'Reconstructed from B200 experiment log output (original file was truncated during download)' — treat as derived, not raw (V1-GAP-005)."]
+    },
+    {
+      "id": "V1-EXP-010",
+      "kind": "experiment_script",
+      "path": "experiments/run_final_experiments.py",
+      "supports": ["Config F ablation"],
+      "produces": ["results/final/final_experiments.json"],
+      "caveats": []
+    },
+    {
+      "id": "V1-EXP-011",
+      "kind": "experiment_script",
+      "path": "experiments/phase1_eigenspectral.py",
+      "supports": ["eigenspectral phase1 calibration scan"],
+      "produces": ["results/eigenspectral/phase1_metadata.json", "results/eigenspectral/summary_statistics.json", "results/eigenspectral/deff_per_layer.csv", "results/eigenspectral/calibration/"],
+      "caveats": [
+        "phase1_metadata.json has gate1_status='FAILED' on disk (V1-GAP-006).",
+        "Reports mean d_eff_keys ≈ 35.19 — this is the UNNORMALIZED participation ratio. Conflicts with the normalized-keys d_eff ≈ 3.95 used in the headline claim (V1-GAP-004)."
+      ]
+    },
+    {
+      "id": "V1-EXP-012",
+      "kind": "experiment_script",
+      "path": "experiments/phase0_setup.py",
+      "supports": ["phase 0 baseline reproduction targets"],
+      "produces": ["results/baseline_reproduction/"],
+      "caveats": ["Listed in v1 evidence map as marking TurboQuant baseline reproduction status — must be inspected before any 'official TurboQuant' claim (V1-GAP-012)."]
+    },
+    {
+      "id": "V1-EXP-013",
+      "kind": "experiment_script",
+      "path": "experiments/phase2_integration.py",
+      "supports": ["v1 integration scripts"],
+      "produces": [],
+      "caveats": []
+    },
+    {
+      "id": "V1-EXP-014",
+      "kind": "experiment_script",
+      "path": "experiments/phase3_exp1_attention_quality.py",
+      "supports": ["v1 attention-quality experiment"],
+      "produces": [],
+      "caveats": []
+    },
+    {
+      "id": "V1-EXP-015",
+      "kind": "experiment_script",
+      "path": "experiments/phase3_exp2_ablation.py",
+      "supports": ["v1 ablation"],
+      "produces": ["results/comparison/ablation_v2.json", "results/comparison/full_ablation.json"],
+      "caveats": ["Ablation files claim TQ baseline cosines that diverge from V1-RESULT-001 by configuration (V1-GAP-013)."]
+    },
+    {
+      "id": "V1-EXP-016",
+      "kind": "experiment_script",
+      "path": "experiments/phase3_exp3_generation.py",
+      "supports": ["generation eval (v1)"],
+      "produces": [],
+      "caveats": []
+    },
+    {
+      "id": "V1-EXP-017",
+      "kind": "experiment_script",
+      "path": "experiments/phase3_exp4_benchmarks.py",
+      "supports": ["v1 benchmarks"],
+      "produces": [],
+      "caveats": []
+    },
+    {
+      "id": "V1-EXP-018",
+      "kind": "experiment_script",
+      "path": "experiments/phase3_exp5_vector_search.py",
+      "supports": ["v1 vector-search eval"],
+      "produces": [],
+      "caveats": []
+    },
+    {
+      "id": "V1-EXP-019",
+      "kind": "experiment_script",
+      "path": "experiments/phase3_exp6_latency.py",
+      "supports": ["v1 latency micro-benchmarks"],
+      "produces": [],
+      "caveats": ["Cross-check with V1-RESULT-003 and V1-RESULT-007 before reusing any number (V1-GAP-003)."]
+    },
+    {
+      "id": "V1-EXP-020",
+      "kind": "experiment_script",
+      "path": "experiments/phase3_exp7_calibration_cost.py",
+      "supports": ["v1 calibration cost"],
+      "produces": [],
+      "caveats": ["README cites '15-second calibration'; this file's measurement is the closest on-disk timing (V1-GAP-007)."]
+    },
+    {
+      "id": "V1-EXP-021",
+      "kind": "experiment_script",
+      "path": "experiments/run_all_experiments.py",
+      "supports": ["v1 driver"],
+      "produces": [],
+      "caveats": []
+    },
+    {
+      "id": "V1-EXP-022",
+      "kind": "experiment_script",
+      "path": "experiments/multiregime_sweep.py",
+      "supports": ["multi-regime quantization sweep"],
+      "produces": ["results/multiregime/"],
+      "caveats": []
+    },
+    {
+      "id": "V1-EXP-023",
+      "kind": "experiment_script",
+      "path": "experiments/optimal_allocation_sweep.py",
+      "supports": ["bit-allocation sweep (precursor to v2 water-filling)"],
+      "produces": ["results/optimal_allocation/"],
+      "caveats": ["Probably the closest v1 artifact to the v2 water-filling idea — inspect before implementing waterfill.py."]
+    },
+    {
+      "id": "V1-EXP-024",
+      "kind": "experiment_script",
+      "path": "experiments/push_to_095.py",
+      "supports": ["aggressive-bit push experiment"],
+      "produces": ["results/push_095/"],
+      "caveats": []
+    },
+    {
+      "id": "V1-EXP-025",
+      "kind": "experiment_script",
+      "path": "experiments/shaped_cache_sweep.py",
+      "supports": ["shaped-cache figure pipeline"],
+      "produces": ["results/shaped_cache/", "figures/shaped_cache_*.png"],
+      "caveats": []
+    },
+    {
+      "id": "V1-RESULT-001",
+      "kind": "result_json",
+      "path": "results/memory_efficiency/all_models.json",
+      "supports": ["headline cosine and compression numbers across 3 Qwen sizes"],
+      "extracted": {
+        "Qwen2.5-14B-Instruct": {
+          "n_layers": 48,
+          "n_kv_heads": 8,
+          "head_dim": 128,
+          "d_eff": 4,
+          "TQ_3bit": {
+            "cos_sim": 0.9226097098489603,
+            "ratio": 5.019607843137255,
+            "avg_bits": 3.1875
+          },
+          "TQ_2bit": {
+            "cos_sim": 0.8248648208379745,
+            "ratio": 7.314285714285714,
+            "avg_bits": 2.1875
+          },
+          "SQ_noQJL_v3": {
+            "cos_sim": 0.9484994028011958,
+            "ratio": 5.953488372093023,
+            "avg_bits": 2.6875
+          }
+        }
+      },
+      "caveats": [
+        "README headline (0.9485 vs 0.9226, 5.95x vs 5.02x) is correct for Qwen2.5-14B-Instruct comparing TQ_3bit vs SQ_noQJL_v3 — but the two configs are at DIFFERENT avg_bits (TQ uses 3.19 bits, SQ uses 2.69 bits). The comparison is honest only if framed as 'at matched-or-better compression ratio'.",
+        "README claims '4 models'; this file holds 3 Qwen sizes (V1-GAP-002).",
+        "Mistral and Llama numbers referenced in README come from results/neurips/neurips_*.json, not this file."
+      ]
+    },
+    {
+      "id": "V1-RESULT-002",
+      "kind": "result_json",
+      "path": "results/neurips/neurips_kv_asymmetry.json",
+      "supports": ["key vs value d_eff asymmetry across 5 models"],
+      "extracted": {
+        "Qwen2.5-1.5B-Instruct": {
+          "d_eff_keys": 3.95,
+          "d_eff_vals": 40.34,
+          "head_dim": 128
+        },
+        "Qwen2.5-7B-Instruct": {
+          "d_eff_keys": 4.3,
+          "d_eff_vals": 52.15,
+          "head_dim": 128
+        },
+        "Qwen2.5-14B-Instruct": {
+          "d_eff_keys": 4.17,
+          "d_eff_vals": 52.11,
+          "head_dim": 128
+        },
+        "Llama-3.1-8B-Instruct": {
+          "d_eff_keys": 3.64,
+          "d_eff_vals": 44.21,
+          "head_dim": 128
+        },
+        "Mistral-7B-Instruct-v0.3": {
+          "d_eff_keys": 4.18,
+          "d_eff_vals": 54.93,
+          "head_dim": 128
+        }
+      },
+      "caveats": [
+        "gemma-2-9b-it row is an HF 403 gated-repo error, not a measurement (V1-GAP-011).",
+        "These d_eff values use NORMALIZED keys (per the v1 method) and are not comparable to the unnormalized 35.19 number in V1-RESULT-008 (V1-GAP-004)."
+      ]
+    },
+    {
+      "id": "V1-RESULT-003",
+      "kind": "result_json",
+      "path": "results/neurips/neurips_latency_crossover.json",
+      "supports": ["latency crossover at 512 tokens"],
+      "extracted": {
+        "model": "Qwen/Qwen2.5-1.5B-Instruct",
+        "seq_lengths": [
+          512,
+          1024,
+          2048
+        ],
+        "crossover_seq_len": 512,
+        "per_seq_len_512": {
+          "tq_per_step_ms": 0.5663140000020661,
+          "sq_per_step_ms": 0.2572705000005726,
+          "tq_attention_ms": 0.22659400000080154,
+          "sq_attention_ms": 0.07081800000108274,
+          "tq_compress_1token_ms": 0.33972000000126457,
+          "sq_compress_1token_ms": 0.18645249999948987,
+          "sq_speedup_over_tq": 2.2012395513702723,
+          "attn_speedup_sq_over_tq": 3.199666751353288
+        }
+      },
+      "caveats": [
+        "Conflicts with V1-RESULT-007 which reports SQ compression ≈ 21 ms vs TQ ≈ 0.4 ms at 512 tokens (V1-GAP-003).",
+        "Numbers are bound to Qwen2.5-1.5B-Instruct only. README's 2.2x latency claim is therefore single-model, not 'across architectures'."
+      ]
+    },
+    {
+      "id": "V1-RESULT-004",
+      "kind": "result_json",
+      "path": "results/v3/v3_perplexity_v2.json",
+      "supports": ["PPL parity claim (Qwen 1.5B)"],
+      "extracted": {
+        "fp16_ppl": 9.509980534121931,
+        "tq_ppl": 9.509980534121931,
+        "sq_ppl": 9.509980534121931,
+        "n_tokens": 1023
+      },
+      "caveats": [
+        "All three methods report identical PPL to 13+ digits, which is suspicious for a real compression pipeline. Likely a too-short / non-decoding eval — must be re-run before any 'compression-neutral PPL' claim (V1-GAP-014)."
+      ]
+    },
+    {
+      "id": "V1-RESULT-005",
+      "kind": "result_json",
+      "path": "results/neurips/neurips_qwen7b_ppl.json",
+      "supports": ["Qwen 7B PPL ≈ 7.51 claim"],
+      "extracted": {},
+      "caveats": ["Inspect ctx-length list and methods before reuse; v1 evidence map flags only the 7B headline value."]
+    },
+    {
+      "id": "V1-RESULT-006",
+      "kind": "result_json",
+      "path": "results/neurips/neurips_10seed.json",
+      "supports": ["seeds CI on Qwen 1.5B"],
+      "extracted": {
+        "seeds_in_file": [
+          42,
+          123,
+          7,
+          2024,
+          31415
+        ],
+        "n_seeds_in_file": 5,
+        "tq_mean": 0.8408672554194927,
+        "sq_mean": 0.8634522778466345,
+        "wilcoxon_p": 0.03125,
+        "claimed_in_readme": "10 seeds"
+      },
+      "caveats": [
+        "Filename and README say 10-seed; on-disk JSON contains 5 seeds (V1-GAP-001). The Wilcoxon p=0.03125 is exactly the minimum p-value achievable with n=5 paired observations and is not robust to a single dropped seed."
+      ]
+    },
+    {
+      "id": "V1-RESULT-007",
+      "kind": "result_json",
+      "path": "results/v3/v3_latency.json",
+      "supports": ["compression vs attention latency at 512 tokens"],
+      "extracted": {
+        "seq_len": 512,
+        "tq_compression_ms_mean": 0.39903219999928297,
+        "sq_compression_ms_mean": 21.04302000000189,
+        "tq_attention_ms_mean": 0.22737699999879624,
+        "sq_attention_ms_mean": 0.050958600002104504
+      },
+      "caveats": [
+        "SQ compression here is ~50x SLOWER than TQ — directly contradicts V1-RESULT-003 which shows SQ compression FASTER than TQ at the same sequence length (V1-GAP-003).",
+        "The two JSONs cannot both be the published latency story; v2 must reconcile or demote."
+      ]
+    },
+    {
+      "id": "V1-RESULT-008",
+      "kind": "result_json",
+      "path": "results/eigenspectral/summary_statistics.json",
+      "supports": ["unnormalized eigenspectral d_eff (phase 1)"],
+      "extracted": {
+        "keys_mean_d_eff": 35.18859328542437,
+        "values_mean_d_eff": 56.65463628087725
+      },
+      "caveats": [
+        "These are the UNNORMALIZED d_eff values. The headline claim 'd_eff/head_dim ≈ 3–4%' depends on the NORMALIZED-key methodology in V1-RESULT-002 (V1-GAP-004).",
+        "phase1_metadata.json marks gate1_status='FAILED' (V1-GAP-006)."
+      ]
+    },
+    {
+      "id": "V1-RESULT-009",
+      "kind": "result_json",
+      "path": "results/eigenspectral/phase1_metadata.json",
+      "supports": ["phase 1 metadata"],
+      "extracted": {
+        "model": "Qwen/Qwen2.5-1.5B",
+        "n_seqs": 50,
+        "seq_len": 128,
+        "n_layers": 28,
+        "n_kv_heads": 2,
+        "head_dim": 128,
+        "gate1_status": "FAILED",
+        "wall_time_s": 31.05
+      },
+      "caveats": ["gate1_status='FAILED' is on disk (V1-GAP-006). wall_time 31 s is the closest data point to the README '15-second calibration' claim (V1-GAP-007)."]
+    },
+    {
+      "id": "V1-RESULT-010",
+      "kind": "result_json",
+      "path": "results/eigenspectral/deff_per_layer.csv",
+      "supports": ["per-layer d_eff CSV"],
+      "extracted": {},
+      "caveats": ["CSV not JSON — must verify column conventions before reuse."]
+    },
+    {
+      "id": "V1-RESULT-011",
+      "kind": "result_json",
+      "path": "results/calibration_stability/stability.json",
+      "supports": ["calibration stability CV claim"],
+      "extracted": {
+        "mean_cv": 0.0394,
+        "max_cv": 0.202,
+        "n_heads_cv_above_02": 1,
+        "total_heads": 56,
+        "n_samples_per_split": 50,
+        "per_split_mean_deff": [
+          3.93,
+          3.71,
+          3.61
+        ],
+        "note_in_file": "Reconstructed from B200 experiment log output (original file was truncated during download)"
+      },
+      "caveats": ["File self-declares as RECONSTRUCTED FROM LOGS, not the original artifact (V1-GAP-005). Treat as supportive, not primary."]
+    },
+    {
+      "id": "V1-RESULT-012",
+      "kind": "result_json",
+      "path": "results/comparison/comparison_results.json",
+      "supports": ["per-head TQ vs SQ at 3 bits on Qwen 1.5B"],
+      "extracted": {
+        "model_name": "Qwen/Qwen2.5-1.5B-Instruct",
+        "total_bits": 3,
+        "tq_mean_cosine_sim": 0.970284141600132,
+        "sq_mean_cosine_sim": 0.41865663044154644,
+        "mean_improvement": -0.5516275111585855,
+        "win_rate": 0.0,
+        "n_samples": 16,
+        "skipped": 14
+      },
+      "caveats": [
+        "STRONGLY NEGATIVE result: SQ loses to TQ on every head sampled. Either (a) this is a broken or early SQ build, (b) a different SQ configuration than the headline, or (c) a real weakness at small-model 3-bit. Must be reconciled or excluded before publication (V1-GAP-002b)."
+      ]
+    },
+    {
+      "id": "V1-RESULT-013",
+      "kind": "result_json",
+      "path": "results/comparison/proper_comparison.json",
+      "supports": ["a 'proper comparison' run that contradicts V1-RESULT-012"],
+      "extracted": {},
+      "caveats": ["File name suggests this is the corrected version of V1-RESULT-012. v2 must determine which file the headline depends on."]
+    },
+    {
+      "id": "V1-RESULT-014",
+      "kind": "result_json",
+      "path": "results/comparison/full_ablation.json",
+      "supports": ["full ablation table (TurboQuant baseline through full SpectralQuant)"],
+      "extracted": {},
+      "caveats": []
+    },
+    {
+      "id": "V1-RESULT-015",
+      "kind": "result_json",
+      "path": "results/comparison/ablation_v2.json",
+      "supports": ["v2 ablation variant"],
+      "extracted": {},
+      "caveats": ["'v2' in this filename is v1-era nomenclature, NOT the SpectralQuant v2 spec target. Do not confuse with the v2 water-filling work."]
+    },
+    {
+      "id": "V1-RESULT-016",
+      "kind": "result_json",
+      "path": "results/lowrank/lowrank_cossim_sweep.json",
+      "supports": ["low-rank SVD baseline failure for value cache (r=4 → CosSim≈0.15 claim)"],
+      "extracted": {},
+      "caveats": []
+    },
+    {
+      "id": "V1-RESULT-017",
+      "kind": "result_json",
+      "path": "results/final/final_experiments.json",
+      "supports": ["Config F ablation; PPL; CIs"],
+      "extracted": {},
+      "caveats": []
+    },
+    {
+      "id": "V1-RESULT-018",
+      "kind": "result_json",
+      "path": "results/v3/v3_crossarch.json",
+      "supports": ["cross-architecture cosine deltas (Llama only on disk)"],
+      "extracted": {},
+      "caveats": [
+        "README cites Llama +1.74 pp / Mistral +1.21 pp / Gemma +0.72 pp; this file currently only carries the Llama row — Mistral comes from neurips_mistral.json and Gemma from neurips_gemma.json (which is partly an HF 403)."
+      ]
+    },
+    {
+      "id": "V1-RESULT-019",
+      "kind": "result_json",
+      "path": "results/v3/v3_distribution_shift.json",
+      "supports": ["distribution-shift experiment (wiki↔code)"],
+      "extracted": {
+        "split_keys": ["wiki→wiki", "wiki→code", "code→wiki", "code→code"]
+      },
+      "caveats": []
+    },
+    {
+      "id": "V1-RESULT-020",
+      "kind": "result_json",
+      "path": "results/v3/v3_longbench.json",
+      "supports": ["LongBench n=5"],
+      "extracted": {
+        "tasks": ["narrativeqa", "qasper", "hotpotqa", "gov_report", "trec", "triviaqa"]
+      },
+      "caveats": ["n=5 per task is too small for any 'LongBench improvement' claim (V1-GAP-008)."]
+    },
+    {
+      "id": "V1-RESULT-021",
+      "kind": "result_json",
+      "path": "results/v3/v3_niah_llama_v2.json",
+      "supports": ["Needle-in-a-haystack on Llama"],
+      "extracted": {},
+      "caveats": ["v1 evidence map flags NIAH artifacts as limited and partly broken (V1-GAP-009)."]
+    },
+    {
+      "id": "V1-RESULT-022",
+      "kind": "result_json",
+      "path": "results/v3/v3_summary.json",
+      "supports": ["v3 summary aggregate"],
+      "extracted": {},
+      "caveats": []
+    },
+    {
+      "id": "V1-RESULT-023",
+      "kind": "result_json",
+      "path": "results/all_results_summary.json",
+      "supports": ["top-level cross-experiment summary"],
+      "extracted": {},
+      "caveats": ["Not schema-validated; treat as derived index, not primary source."]
+    },
+    {
+      "id": "V1-FIG-001",
+      "kind": "figure",
+      "path": "figures/shaped_cache_heatmap.png",
+      "supports": ["shaped cache sweep heatmap"],
+      "produced_by": "gen_shaped_cache_figures.py",
+      "caveats": []
+    },
+    {
+      "id": "V1-FIG-002",
+      "kind": "figure",
+      "path": "figures/shaped_cache_kv_sensitivity.png",
+      "supports": ["KV sensitivity figure"],
+      "produced_by": "gen_shaped_cache_figures.py",
+      "caveats": []
+    },
+    {
+      "id": "V1-FIG-003",
+      "kind": "figure",
+      "path": "figures/shaped_cache_pareto.png",
+      "supports": ["Pareto figure"],
+      "produced_by": "gen_shaped_cache_figures.py",
+      "caveats": []
+    },
+    {
+      "id": "V1-FIG-004",
+      "kind": "figure",
+      "path": "paper_output/figures/fig_eigenvalue_spectrum.pdf",
+      "supports": ["paper Figure: eigenvalue spectrum"],
+      "produced_by": "paper_output/generate_figures.py",
+      "caveats": []
+    },
+    {
+      "id": "V1-FIG-005",
+      "kind": "figure",
+      "path": "paper_output/figures/fig_memory_savings.pdf",
+      "supports": ["paper Figure: memory savings"],
+      "produced_by": "paper_output/generate_figures.py",
+      "caveats": []
+    },
+    {
+      "id": "V1-FIG-006",
+      "kind": "figure",
+      "path": "paper_output/figures/fig_pareto.pdf",
+      "supports": ["paper Figure: Pareto"],
+      "produced_by": "paper_output/generate_figures.py",
+      "caveats": []
+    },
+    {
+      "id": "V1-FIG-007",
+      "kind": "figure",
+      "path": "paper_output/figures/fig_scaling.pdf",
+      "supports": ["paper Figure: model scaling"],
+      "produced_by": "paper_output/generate_figures.py",
+      "caveats": []
+    },
+    {
+      "id": "V1-FIG-008",
+      "kind": "figure",
+      "path": "paper_output/figures/fig_seqlen.pdf",
+      "supports": ["paper Figure: sequence length scaling"],
+      "produced_by": "paper_output/generate_figures.py",
+      "caveats": []
+    },
+    {
+      "id": "V1-CONF-001",
+      "kind": "config",
+      "path": "configs/default.yaml",
+      "supports": ["v1 default experimental configuration"],
+      "caveats": []
+    },
+    {
+      "id": "V1-CONF-002",
+      "kind": "config",
+      "path": "configs/quick.yaml",
+      "supports": ["v1 quick-run configuration"],
+      "caveats": []
+    },
+    {
+      "id": "V1-CONF-003",
+      "kind": "build",
+      "path": "Makefile",
+      "supports": ["v1 make targets"],
+      "caveats": []
+    },
+    {
+      "id": "V1-CONF-004",
+      "kind": "build",
+      "path": "pyproject.toml",
+      "supports": ["v1 package metadata"],
+      "caveats": ["Repository URL still points at dynamis-labs/spectralquant; v2 should retarget to niashwin/spectralquant-v2 when implementing Phase 5+."]
+    },
+    {
+      "id": "V1-TEST-001",
+      "kind": "test",
+      "path": "tests/test_calibration.py",
+      "supports": ["v1 calibration unit tests"],
+      "caveats": []
+    },
+    {
+      "id": "V1-TEST-002",
+      "kind": "test",
+      "path": "tests/test_quantization.py",
+      "supports": ["v1 quantization unit tests"],
+      "caveats": []
+    },
+    {
+      "id": "V1-TEST-003",
+      "kind": "test",
+      "path": "tests/test_spectral_rotation.py",
+      "supports": ["v1 spectral-rotation unit tests"],
+      "caveats": []
+    },
+    {
+      "id": "V1-TEST-004",
+      "kind": "test",
+      "path": "tests/test_end_to_end.py",
+      "supports": ["v1 end-to-end smoke tests"],
+      "caveats": []
+    },
+    {
+      "id": "V1-TEST-005",
+      "kind": "test",
+      "path": "tests/conftest.py",
+      "supports": ["pytest fixtures"],
+      "caveats": []
+    },
+    {
+      "id": "V2-SPEC-001",
+      "kind": "spec",
+      "path": "docs/spectralquant_v2_technical_spec.md",
+      "supports": ["v2 implementation spec, target claims, claims discipline"],
+      "caveats": ["Authoritative for v2. Any conflict between this spec and v1 README must be resolved in favor of the spec."]
+    },
+    {
+      "id": "RUN-THREEWAY-MISTRAL-5BIT",
+      "kind": "modal_run_artifact",
+      "path": "spectralquant-v2-results:/results/three_way/Mistral-7B-v0.3_b5_calib32_eval8_seed42.json",
+      "supports": [
+        "Three-way attention-output cosine on mistralai/Mistral-7B-v0.3 at avg_bits=5",
+        "Compression accounting at b=5: TQ ratio 3.0843, SQ v2 ratio 3.0820",
+        "Backs the b=5 row of docs/full_matrix_evidence_summary.md §3"
+      ],
+      "caveats": [
+        "Sliced full-path benchmark row: WikiText-103, n_calib=32, n_eval=8, 8 sampled layers, single seed (42).",
+        "TurboQuant arm is the local reimplementation (V1-GAP-012 still in force).",
+        "Per-layer aggregates only; per-head min-cosine distribution is NOT in this artifact.",
+        "Local staging copy at modal_artifacts/mistral7b_full_b5/ is off-repo; the canonical store is the Modal volume.",
+        "Validates against schemas/three_way_result.schema.json with schemas/accounting.schema.json cross-resolved."
+      ],
+      "produced_by": "experiments/run_three_way.py at commit abcb09197998cc027df688abceae5fb81cfcd31d",
+      "extracted": {
+        "commit": "abcb09197998cc027df688abceae5fb81cfcd31d",
+        "mode": "full",
+        "paper_valid": true,
+        "model": "mistralai/Mistral-7B-v0.3",
+        "avg_bits": 5,
+        "seed": 42,
+        "n_calib": 32,
+        "n_eval": 8,
+        "n_layers_sample": 8,
+        "calibration_corpus": "WikiText-103",
+        "eval_corpus": "WikiText-103",
+        "disjoint_eval": true,
+        "max_calib_tokens": 384,
+        "layer_sample": [
+          0,
+          4,
+          8,
+          12,
+          16,
+          20,
+          24,
+          28
+        ],
+        "tq_attn_cosine_mean": 0.6555936578661203,
+        "tq_attn_cosine_std": 0.08860784489360324,
+        "sq_v1_attn_cosine_mean": 0.9404250364750624,
+        "sq_v1_attn_cosine_std": 0.039762185465969976,
+        "sq_v2_attn_cosine_mean": 0.9421251676976681,
+        "sq_v2_attn_cosine_std": 0.03903264058311664,
+        "tq_compression_ratio": 3.0843373493975905,
+        "sq_v2_compression_ratio": 3.0820165537998494,
+        "engine": "SpectralQuantEngine",
+        "gpu": "NVIDIA H200",
+        "model_revision": "caa1feb0e54d415e2df31207e5f4e273e33509b1"
+      }
+    },
+    {
+      "id": "RUN-THREEWAY-MISTRAL-3BIT",
+      "kind": "modal_run_artifact",
+      "path": "spectralquant-v2-results:/results/three_way/Mistral-7B-v0.3_b3_calib32_eval8_seed42.json",
+      "supports": [
+        "Three-way attention-output cosine on mistralai/Mistral-7B-v0.3 at avg_bits=3",
+        "Compression accounting at b=3: TQ ratio 5.0196, SQ v2 ratio 5.0135",
+        "Backs the b=3 row of docs/full_matrix_evidence_summary.md §3"
+      ],
+      "caveats": [
+        "Sliced full-path benchmark row: WikiText-103, n_calib=32, n_eval=8, 8 sampled layers, single seed (42).",
+        "TurboQuant arm is the local reimplementation (V1-GAP-012 still in force).",
+        "Per-layer aggregates only; per-head min-cosine distribution is NOT in this artifact.",
+        "5.0135 ratio is method-derived from accounting.py; this run does NOT unblock the v1 5.95x headline (V1-GAP-014).",
+        "Local staging copy at modal_artifacts/mistral7b_full_b3/ is off-repo; the canonical store is the Modal volume.",
+        "Validates against schemas/three_way_result.schema.json with schemas/accounting.schema.json cross-resolved."
+      ],
+      "produced_by": "experiments/run_three_way.py at commit abcb09197998cc027df688abceae5fb81cfcd31d",
+      "extracted": {
+        "commit": "abcb09197998cc027df688abceae5fb81cfcd31d",
+        "mode": "full",
+        "paper_valid": true,
+        "model": "mistralai/Mistral-7B-v0.3",
+        "avg_bits": 3,
+        "seed": 42,
+        "n_calib": 32,
+        "n_eval": 8,
+        "n_layers_sample": 8,
+        "calibration_corpus": "WikiText-103",
+        "eval_corpus": "WikiText-103",
+        "disjoint_eval": true,
+        "max_calib_tokens": 384,
+        "layer_sample": [
+          0,
+          4,
+          8,
+          12,
+          16,
+          20,
+          24,
+          28
+        ],
+        "tq_attn_cosine_mean": 0.6262865311000496,
+        "tq_attn_cosine_std": 0.09203311289718222,
+        "sq_v1_attn_cosine_mean": 0.9329149769619107,
+        "sq_v1_attn_cosine_std": 0.036942990577146936,
+        "sq_v2_attn_cosine_mean": 0.9326824732124805,
+        "sq_v2_attn_cosine_std": 0.03698033263189286,
+        "tq_compression_ratio": 5.019607843137255,
+        "sq_v2_compression_ratio": 5.013463892288861,
+        "engine": "SpectralQuantEngine",
+        "gpu": "NVIDIA H200",
+        "model_revision": "caa1feb0e54d415e2df31207e5f4e273e33509b1"
+      }
+    },
+    {
+      "id": "RUN-THREEWAY-MISTRAL-2BIT",
+      "kind": "modal_run_artifact",
+      "path": "spectralquant-v2-results:/results/three_way/Mistral-7B-v0.3_b2_calib32_eval8_seed42.json",
+      "supports": [
+        "Three-way attention-output cosine on mistralai/Mistral-7B-v0.3 at avg_bits=2",
+        "Compression accounting at b=2: TQ ratio 7.3143, SQ v2 ratio 7.3012",
+        "Backs the b=2 row of docs/full_matrix_evidence_summary.md §3"
+      ],
+      "caveats": [
+        "Sliced full-path benchmark row: WikiText-103, n_calib=32, n_eval=8, 8 sampled layers, single seed (42).",
+        "TurboQuant arm is the local reimplementation (V1-GAP-012 still in force).",
+        "Per-layer aggregates only; per-head min-cosine distribution is NOT in this artifact.",
+        "Largest SQ v2 − v1 cosine gap (+0.0177) at b=2 — this is the only run where the water-filling effect is visibly above noise; do not generalize the b=2 gap to other bit widths.",
+        "Local staging copy at modal_artifacts/mistral7b_full_b2/ is off-repo; the canonical store is the Modal volume.",
+        "Validates against schemas/three_way_result.schema.json with schemas/accounting.schema.json cross-resolved."
+      ],
+      "produced_by": "experiments/run_three_way.py at commit abcb09197998cc027df688abceae5fb81cfcd31d",
+      "extracted": {
+        "commit": "abcb09197998cc027df688abceae5fb81cfcd31d",
+        "mode": "full",
+        "paper_valid": true,
+        "model": "mistralai/Mistral-7B-v0.3",
+        "avg_bits": 2,
+        "seed": 42,
+        "n_calib": 32,
+        "n_eval": 8,
+        "n_layers_sample": 8,
+        "calibration_corpus": "WikiText-103",
+        "eval_corpus": "WikiText-103",
+        "disjoint_eval": true,
+        "max_calib_tokens": 384,
+        "layer_sample": [
+          0,
+          4,
+          8,
+          12,
+          16,
+          20,
+          24,
+          28
+        ],
+        "tq_attn_cosine_mean": 0.649525182787329,
+        "tq_attn_cosine_std": 0.07121738383507918,
+        "sq_v1_attn_cosine_mean": 0.9035388147458434,
+        "sq_v1_attn_cosine_std": 0.04216283361648719,
+        "sq_v2_attn_cosine_mean": 0.9212694820016623,
+        "sq_v2_attn_cosine_std": 0.03809236742452301,
+        "tq_compression_ratio": 7.314285714285714,
+        "sq_v2_compression_ratio": 7.301247771836007,
+        "engine": "SpectralQuantEngine",
+        "gpu": "NVIDIA H200",
+        "model_revision": "caa1feb0e54d415e2df31207e5f4e273e33509b1"
+      }
+    },
+    {
+      "id": "RUN-THREEWAY-QWEN-3BIT",
+      "kind": "modal_run_artifact",
+      "path": "spectralquant-v2-results:/results/three_way/Qwen2.5-7B_b3_calib32_eval8_seed42.json",
+      "supports": [
+        "Three-way attention-output cosine on Qwen/Qwen2.5-7B at avg_bits=3",
+        "Compression accounting at b=3 on a different architecture: TQ ratio 5.0196, SQ v2 ratio 5.0135",
+        "Backs the Qwen row of docs/full_matrix_evidence_summary.md §3"
+      ],
+      "caveats": [
+        "Sliced full-path benchmark row: WikiText-103, n_calib=32, n_eval=8, 8 sampled layers, single seed (42).",
+        "TurboQuant arm is the local reimplementation (V1-GAP-012 still in force).",
+        "Per-layer aggregates only; per-head min-cosine distribution is NOT in this artifact.",
+        "Cosine values are notably lower than Mistral at the same bit width (TQ 0.399 vs 0.626; SQ v2 0.779 vs 0.933) — record this asymmetry rather than averaging across architectures.",
+        "Single-architecture single-bit single-seed datapoint; does NOT support a 'universal' or 'cross-architecture' claim.",
+        "Local staging copy at modal_artifacts/qwen7b_full_b3/ is off-repo; the canonical store is the Modal volume.",
+        "Validates against schemas/three_way_result.schema.json with schemas/accounting.schema.json cross-resolved."
+      ],
+      "produced_by": "experiments/run_three_way.py at commit abcb09197998cc027df688abceae5fb81cfcd31d",
+      "extracted": {
+        "commit": "abcb09197998cc027df688abceae5fb81cfcd31d",
+        "mode": "full",
+        "paper_valid": true,
+        "model": "Qwen/Qwen2.5-7B",
+        "avg_bits": 3,
+        "seed": 42,
+        "n_calib": 32,
+        "n_eval": 8,
+        "n_layers_sample": 8,
+        "calibration_corpus": "WikiText-103",
+        "eval_corpus": "WikiText-103",
+        "disjoint_eval": true,
+        "max_calib_tokens": 384,
+        "layer_sample": [
+          0,
+          3,
+          6,
+          9,
+          12,
+          15,
+          18,
+          21
+        ],
+        "tq_attn_cosine_mean": 0.39858556439867243,
+        "tq_attn_cosine_std": 0.1490800404894516,
+        "sq_v1_attn_cosine_mean": 0.7723933034576476,
+        "sq_v1_attn_cosine_std": 0.1054777042492236,
+        "sq_v2_attn_cosine_mean": 0.7785805761814117,
+        "sq_v2_attn_cosine_std": 0.1103928103362831,
+        "tq_compression_ratio": 5.019607843137255,
+        "sq_v2_compression_ratio": 5.013463892288861,
+        "engine": "SpectralQuantEngine",
+        "gpu": "NVIDIA H200",
+        "model_revision": "d149729398750b98c0af14eb82c78cfe92750796"
+      }
+    },
+    {
+      "id": "RUN-PERPLEXITY-QWEN2.5-7B",
+      "kind": "modal_run_artifact",
+      "path": "results/v3/modal/perplexity__Qwen2.5-7B__b3_seed42_n1024_tok1024_str512_fp16+spectralquant_v2+turboquant.json",
+      "supports": ["Qwen2.5-7B b=3 perplexity vs FP16 vs in-repo TurboQuant on 104k tokens of WikiText-103 validation"],
+      "caveats": []
+    },
+    {
+      "id": "RUN-LATENCY-QWEN2.5-7B",
+      "kind": "modal_run_artifact",
+      "path": "results/v3/modal/latency__Qwen2.5-7B__b3_seed42_bs1_ctx512x1024x2048_gen64_wm3_it10_fp16+spectralquant_v2+turboquant.json",
+      "supports": ["Qwen2.5-7B latency: fp16 production-kernel + SQv2/TQ K/V microbenchmark + SQv2/TQ hooked-replay end-to-end"],
+      "caveats": ["hooked-replay rows include Python-level per-layer hook overhead (production_kernel=false); microbench rows must never be compared directly to end-to-end rows."]
+    },
+    {
+      "id": "RUN-GENERATION-QWEN2.5-7B",
+      "kind": "modal_run_artifact",
+      "path": "results/v3/modal/generation__Qwen2.5-7B__b3_seed42_t0.00_new128_fp16+spectralquant_v2+turboquant.json",
+      "supports": ["Qwen2.5-7B greedy generation 8-prompt set: token-overlap-F1 vs FP16 self (SQv2 0.482, TQ 0.120) and distinct-2 (0.768/0.603/0.301)"],
+      "caveats": ["FP16 token-overlap-F1=1.0 is by construction (self vs self); the comparison is SQv2 0.482 vs TQ 0.120."]
+    },
+    {
+      "id": "RUN-LONGBENCH-QWEN2.5-7B-DETERMINISTIC",
+      "kind": "modal_run_artifact",
+      "path": "results/v3/modal/longbench__Qwen2.5-7B__b3_seed42_subsetdeterministic_n50_in8192_out128_fp16+spectralquant_v2+turboquant.json",
+      "supports": [
+        "LongBench deterministic 5-task subset (narrativeqa, qasper, hotpotqa, gov_report, trec) at n=50/task, max_input=8192, max_new=128, paper_valid=true",
+        "Macro scores: fp16=0.1755, spectralquant_v2=0.2004 (+14.2% relative), turboquant=0.0044",
+        "Per-task qa_f1 (narrativeqa/qasper/hotpotqa): fp16 0.1361/0.1712/0.2713; SQv2 0.1648/0.3274/0.2735; TQ 0.0047/0.0000/0.0025",
+        "Per-task gov_report ROUGE: fp16 0.1587, SQv2 0.1364, TQ 0.0149; trec classification_em: fp16 0.14, SQv2 0.10, TQ 0.00",
+        "Replay coverage 1.0 (28/28 layers calibrated, 0 passthrough) for both compressed methods",
+        "Run identity: commit 1ecb578a0b0251f1a716469e51be4303c7191cd6, Modal app ap-GHvmUwex1Hoav4BRrnTtVi, function call fc-01KQFKCFNP61M33NMBN7CQ4DQB, started 2026-04-30T16:26:17Z, succeeded 2026-04-30T22:04:00Z (~5h38m on H200)"
+      ],
+      "caveats": [
+        "subset=deterministic: artifact's own caveats[] declares this is a transparent subset of LongBench (5/21 tasks); never headline as full LongBench (claims_discipline.md §5.2.5)",
+        "Single seed (42), single bit budget (b=3), single model (Qwen2.5-7B), single hardware class (NVIDIA H200/Modal); no per-task error bars",
+        "TurboQuant arm is in-repo local re-implementation (methods.turboquant.label='turboquant'); V1-GAP-012 (official Google TurboQuant) is not unblocked",
+        "Wall-clock dominated by SQv2's per-layer Python-callback hooked-replay overhead (~3.66h for SQv2 alone); not a production-kernel claim",
+        "First 6h-capped attempt on commit 6154175 (app ap-vTqL16w5Nmaw6s2oGc6czU, started 2026-04-30T10:10Z) was kill-switched without writing JSON; recovery patch in commit 1ecb578 (per-method full-record persistence + 12h kill-switch raise) enabled the canonical run"
+      ]
+    }
+  ],
+  "gaps": [
+    {
+      "id": "V1-GAP-001",
+      "summary": "Headline 10-seed CI (README, paper) but only 5 seeds on disk in results/neurips/neurips_10seed.json.",
+      "blocks_v2_claims": ["Wilcoxon p=0.031 cited as evidence of significance"],
+      "resolution_options": ["Re-run 5 missing seeds.", "Demote to '5 seeds' in v2 report and recompute statistics with the smaller n.", "Exclude statistical-significance claim from v2 headlines."]
+    },
+    {
+      "id": "V1-GAP-002",
+      "summary": "README cites 4 models in main results table; results/memory_efficiency/all_models.json contains 3 Qwen sizes only.",
+      "blocks_v2_claims": ["'4 models' headline in any v2 reuse"],
+      "resolution_options": ["Restrict v2 reuse to the three Qwen rows actually present.", "Re-run a 4th model and add it to the file before reuse."]
+    },
+    {
+      "id": "V1-GAP-002b",
+      "summary": "results/comparison/comparison_results.json shows SQ catastrophically losing to TQ at 3 bits on Qwen 1.5B (mean_improvement = -55 pp, win_rate = 0/16). Conflicts with the headline SQ-wins-on-every-head story.",
+      "blocks_v2_claims": ["'SQ wins per-head' until reconciled with results/comparison/proper_comparison.json"],
+      "resolution_options": ["Document why this configuration loses and exclude it from the headline.", "If it represents a broken intermediate build, delete it or move it under results/_archive/."]
+    },
+    {
+      "id": "V1-GAP-003",
+      "summary": "Latency conflict: results/neurips/neurips_latency_crossover.json reports SQ FASTER than TQ at 512 tokens (per-step 0.257 ms vs 0.566 ms); results/v3/v3_latency.json reports SQ ~50x SLOWER for compression at the same sequence length (21.04 ms vs 0.40 ms).",
+      "blocks_v2_claims": ["'SQ faster than TQ at 512 tokens' headline"],
+      "resolution_options": ["Pick one canonical latency methodology and re-run.", "Demote latency from headline until reconciled."]
+    },
+    {
+      "id": "V1-GAP-004",
+      "summary": "Two d_eff conventions live in the repo. Normalized-keys convention gives mean d_eff ≈ 3.95–4.30 across 5 models (V1-RESULT-002). Unnormalized eigenspectral phase 1 gives mean d_eff ≈ 35 (V1-RESULT-008). Both quoted in different places.",
+      "blocks_v2_claims": ["Any 'd_eff/head_dim ≈ 3–4%' claim that does not specify which convention."],
+      "resolution_options": ["v2 spec section 9.1 mandates normalized keys for d_eff. v2 must label all unnormalized numbers as such or remove them."]
+    },
+    {
+      "id": "V1-GAP-004b",
+      "summary": "results/v3/v3_perplexity_v2.json reports identical PPL = 9.5099805... to 13 digits for fp16, TQ, and SQ on Qwen 1.5B over 1023 tokens. The exact equality is suspicious for any real compression pipeline.",
+      "blocks_v2_claims": ["'Compression-neutral PPL'"],
+      "resolution_options": ["Re-run with longer context, real decoding, and per-step PPL deltas before reusing this number."]
+    },
+    {
+      "id": "V1-GAP-005",
+      "summary": "results/calibration_stability/stability.json self-declares 'Reconstructed from B200 experiment log output (original file was truncated during download)'.",
+      "blocks_v2_claims": ["'CV=3.9%' as a primary stability claim."],
+      "resolution_options": ["Re-run calibration stability and overwrite the reconstructed file.", "Mark the existing file as derived in the v2 evidence catalog (done)."]
+    },
+    {
+      "id": "V1-GAP-006",
+      "summary": "results/eigenspectral/phase1_metadata.json has gate1_status='FAILED'.",
+      "blocks_v2_claims": ["Any direct citation of phase 1 d_eff numbers without re-running."],
+      "resolution_options": ["Re-run phase 1 with gate fixed.", "Retire phase 1 artifact in favor of the per-model normalized d_eff in V1-RESULT-002."]
+    },
+    {
+      "id": "V1-GAP-007",
+      "summary": "README says '15-second calibration'; closest on-disk timing is wall_time_s=31.05 in V1-RESULT-009.",
+      "blocks_v2_claims": ["'15-second calibration' headline."],
+      "resolution_options": ["Drop the '15-second' framing.", "Re-time calibration on a documented hardware target and update README from JSON."]
+    },
+    {
+      "id": "V1-GAP-008",
+      "summary": "LongBench evidence (V1-RESULT-020) is n=5 per task — too small to support generalization.",
+      "blocks_v2_claims": ["'LongBench improvement'"],
+      "resolution_options": ["Re-run with n ≥ 50 per task before any LongBench claim (per spec §13.7)."]
+    },
+    {
+      "id": "V1-GAP-009",
+      "summary": "v1 evidence map flags NIAH artifacts as limited / partly broken.",
+      "blocks_v2_claims": ["'NIAH 10/10' headline."],
+      "resolution_options": ["Treat NIAH as background until re-run with v2 spec §13.7 protocol."]
+    },
+    {
+      "id": "V1-GAP-010",
+      "summary": "Two SpectralQuant engine surfaces coexist (src/spectralquant/engine.py and src/spectralquant/spectralquant.py).",
+      "blocks_v2_claims": ["Reproducibility — depending on import path, callers may exercise different code."],
+      "resolution_options": ["Pick one canonical engine in Phase 5; deprecate or alias the other; add an explicit __init__.py export."]
+    },
+    {
+      "id": "V1-GAP-011",
+      "summary": "Gemma row in V1-RESULT-002 is an HF 403 gated-repo error, not a measurement.",
+      "blocks_v2_claims": ["'Gemma 2-9B' as a measured architecture in v1."],
+      "resolution_options": ["Acquire HF access and re-run.", "Drop Gemma from the architecture list until re-run."]
+    },
+    {
+      "id": "V1-GAP-012",
+      "summary": "v1 evidence map says local TurboQuant baseline reproduction is marked failed in at least one phase 0 artifact.",
+      "blocks_v2_claims": ["'Beats official TurboQuant'."],
+      "resolution_options": ["Per spec §6 and §18, v2 may only claim 'beats LOCAL TurboQuant baseline' until the official Google implementation is run."]
+    },
+    {
+      "id": "V1-GAP-013",
+      "summary": "Ablation files (results/comparison/ablation_v2.json, full_ablation.json) report TQ baselines that don't always agree with V1-RESULT-001 numerically.",
+      "blocks_v2_claims": ["Any ablation row reused as a TQ baseline without reconciliation."],
+      "resolution_options": ["Pick one canonical TQ baseline file per (model, bits) and reference only that ID in v2 figures."]
+    },
+    {
+      "id": "V1-GAP-014",
+      "summary": "Compression-ratio formula in spec §10 does not yield 5.95x at b=3, d=3 with the simple appendix derivation. v1 README quotes 5.95x without a derivation that matches the stored bits.",
+      "blocks_v2_claims": ["Any compression-ratio number not produced by src/spectralquant/accounting.py."],
+      "resolution_options": ["Implement accounting.py per spec §10.", "Refuse to print headline ratios in v2 figures unless they come from accounting.py output."]
+    }
+  ],
+  "updated_at": "2026-04-30"
+}

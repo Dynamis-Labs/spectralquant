@@ -1,0 +1,35 @@
+{
+  "kind": "longbench_relaunch_metadata",
+  "launched_at_utc": "2026-04-30T16:26:14Z",
+  "git_commit": "1ecb578a0b0251f1a716469e51be4303c7191cd6",
+  "git_branch": "main",
+  "modal_app_id": "ap-GHvmUwex1Hoav4BRrnTtVi",
+  "modal_app_url": "https://modal.com/apps/sentra/main/ap-GHvmUwex1Hoav4BRrnTtVi",
+  "modal_function_call_id": "fc-01KQFKCFNP61M33NMBN7CQ4DQB",
+  "modal_volume": "spectralquant-v2-results",
+  "modal_status_dir": "/status/longbench/longbench__Qwen2.5-7B__b3_seed42_subsetdeterministic_n50_in8192_out128_fp16+spectralquant_v2+turboquant",
+  "modal_canonical_output_dir": "/longbench",
+  "kill_switch_sec": 43200,
+  "kill_switch_hours": 12,
+  "env": {
+    "SPECTRALQUANT_MODAL_TIMEOUT_LONGBENCH_SEC": "43200"
+  },
+  "command": "SPECTRALQUANT_MODAL_TIMEOUT_LONGBENCH_SEC=43200 modal run -d scripts/launch_modal_eval.py::main_entry --family longbench --model Qwen/Qwen2.5-7B --avg-bits 3 --methods \"fp16,spectralquant_v2,turboquant\" --extra \"--subset deterministic --n-per-task 50 --max-input-tokens 8192 --max-new-tokens 128 --calibration-mode paper --n-calib 16 --lloyd-max-iter 200 --calib-max-seq-tokens 512\"",
+  "config": {
+    "family": "longbench",
+    "model": "Qwen/Qwen2.5-7B",
+    "seed": 42,
+    "avg_bits": 3,
+    "methods": ["fp16", "spectralquant_v2", "turboquant"],
+    "subset": "deterministic",
+    "n_per_task": 50,
+    "max_input_tokens": 8192,
+    "max_new_tokens": 128,
+    "calibration_mode": "paper",
+    "n_calib": 16,
+    "lloyd_max_iter": 200,
+    "calib_max_seq_tokens": 512,
+    "tasks_planned": ["narrativeqa", "qasper", "hotpotqa", "gov_report", "trec"]
+  },
+  "rationale": "Relaunch from patched commit 1ecb578 which writes per-method partial method__<name>.json shards via _write_method_partial_record. Previous live run at parent commit 6154175 died at ~6h with no canonical JSON and no recoverable per-method records. 12h cap chosen to clear paper-valid LongBench (~7h observed envelope) plus margin."
+}

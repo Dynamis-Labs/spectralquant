@@ -1,0 +1,14 @@
+{
+  "avg_bits": null,
+  "commit": "1ecb578a0b0251f1a716469e51be4303c7191cd6",
+  "host": "modal",
+  "message": "/results/longbench/longbench__Qwen2.5-7B__b3_seed42_subsetdeterministic_n50_in8192_out128_fp16+spectralquant_v2+turboquant.json",
+  "model": "Qwen/Qwen2.5-7B",
+  "n_calib": null,
+  "n_eval": null,
+  "n_layers_sample": null,
+  "pid": 28,
+  "run_id": "longbench__Qwen2.5-7B__b3_seed42_subsetdeterministic_n50_in8192_out128_fp16+spectralquant_v2+turboquant",
+  "stage": "success",
+  "timestamp": "2026-04-30T22:04:00.087683Z"
+}

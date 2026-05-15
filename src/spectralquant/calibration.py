@@ -349,14 +349,18 @@ def _cumulative_variance_thresholds(
 # ---------------------------------------------------------------------------
 
 class _KVCollectorHook:
-    """Forward hook that collects key and value tensors from an attention layer.
+    """Forward hooks that collect K/V projection outputs for one attention layer.
 
-    The hook expects the attention module to expose ``k_proj`` and ``v_proj``
-    as child modules (standard HuggingFace convention), or to receive the
-    key/value tensors via the output tuple.
+    Strategy: register one ``forward_hook`` on ``k_proj`` and one on
+    ``v_proj``. Each projection emits a tensor of shape
+    ``(batch, seq, n_kv_heads * head_dim)`` regardless of transformers
+    version, RoPE wrapping, ``Cache`` API changes, or eager-vs-SDPA
+    attention path. We reshape to per-head and accumulate.
 
-    Collected tensors are appended to ``key_buffers[head_idx]`` and
-    ``value_buffers[head_idx]`` (list of 1D tensors per head).
+    This avoids the brittle "scan attn_module output for tuple-of-2-4D-tensors"
+    heuristic, which broke on Qwen2 + modern transformers (where the
+    ``past_key_value`` slot in the output is a ``Cache`` object, not a
+    tuple of raw tensors).
 
     Parameters
     ----------
@@ -386,6 +390,82 @@ class _KVCollectorHook:
         self._total_tokens: int = 0
         self._active: bool = True
 
+    def _reshape_proj(self, output: torch.Tensor) -> Optional[torch.Tensor]:
+        """Reshape a k_proj/v_proj output to ``(batch, n_kv_heads, seq, head_dim)``.
+
+        Accepts ``(batch, seq, n_kv_heads*head_dim)`` (standard HF Linear
+        output for q_proj/k_proj/v_proj).  Returns ``None`` if the shape is
+        unrecognised so the caller can skip silently rather than raise
+        mid-forward.
+        """
+        if not isinstance(output, torch.Tensor):
+            return None
+        if output.dim() == 3:
+            bsz, seq, total = output.shape
+            expected = self.n_kv_heads * self.head_dim
+            if total != expected:
+                return None
+            return output.reshape(bsz, seq, self.n_kv_heads, self.head_dim).permute(
+                0, 2, 1, 3
+            )
+        if output.dim() == 4:
+            return output
+        return None
+
+    def _accumulate(
+        self,
+        buffers: List[List[torch.Tensor]],
+        proj_output: Any,
+    ) -> int:
+        """Append per-head slices from ``proj_output`` to ``buffers``.
+
+        Returns the number of tokens (batch * seq_use) appended so the
+        caller can update its global counter.  ``buffers`` is mutated
+        in-place.
+        """
+        if not self._active or self._total_tokens >= self.max_tokens:
+            return 0
+        reshaped = self._reshape_proj(proj_output)
+        if reshaped is None:
+            return 0
+        x = reshaped.detach().float().cpu()
+        batch, n_kv, seq_len, hdim = x.shape
+        remaining = self.max_tokens - self._total_tokens
+        seq_use = min(seq_len, remaining // max(batch, 1))
+        if seq_use <= 0:
+            self._active = False
+            return 0
+        for h in range(min(n_kv, self.n_kv_heads)):
+            buffers[h].append(x[:, h, :seq_use, :].reshape(-1, hdim))
+        return batch * seq_use
+
+    def k_hook(
+        self,
+        module: nn.Module,
+        inputs: Tuple,
+        output: Any,
+    ) -> None:
+        added = self._accumulate(self.key_buffers, output)
+        if added > 0:
+            # Keys advance the global token counter; the V hook does not so
+            # we don't double-count K and V from the same forward pass.
+            self._total_tokens += added
+            if self._total_tokens >= self.max_tokens:
+                self._active = False
+
+    def v_hook(
+        self,
+        module: nn.Module,
+        inputs: Tuple,
+        output: Any,
+    ) -> None:
+        # Same shape as keys; do not advance the token counter.
+        self._accumulate(self.value_buffers, output)
+
+    # Back-compat single-hook entrypoint (kept so that any code path that
+    # registers the collector directly on the attention module — and only
+    # gets the attention output — still has a chance of grabbing K/V from
+    # a legacy ``past_key_value`` tuple). New code uses k_hook / v_hook.
     def __call__(
         self,
         module: nn.Module,
@@ -394,13 +474,8 @@ class _KVCollectorHook:
     ) -> None:
         if not self._active or self._total_tokens >= self.max_tokens:
             return
-
-        # Attempt to extract key and value tensors from the output.
-        # HuggingFace attention modules typically return (attn_out, attn_weights,
-        # past_key_value).  The past_key_value is a tuple (key, value).
         keys: Optional[torch.Tensor] = None
         values: Optional[torch.Tensor] = None
-
         if isinstance(output, tuple):
             for item in output:
                 if isinstance(item, tuple) and len(item) == 2:
@@ -408,44 +483,15 @@ class _KVCollectorHook:
                     if (
                         isinstance(k_cand, torch.Tensor)
                         and isinstance(v_cand, torch.Tensor)
-                        and k_cand.dim() == 4  # (batch, n_kv_heads, seq, head_dim)
+                        and k_cand.dim() == 4
                     ):
                         keys, values = k_cand, v_cand
                         break
-
-        if keys is None:
-            # Try input tuple: some implementations pass (hidden, key, value, ...)
-            for item in inputs:
-                if isinstance(item, torch.Tensor) and item.dim() == 4:
-                    if keys is None:
-                        keys = item
-                    elif values is None:
-                        values = item
-                        break
-
         if keys is None or values is None:
             return
-
-        # keys / values shape: (batch, n_kv_heads, seq_len, head_dim)
-        # Move to CPU and cast to float32
-        keys = keys.detach().float().cpu()
-        values = values.detach().float().cpu()
-
-        batch, n_kv, seq_len, hdim = keys.shape
-        remaining = self.max_tokens - self._total_tokens
-        seq_use = min(seq_len, remaining // max(batch, 1))
-        if seq_use <= 0:
-            self._active = False
-            return
-
-        for h in range(min(n_kv, self.n_kv_heads)):
-            # Shape: (batch * seq_use, head_dim)
-            k_slice = keys[:, h, :seq_use, :].reshape(-1, hdim)
-            v_slice = values[:, h, :seq_use, :].reshape(-1, hdim)
-            self.key_buffers[h].append(k_slice)
-            self.value_buffers[h].append(v_slice)
-
-        self._total_tokens += batch * seq_use
+        added_k = self._accumulate(self.key_buffers, keys)
+        self._accumulate(self.value_buffers, values)
+        self._total_tokens += added_k
         if self._total_tokens >= self.max_tokens:
             self._active = False
 
@@ -550,23 +596,44 @@ class EigenspectralCalibrator:
 
         model_config = getattr(model, "config", None)
 
-        # Register hooks on every attention layer
+        # Register hooks on every attention layer's k_proj/v_proj. We deliberately
+        # do NOT hook the attention module itself: in modern transformers the
+        # past_key_value slot of the output is a ``Cache`` object (not a raw
+        # tensor tuple), so the legacy "scan output for tuple-of-2-4D-tensors"
+        # heuristic silently captures nothing, leaving the calibrator empty
+        # for every (layer, head, type) and producing the
+        # ``KeyError: No calibration data for layer=0, head=0, type='key'``
+        # we observed on Qwen2.5 inline-corpus smoke runs.
         hooks_map: Dict[int, _KVCollectorHook] = {}
-        hook_handles: List[torch.utils.hooks.RemovableHook] = []
+        hook_handles: List[Any] = []
 
         for layer_idx, attn_module in _iter_attention_layers(model, arch):
             if layer_idx in hooks_map:
                 continue
             n_heads, n_kv_heads, head_dim = _get_kv_head_dims(attn_module, model_config)
+            k_proj = getattr(attn_module, "k_proj", None)
+            v_proj = getattr(attn_module, "v_proj", None)
             collector = _KVCollectorHook(
                 n_kv_heads=n_kv_heads,
                 head_dim=head_dim,
                 device=torch.device("cpu"),
                 max_tokens=self.max_tokens_per_layer,
             )
-            handle = attn_module.register_forward_hook(collector)
+            if k_proj is not None and v_proj is not None:
+                hook_handles.append(k_proj.register_forward_hook(collector.k_hook))
+                hook_handles.append(v_proj.register_forward_hook(collector.v_hook))
+            else:
+                # Last-resort fallback: register on the attention module and
+                # rely on the legacy single-hook __call__ path. Logged loudly
+                # so missing samples are easy to diagnose.
+                logger.warning(
+                    "Layer %d has no k_proj/v_proj; falling back to attention-module "
+                    "hook (legacy past_key_value path). Calibration may be empty if "
+                    "the model returns a Cache object.",
+                    layer_idx,
+                )
+                hook_handles.append(attn_module.register_forward_hook(collector))
             hooks_map[layer_idx] = collector
-            hook_handles.append(handle)
             logger.debug(
                 "Registered hook on layer %d (n_kv_heads=%d, head_dim=%d)",
                 layer_idx,

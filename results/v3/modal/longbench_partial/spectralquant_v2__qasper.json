@@ -1,0 +1,12 @@
+{
+  "completed": 20,
+  "elapsed_s": 1033.075,
+  "kind": "longbench_partial_task",
+  "last_completion_chars": 614,
+  "method": "spectralquant_v2",
+  "paper_valid": false,
+  "partial": true,
+  "status": "running",
+  "task": "qasper",
+  "total": 50
+}

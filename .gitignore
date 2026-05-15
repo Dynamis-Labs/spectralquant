@@ -98,6 +98,35 @@ paper_output/*.toc
 paper_output/*.fls
 paper_output/*.fdb_latexmk
 paper_output/*.synctex.gz
+paper_output_v2/*.aux
+paper_output_v2/*.log
+paper_output_v2/*.bbl
+paper_output_v2/*.blg
+paper_output_v2/*.out
+paper_output_v2/*.toc
+paper_output_v2/*.fls
+paper_output_v2/*.fdb_latexmk
+paper_output_v2/*.synctex.gz
+
+paper_output_consolidated/*.aux
+paper_output_consolidated/*.log
+paper_output_consolidated/*.blg
+paper_output_consolidated/*.out
+paper_output_consolidated/*.toc
+paper_output_consolidated/*.fls
+paper_output_consolidated/*.fdb_latexmk
+paper_output_consolidated/*.synctex.gz
+
+paper_neurips2026/*.aux
+paper_neurips2026/*.log
+paper_neurips2026/*.blg
+paper_neurips2026/*.bbl
+paper_neurips2026/*.out
+paper_neurips2026/*.toc
+paper_neurips2026/*.fls
+paper_neurips2026/*.fdb_latexmk
+paper_neurips2026/*.synctex.gz
+paper_neurips2026/refs.bib
 
 # Baseline clone (large)
 baseline/turboquant_cutile/
@@ -105,6 +134,63 @@ baseline/turboquant_cutile/
 # HuggingFace cache
 .cache/huggingface/
 
-# Environment files
+# Environment files (NEVER commit secrets)
 .env
-.env.local
+.env.*
+!.env.example
+.envrc
+direnv.toml
+
+# Modal credentials and local Modal state
+modal_token
+modal_token.*
+modal_token_id
+modal_token_id.*
+modal_token_secret
+modal_token_secret.*
+.modal/
+.modal.toml
+
+# Hugging Face credentials and local cache
+hf_token
+hf_token.*
+.huggingface/
+huggingface_token
+
+# Generic secret bundles
+secrets/
+secrets.json
+*.secret
+*.secrets
+*.pem
+*.key
+id_rsa
+id_rsa.*
+*.pfx
+
+# Local-only run outputs (machine-specific, not for the repo)
+local_results/
+local_runs/
+runs/
+checkpoints/
+caches/
+cache/
+tmp/
+.tmp/
+scratch/
+
+# Modal run logs / archives
+modal_logs/
+*.modal.log
+
+# Result intermediates that should not be committed unless explicitly tracked
+results/three_way_smoke/
+results/**/*.stdout.log
+results/**/*.stderr.log
+
+# Unrestricted paper LaTeX aux artifacts
+paper_output_v2/spectralquant_unrestricted_paper.aux
+paper_output_v2/spectralquant_unrestricted_paper.log
+paper_output_v2/spectralquant_unrestricted_paper.blg
+paper_output_v2/spectralquant_unrestricted_paper.out
+paper_output_v2/spectralquant_unrestricted_paper.toc

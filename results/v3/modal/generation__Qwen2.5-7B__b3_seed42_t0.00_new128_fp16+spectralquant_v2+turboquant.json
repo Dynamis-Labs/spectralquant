@@ -1,0 +1,260 @@
+{
+  "caveats": [],
+  "command": "--model Qwen/Qwen2.5-7B --output-dir /results/generation --seed 42 --device cuda --dtype float16 --avg-bits 3 --methods fp16 --methods fp16 spectralquant_v2 turboquant --max-new-tokens 128 --temperature 0.0 --status-dir /results/status/generation",
+  "commit": "197bcfb4ad54a7d7bc9430a80695c62c145371fd",
+  "decoding": {
+    "do_sample": false,
+    "max_new_tokens": 128,
+    "seed": 42,
+    "temperature": 0.0,
+    "top_k": 0,
+    "top_p": 1.0
+  },
+  "evidence_ids": [
+    "RUN-GENERATION-QWEN2.5-7B"
+  ],
+  "family": "generation",
+  "hardware": {
+    "cuda": "13.0",
+    "gpu": "NVIDIA H200",
+    "gpu_total_memory_mb": 143156.06,
+    "host": "modal",
+    "platform": "Linux-4.4.0-x86_64-with-glibc2.35"
+  },
+  "methods": {
+    "fp16": {
+      "completions": [
+        {
+          "n_tokens": 68,
+          "prompt_id": "summary-001",
+          "text": " It achieves this by using a spectral decomposition of the attention matrix to identify the most important features and then compressing them. SpectralQuant is a technique that compresses the key-value cache in transformer attention without affecting downstream attention-output quality. It identifies the most important features using a spectral decomposition of the attention matrix and then compresses them."
+        },
+        {
+          "n_tokens": 1,
+          "prompt_id": "qa-001",
+          "text": ""
+        },
+        {
+          "n_tokens": 128,
+          "prompt_id": "code-001",
+          "text": " The function should take a vector of eigenvalues as input and return the participation ratio as output. The function should be named \"participation_ratio\" and should be defined as follows:\n\n```python\ndef participation_ratio(eig):\n    return (sum(eig)**2) / sum(eig**2)\n```\n\nThe function should be tested with the following code:\n\n```python\neig = [1, 2, 3, 4, 5]\nprint(participation_ratio(eig))\n```\n\nThe output should be:\n\n```\n1.0\n```\n\nThe function should be tested with the following code:\n\n```python"
+        },
+        {
+          "n_tokens": 128,
+          "prompt_id": "complete-001",
+          "text": " the ratio of the spectrum's participation to the total spectrum's participation. Is this statement correct?\nA. Correct\nB. Incorrect\nAnswer:\nA\n\nIn the process of using a spectrophotometer, which of the following operations is incorrect?\nA. Before use, ensure that the instrument has been preheated for 30 minutes.\nB. When adjusting the transmittance to 100%, use a blank solution as the reference.\nC. When measuring, the cuvette must be cleaned thoroughly, and the liquid level should be controlled between 2/3 and 3/4 of the cuvette height.\n"
+        },
+        {
+          "n_tokens": 128,
+          "prompt_id": "instruct-001",
+          "text": " 1. **Dimensionality Reduction**: Low-rank approximation is a technique used to reduce the dimensionality of a matrix by approximating it with a product of two lower-dimensional matrices. In the context of transformer attention, this is particularly useful for the query, key, and value matrices, which are typically high-dimensional. By reducing the dimensionality of these matrices, the computational complexity of the attention mechanism is significantly reduced, making it more efficient to compute the attention scores and context vectors. However, for the value matrix, which is used to compute the final output, the low-rank approximation may not be as effective because the values are not"
+        },
+        {
+          "n_tokens": 128,
+          "prompt_id": "translate-001",
+          "text": " L'\u00e9tape de calibration prend quelques secondes et est effectu\u00e9e une fois par mod\u00e8le.\n\nStep-by-step translation process:\n\n1. Identify the main components of the sentence: \"calibration step\", \"takes a few seconds\", \"is performed\", \"once per model\".\n2. Translate each component into French: \"\u00e9tape de calibration\", \"prend quelques secondes\", \"est effectu\u00e9e\", \"une fois par mod\u00e8le\".\n3. Rearrange the components to form a coherent sentence in French: \"L'\u00e9tape de calibration prend quelques secondes et est effectu\u00e9e une fois par mod\u00e8le.\"\n4. Verify the translation for accuracy"
+        },
+        {
+          "n_tokens": 128,
+          "prompt_id": "longctx-001",
+          "text": " Water-filling is a technique used in signal processing and communication systems to allocate resources, such as bits, to different dimensions or channels based on their importance or capacity. In the context of attention mechanisms, particularly in neural networks like Transformers, water-filling can be applied to allocate attention bits to different dimensions of the input data.\n\nAt low average bitrates, the total number of bits available for attention is limited. By using water-filling, the algorithm assigns more bits to dimensions with larger eigenvalues, which represent the most important or informative features of the input data. This is because dimensions with larger eigenvalues have a higher capacity to carry information"
+        },
+        {
+          "n_tokens": 128,
+          "prompt_id": "factual-001",
+          "text": " I've come across this term in the context of transformer inference, but I'm not sure what it means. Can you provide some information on this topic?\nThe acronym KV cache stands for \"key-value cache\" in the context of transformer inference. It is a technique used to speed up the inference process of transformer models by caching the key-value pairs of the attention mechanism. This allows the model to reuse the same key-value pairs for subsequent inference steps, reducing the computational cost and improving the overall performance. The KV cache is typically implemented as a data structure that stores the key-value pairs for each attention head, and is updated after each inference step"
+        }
+      ],
+      "evidence_ids": [
+        "RUN-GENERATION-FP16"
+      ],
+      "label": "fp16",
+      "metrics": {
+        "mean_distinct_1": 0.5807432221970481,
+        "mean_distinct_2": 0.7680762122418705,
+        "mean_token_overlap_f1": 1.0
+      }
+    },
+    "spectralquant_v2": {
+      "completions": [
+        {
+          "n_tokens": 84,
+          "prompt_id": "summary-001",
+          "text": " It achieves this by using a novel compression algorithm that reduces the size of the cache by up to 90% without any loss in performance. SpectralQuant is a technique that compresses the key-value cache in transformer attention without affecting the quality of downstream attention-output. It achieves this by using a novel compression algorithm that reduces the size of the cache by up to 90% without any loss in performance."
+        },
+        {
+          "n_tokens": 1,
+          "prompt_id": "qa-001",
+          "text": ""
+        },
+        {
+          "n_tokens": 127,
+          "prompt_id": "code-001",
+          "text": " The function should take a vector of eigenvalues as input and return the participation ratio as output. The function should be named \"participation_ratio\" and should be defined as follows:\n\n```python\ndef participation_ratio(eig):\n    return (sum(eig)**2) / sum(eig**2)\n```\n\nThe function should be able to handle any vector of eigenvalues and return the participation ratio as output. The function should be named \"participation_ratio\" and should be defined as follows:\n\n```python\ndef participation_ratio(eig):\n    return (sum(eig)**2) / sum(eig**2)\n```"
+        },
+        {
+          "n_tokens": 128,
+          "prompt_id": "complete-001",
+          "text": " the ratio of the power of the spectrum to the total power of the spectrum and the noise. The total power of the spectrum is the sum of the power of the spectrum and the noise. The noise power is the power of the noise. The noise power is the power of the noise. The noise power is the power of the noise. The noise power is the power of the noise. The noise power is the power of the noise. The noise power is the power of the noise. The noise power is the power of the noise. The noise power is the power of the noise. The noise power is the power of the noise."
+        },
+        {
+          "n_tokens": 128,
+          "prompt_id": "instruct-001",
+          "text": " 1. **Dimensionality Reduction**: In the context of transformer attention, low-rank approximation is often used to reduce the dimensionality of the input data. This is particularly useful for keys, as they are typically used to compute attention scores, which can be high-dimensional. By approximating the keys with a lower-rank matrix, we can reduce the computational complexity of the attention mechanism, making it more efficient and scalable.\n\n2. **Invariance to Permutations**: The attention mechanism is invariant to the order of the input data. This means that the attention scores should not depend on the order in which the input data is presented."
+        },
+        {
+          "n_tokens": 128,
+          "prompt_id": "translate-001",
+          "text": " 'Le pas de calibration prend quelques secondes et est effectu\u00e9 une fois par mod\u00e8le.'\n\nStep-by-step justification:\n\n1. Identify the key phrases and words in the original sentence: \"calibration step\", \"takes a few seconds\", \"performed once\", \"model\".\n2. Translate each key phrase or word into French: \"pas de calibration\", \"prend quelques secondes\", \"une fois\", \"mod\u00e8le\".\n3. Rearrange the translated phrases and words to form a grammatically correct and coherent sentence in French: \"Le pas de calibration prend quelques secondes et est effectu\u00e9 une fois par mod\u00e8le.\"\nYou are an AI"
+        },
+        {
+          "n_tokens": 128,
+          "prompt_id": "longctx-001",
+          "text": " Water-filling is a technique used in communication systems to allocate resources, such as bits, to different dimensions or channels. In the context of attention quality, water-filling assigns more bits to dimensions with larger eigenvalues, which represent the importance or relevance of different features or dimensions in a dataset. This is because dimensions with larger eigenvalues are more informative and carry more relevant information.\n\nAt low average bitrates, the total number of bits available for encoding is limited. By allocating more bits to dimensions with larger eigenvalues, water-filling ensures that the most important features are encoded with higher precision, resulting in better attention quality. This is because"
+        },
+        {
+          "n_tokens": 96,
+          "prompt_id": "factual-001",
+          "text": " In the context of transformer inference, the acronym KV cache stands for \"key-value\" cache. It is a data structure used to store the keys and values of the attention mechanism in a transformer model. The keys and values are used to compute the attention weights, which are then used to compute the output of the transformer model. The KV cache is used to speed up the inference process by reusing the keys and values from previous time steps, reducing the number of computations required."
+        }
+      ],
+      "evidence_ids": [
+        "RUN-GENERATION-SPECTRALQUANT_V2"
+      ],
+      "label": "spectralquant_v2",
+      "metrics": {
+        "mean_distinct_1": 0.44889418208691234,
+        "mean_distinct_2": 0.6027232854268431,
+        "mean_token_overlap_f1": 0.48173593856049235
+      },
+      "replay_coverage": {
+        "fraction_layers_real": 1.0,
+        "missing_layers": [],
+        "n_hook_calls": 45920,
+        "n_layers_calibrated": 28,
+        "n_layers_hooked": 28,
+        "n_layers_total": 28,
+        "n_passthrough_calls": 0
+      }
+    },
+    "turboquant": {
+      "completions": [
+        {
+          "n_tokens": 128,
+          "prompt_id": "summary-001",
+          "text": " The key is cache in transformer is transformer is property transformer a key key key cache cache in p\u00e9rdida. The key key Cache in Transformer Key Key Cache in Transformer a key key key key cache in transformer a key a key a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a"
+        },
+        {
+          "n_tokens": 128,
+          "prompt_id": "qa-001",
+          "text": " \n A\nAnswer isthe main motivation for non-uniform per per mationation in KV cache compression compression for e is the main motivation for non-uniform per pationation in KV cache compression compression for e in the main motivation for non-uniform per p pationation in KV cache compression compression in e e in the main motivation for non-uniform per p p pation in KV cache e in e e in the main motivation for non-uniform per p p p p in in in in KV p e e in e e in the main motivation in non the main p p p p p p p in in KV p e"
+        },
+        {
+          "n_tokens": 128,
+          "prompt_id": "code-001",
+          "text": " The function should be return the participation ratio of a a eigenvalue. The function should be be able to be a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a"
+        },
+        {
+          "n_tokens": 128,
+          "prompt_id": "complete-001",
+          "text": " the ratio of the number of of the shares of the company owned by a person investor to the total number of shares outstanding it.\n. Shares in the number of the total number number of shares the company number number of the shares the company has outstanding. The number of the shares the total shares the company of. the total the number shares the company total of shares the company has in. shares in the total shares the company shares the company has its.. share. shares are or its total number number in its. its its its its.. its.. in its its it its its its. its in\u91cd\u8981\u56e0\u7d20 its.. its its"
+        },
+        {
+          "n_tokens": 128,
+          "prompt_id": "instruct-001",
+          "text": " The key and is key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key key"
+        },
+        {
+          "n_tokens": 128,
+          "prompt_id": "translate-001",
+          "text": ". The calibration step is is is a a model model model of. The calibration step is a model model..'\"\n La model. The calibration step a model model model model.. The calibration model a model model a. The model. model a model model. a model. model. a model model model a model model model model a model model a model model.'\n a model model a model model. model model a model model a model model model a model model model model a model model model model a model model model a model model a model model model a model model a model model a a model model model model a model a model a"
+        },
+        {
+          "n_tokens": 128,
+          "prompt_id": "longctx-001",
+          "text": " The eigenvalues of the matrix is the matrix. The eigenvalues are the amount of of variance that each eig s\u00e9curon is dimension contributes to the total variance variance. By the Pythagorean theorem, The first variance that each dimension contributes to the total variance variance is dimension contributes to the eigenvalues is the eigenvalues explain the amount variance variance variance that each dimension contributes to the total variance variance. The eigenvalues are the amount of variance variance variance that each dimension contributes. The first variance amount p\u00e9rdida variance of the the eigenvectorsss for the eigenvector is is of the eigenvalues is dimension. The the amount amount of of variance"
+        },
+        {
+          "n_tokens": 128,
+          "prompt_id": "factual-001",
+          "text": "?\nA the context of transformer inference,, the acronym KV cache stands for \"keyKey-Value\" cache cache. It iss a way type data of cache that stores is transformer is key- worth a worth of. In. It\"s a a type a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a"
+        }
+      ],
+      "evidence_ids": [
+        "RUN-GENERATION-TURBOQUANT"
+      ],
+      "label": "turboquant",
+      "metrics": {
+        "mean_distinct_1": 0.15844701729277072,
+        "mean_distinct_2": 0.3010252659226585,
+        "mean_token_overlap_f1": 0.11969037758597664
+      },
+      "replay_coverage": {
+        "fraction_layers_real": 1.0,
+        "missing_layers": [],
+        "n_hook_calls": 57344,
+        "n_layers_calibrated": 28,
+        "n_layers_hooked": 28,
+        "n_layers_total": 28,
+        "n_passthrough_calls": 0
+      }
+    }
+  },
+  "mode": "full",
+  "model": {
+    "name": "Qwen/Qwen2.5-7B"
+  },
+  "paper_valid": true,
+  "prompts": [
+    {
+      "category": "summarization",
+      "id": "summary-001",
+      "prompt": "Summarize the following passage in two sentences. Passage: SpectralQuant exploits a structural property of the key-value cache in transformer attention to compress without destroying downstream attention-output quality."
+    },
+    {
+      "category": "qa",
+      "id": "qa-001",
+      "prompt": "Question: What is the main motivation for non-uniform per-dimension bit allocation in KV cache compression? Answer briefly."
+    },
+    {
+      "category": "code",
+      "id": "code-001",
+      "prompt": "Write a short Python function that computes the participation ratio of a vector of eigenvalues. The function should return (sum(eig)**2) / sum(eig**2)."
+    },
+    {
+      "category": "completion",
+      "id": "complete-001",
+      "prompt": "The participation ratio of a spectrum is defined as"
+    },
+    {
+      "category": "instruction",
+      "id": "instruct-001",
+      "prompt": "List three reasons why low-rank approximation typically works for keys but not for values in transformer attention."
+    },
+    {
+      "category": "translation",
+      "id": "translate-001",
+      "prompt": "Translate to French: 'The calibration step takes a few seconds and is performed once per model.'"
+    },
+    {
+      "category": "long_context",
+      "id": "longctx-001",
+      "prompt": "Given the context that water-filling assigns more bits to dimensions with larger eigenvalues, explain in one paragraph why this improves attention quality at low average bitrates."
+    },
+    {
+      "category": "factual",
+      "id": "factual-001",
+      "prompt": "What does the acronym KV cache stand for in the context of transformer inference?"
+    }
+  ],
+  "repo": "niashwin/spectralquant-v2",
+  "run_id": "generation__Qwen2.5-7B__b3_seed42_t0.00_new128_fp16+spectralquant_v2+turboquant",
+  "schema_version": "1",
+  "software": {
+    "datasets": "4.8.5",
+    "python": "3.12.1",
+    "torch": "2.11.0+cu130",
+    "transformers": "5.7.0"
+  },
+  "timestamp": "2026-04-30T06:29:27Z"
+}

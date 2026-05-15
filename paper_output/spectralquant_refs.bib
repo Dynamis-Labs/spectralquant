@@ -38,7 +38,8 @@
   title={The Price of Meaning: Why Every Semantic Memory System Forgets},
   author={Barman, Sambartha Ray and Starenky, Andrey and Bodnar, Sofia and Narasimhan, Nikhil and Gopinath, Ashwin},
   journal={arXiv preprint arXiv:2603.27116},
-  year={2026}
+  year={2026},
+  url={https://arxiv.org/abs/2603.27116}
 }
 
 @misc{liu2024kivi,
@@ -245,4 +246,373 @@
   year      = {2003},
   publisher = {Elsevier},
   url       = {https://doi.org/10.1016/S0022-0000(03)00025-4}
+}
+
+@book{cover2006elements,
+  title     = {Elements of Information Theory},
+  author    = {Cover, Thomas M. and Thomas, Joy A.},
+  edition   = {2},
+  year      = {2006},
+  publisher = {Wiley-Interscience},
+  isbn      = {978-0-471-24195-9},
+  note      = {Chapter 10 (Rate Distortion Theory) covers the classical water-filling allocation across parallel Gaussian channels.}
+}
+
+@misc{ainslie2023gqa,
+  title         = {{GQA}: Training Generalized Multi-Query Transformer Models from Multi-Head Checkpoints},
+  author        = {Ainslie, Joshua and Lee-Thorp, James and de Jong, Michiel and Zemlyanskiy, Yury and Lebr{\'o}n, Federico and Sanghai, Sumit},
+  year          = {2023},
+  eprint        = {2305.13245},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL},
+  url           = {https://arxiv.org/abs/2305.13245}
+}
+
+% ---------------------------------------------------------------------------
+% Foundational transformer / attention
+% ---------------------------------------------------------------------------
+
+@inproceedings{vaswani2017attention,
+  title     = {Attention Is All You Need},
+  author    = {Vaswani, Ashish and Shazeer, Noam and Parmar, Niki and Uszkoreit, Jakob and Jones, Llion and Gomez, Aidan N. and Kaiser, {\L}ukasz and Polosukhin, Illia},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2017},
+  url       = {https://arxiv.org/abs/1706.03762}
+}
+
+% ---------------------------------------------------------------------------
+% KV-cache memory bottleneck / roofline / inference scaling
+% ---------------------------------------------------------------------------
+
+@misc{li2024kvcachesurvey,
+  title         = {A Survey on Large Language Model Acceleration Based on {KV} Cache Management},
+  author        = {Li, Haoyang and Li, Yiming and Tian, Anxin and Tang, Tianhao and Xu, Zhanchao and Chen, Xuejia and Hu, Nicole and Dong, Wei and Li, Qing and Chen, Lei},
+  year          = {2024},
+  eprint        = {2412.19442},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.LG},
+  url           = {https://arxiv.org/abs/2412.19442}
+}
+
+@inproceedings{pope2022efficiently,
+  title     = {Efficiently Scaling Transformer Inference},
+  author    = {Pope, Reiner and Douglas, Sholto and Chowdhery, Aakanksha and Devlin, Jacob and Bradbury, James and Levskaya, Anselm and Heek, Jonathan and Xiao, Kefan and Agrawal, Shivani and Dean, Jeff},
+  booktitle = {Proceedings of Machine Learning and Systems (MLSys)},
+  year      = {2023},
+  url       = {https://arxiv.org/abs/2211.05102}
+}
+
+@misc{yuan2024llminferenceroofline,
+  title         = {{LLM} Inference Unveiled: Survey and Roofline Model Insights},
+  author        = {Yuan, Zhihang and Shang, Yuzhang and Zhou, Yang and Dong, Zhen and Zhou, Zhe and Xue, Chenhao and Wu, Bingzhe and Li, Zhikai and Gu, Qingyi and Lee, Yong Jae and Yan, Yan and Chen, Beidi and Sun, Guangyu and Keutzer, Kurt},
+  year          = {2024},
+  eprint        = {2402.16363},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.LG},
+  url           = {https://arxiv.org/abs/2402.16363}
+}
+
+% ---------------------------------------------------------------------------
+% FlashAttention kernels
+% ---------------------------------------------------------------------------
+
+@inproceedings{dao2022flashattention,
+  title     = {{FlashAttention}: Fast and Memory-Efficient Exact Attention with {IO}-Awareness},
+  author    = {Dao, Tri and Fu, Daniel Y. and Ermon, Stefano and Rudra, Atri and R{\'e}, Christopher},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2022},
+  url       = {https://arxiv.org/abs/2205.14135}
+}
+
+@inproceedings{dao2023flashattention2,
+  title     = {{FlashAttention-2}: Faster Attention with Better Parallelism and Work Partitioning},
+  author    = {Dao, Tri},
+  booktitle = {International Conference on Learning Representations ({ICLR})},
+  year      = {2024},
+  url       = {https://arxiv.org/abs/2307.08691}
+}
+
+% ---------------------------------------------------------------------------
+% Weight / activation quantization
+% ---------------------------------------------------------------------------
+
+@inproceedings{frantar2022gptq,
+  title     = {{GPTQ}: Accurate Post-Training Quantization for Generative Pre-trained Transformers},
+  author    = {Frantar, Elias and Ashkboos, Saleh and Hoefler, Torsten and Alistarh, Dan},
+  booktitle = {International Conference on Learning Representations ({ICLR})},
+  year      = {2023},
+  url       = {https://arxiv.org/abs/2210.17323}
+}
+
+@inproceedings{lin2023awq,
+  title     = {{AWQ}: Activation-Aware Weight Quantization for {LLM} Compression and Acceleration},
+  author    = {Lin, Ji and Tang, Jiaming and Tang, Haotian and Yang, Shang and Chen, Wei-Ming and Xiao, Guangxuan and Dang, Xingyu and Gan, Chuang and Han, Song},
+  booktitle = {Proceedings of Machine Learning and Systems (MLSys)},
+  year      = {2024},
+  note      = {Best Paper Award},
+  url       = {https://arxiv.org/abs/2306.00978}
+}
+
+@inproceedings{xiao2022smoothquant,
+  title     = {{SmoothQuant}: Accurate and Efficient Post-Training Quantization for Large Language Models},
+  author    = {Xiao, Guangxuan and Lin, Ji and Seznec, Mickael and Wu, Hao and Demouth, Julien and Han, Song},
+  booktitle = {International Conference on Machine Learning (ICML)},
+  year      = {2023},
+  url       = {https://arxiv.org/abs/2211.10438}
+}
+
+% ---------------------------------------------------------------------------
+% KV-cache quantization (TurboQuant family + neighbors)
+% ---------------------------------------------------------------------------
+
+@misc{zandieh2024qjl,
+  title         = {{QJL}: 1-Bit Quantized {JL} Transform for {KV} Cache Quantization with Zero Overhead},
+  author        = {Zandieh, Amir and Daliri, Majid and Han, Insu},
+  year          = {2024},
+  eprint        = {2406.03482},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.LG},
+  url           = {https://arxiv.org/abs/2406.03482}
+}
+
+@misc{han2025polarquant,
+  title         = {{PolarQuant}: Quantizing {KV} Caches with Polar Transformation},
+  author        = {Han, Insu and Kacham, Praneeth and Karbasi, Amin and Mirrokni, Vahab and Zandieh, Amir},
+  year          = {2025},
+  eprint        = {2502.02617},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.LG},
+  url           = {https://arxiv.org/abs/2502.02617},
+  note          = {Venue listed variously as NeurIPS 2025 / AISTATS 2026; verify before camera-ready}
+}
+
+@inproceedings{ashkboos2024quarot,
+  title     = {{QuaRot}: Outlier-Free 4-Bit Inference in Rotated {LLMs}},
+  author    = {Ashkboos, Saleh and Mohtashami, Amirkeivan and Croci, Maximilian L. and Li, Bo and Cameron, Pashmina and Jaggi, Martin and Alistarh, Dan and Hoefler, Torsten and Hensman, James},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2024},
+  url       = {https://arxiv.org/abs/2404.00456}
+}
+
+@misc{duanmu2024skvq,
+  title         = {{SKVQ}: Sliding-Window Key and Value Cache Quantization for Large Language Models},
+  author        = {Duanmu, Haojie and Yuan, Zhihang and Li, Xiuhong and Duan, Jiangfei and Zhang, Xingcheng and Lin, Dahua},
+  year          = {2024},
+  eprint        = {2405.06219},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.LG},
+  url           = {https://arxiv.org/abs/2405.06219}
+}
+
+@misc{li2025kvtuner,
+  title         = {{KVTuner}: Sensitivity-Aware Layer-Wise Mixed Precision {KV} Cache Quantization},
+  author        = {Li, Xing and Xing, Zeyu and Li, Yiming and Qu, Lin and Zhen, Hui-Ling and Liu, Wulong and Yao, Yiwu and Pan, S. J. and Yuan, Mingxuan},
+  year          = {2025},
+  eprint        = {2502.04420},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.LG},
+  url           = {https://arxiv.org/abs/2502.04420}
+}
+
+@misc{hariri2025kvadaquant,
+  title         = {More for Keys, Less for Values: Adaptive {KV} Cache Quantization},
+  author        = {Hariri, Mohsen and Nguyen, Lam and Chen, Sixu and Zhong, Shaochen and Wang, Qifan and Hu, Xia and Han, Xiaotian and Chaudhary, Vipin},
+  year          = {2025},
+  eprint        = {2502.15075},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.LG},
+  url           = {https://arxiv.org/abs/2502.15075}
+}
+
+@misc{malinovskii2024higgs,
+  title         = {{HIGGS}: Pushing the Limits of Large Language Model Quantization via the Linearity Theorem},
+  author        = {Malinovskii, Denis and others},
+  year          = {2024},
+  eprint        = {2411.17525},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.LG},
+  url           = {https://arxiv.org/abs/2411.17525},
+  note          = {NAACL 2025}
+}
+
+% ---------------------------------------------------------------------------
+% Long-context evaluation
+% ---------------------------------------------------------------------------
+
+@inproceedings{yen2024helmet,
+  title     = {{HELMET}: How to Evaluate Long-Context Language Models Effectively and Thoroughly},
+  author    = {Yen, Howard and Gao, Tianyu and Hou, Minmin and Ding, Ke and Fleischer, Daniel and Izsak, Peter and Wasserblat, Moshe and Chen, Danqi},
+  booktitle = {International Conference on Learning Representations ({ICLR})},
+  year      = {2025},
+  url       = {https://arxiv.org/abs/2410.02694}
+}
+
+@misc{bai2024longbenchv2,
+  title         = {{LongBench v2}: Towards Deeper Understanding and Reasoning on Realistic Long-Context Multitasks},
+  author        = {Bai, Yushi and Tu, Shangqing and Zhang, Jiajie and Peng, Hao and Wang, Xiaozhi and Lv, Xin and others},
+  year          = {2024},
+  eprint        = {2412.15204},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL},
+  url           = {https://arxiv.org/abs/2412.15204}
+}
+
+% ---------------------------------------------------------------------------
+% Mixed-precision / bit allocation
+% ---------------------------------------------------------------------------
+
+@inproceedings{vanbaalen2020bayesianbits,
+  title     = {Bayesian Bits: Unifying Quantization and Pruning},
+  author    = {van Baalen, Mart and Louizos, Christos and Nagel, Markus and Amjad, Rana Ali and Wang, Ying and Blankevoort, Tijmen and Welling, Max},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2020},
+  url       = {https://arxiv.org/abs/2005.07093}
+}
+
+@misc{huang2024slimllm,
+  title         = {{SliM-LLM}: Salience-Driven Mixed-Precision Quantization for Large Language Models},
+  author        = {Huang, Wei and Qin, Haotong and Liu, Yangdong and Li, Yawei and Liu, Xianglong and Benini, Luca and Magno, Michele and Qi, Xiaojuan},
+  year          = {2024},
+  eprint        = {2405.14917},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.LG},
+  url           = {https://arxiv.org/abs/2405.14917}
+}
+
+@misc{gulhan2025baklava,
+  title         = {{BaKlaVa}: Budgeted Allocation of {KV} Cache for Long-Context Inference},
+  author        = {Gulhan, Ahmed Burak and Chitty-Venkata, Krishna Teja and Emani, Murali and Kandemir, Mahmut and Vishwanath, Venkatram},
+  year          = {2025},
+  eprint        = {2502.13176},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.LG},
+  url           = {https://arxiv.org/abs/2502.13176}
+}
+
+@inproceedings{zhang2023h2o,
+  title         = {{H}$_2${O}: Heavy-Hitter Oracle for Efficient Generative Inference of Large Language Models},
+  author        = {Zhang, Zhenyu and Sheng, Ying and Zhou, Tianyi and Chen, Tianlong and Zheng, Lianmin and Cai, Ruisi and Song, Zhao and Tian, Yuandong and R\'e, Christopher and Barrett, Clark and Wang, Zhangyang and Chen, Beidi},
+  booktitle     = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year          = {2023},
+  eprint        = {2306.14048},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.LG},
+  url           = {https://arxiv.org/abs/2306.14048}
+}
+
+@article{lin2022esm2,
+  title         = {Evolutionary-scale prediction of atomic-level protein structure with a language model},
+  author        = {Lin, Zeming and Akin, Halil and Rao, Roshan and Hie, Brian and Zhu, Zhongkai and Lu, Wenting and Smetanin, Nikita and Verkuil, Robert and Kabeli, Ori and Shmueli, Yaniv and dos Santos Costa, Allan and Fazel-Zarandi, Maryam and Sercu, Tom and Candido, Salvatore and Rives, Alexander},
+  journal       = {Science},
+  volume        = {379},
+  number        = {6637},
+  pages         = {1123--1130},
+  year          = {2023},
+  doi           = {10.1126/science.ade2574}
+}
+
+@article{cheng2023alphamissense,
+  title         = {Accurate proteome-wide missense variant effect prediction with {AlphaMissense}},
+  author        = {Cheng, Jun and Novati, Guido and Pan, Joshua and Bycroft, Clare and {\v{Z}}emgulyt{\.e}, Akvil{\.e} and Applebaum, Taylor and Pritzel, Alexander and Wong, Lai Hong and Zielinski, Michal and Sargeant, Tobias and Schneider, Rosalia G. and Senior, Andrew W. and Jumper, John and Hassabis, Demis and Kohli, Pushmeet and Avsec, {\v{Z}}iga},
+  journal       = {Science},
+  volume        = {381},
+  number        = {6664},
+  pages         = {eadg7492},
+  year          = {2023},
+  doi           = {10.1126/science.adg7492}
+}
+
+@article{nguyen2024evo,
+  title         = {Sequence modeling and design from molecular to genome scale with {Evo}},
+  author        = {Nguyen, Eric and Poli, Michael and Durrant, Matthew G. and Kang, Brian and Katrekar, Dhruva and Li, David B. and Bartie, Liam J. and Thomas, Armin W. and King, Samuel H. and Brixi, Garyk and Sullivan, Jeremy and Ng, Madelena Y. and Lewis, Ashley and Lou, Aaron and Ermon, Stefano and Baccus, Stephen A. and Hernandez-Boussard, Tina and R{\'e}, Christopher and Hsu, Patrick D. and Hie, Brian L.},
+  journal       = {Science},
+  volume        = {386},
+  number        = {6723},
+  pages         = {eado9336},
+  year          = {2024},
+  doi           = {10.1126/science.ado9336}
+}
+
+@article{srivastava2014dropout,
+  title         = {Dropout: A Simple Way to Prevent Neural Networks from Overfitting},
+  author        = {Srivastava, Nitish and Hinton, Geoffrey and Krizhevsky, Alex and Sutskever, Ilya and Salakhutdinov, Ruslan},
+  journal       = {Journal of Machine Learning Research},
+  volume        = {15},
+  number        = {56},
+  pages         = {1929--1958},
+  year          = {2014}
+}
+
+@article{fedus2022switch,
+  title         = {{Switch Transformers}: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity},
+  author        = {Fedus, William and Zoph, Barret and Shazeer, Noam},
+  journal       = {Journal of Machine Learning Research},
+  volume        = {23},
+  number        = {120},
+  pages         = {1--39},
+  year          = {2022}
+}
+
+@inproceedings{tenney2019bert,
+  title         = {{BERT} Rediscovers the Classical {NLP} Pipeline},
+  author        = {Tenney, Ian and Das, Dipanjan and Pavlick, Ellie},
+  booktitle     = {Proceedings of the 57th Annual Meeting of the Association for Computational Linguistics (ACL)},
+  pages         = {4593--4601},
+  year          = {2019},
+  url           = {https://aclanthology.org/P19-1452}
+}
+
+@misc{elhage2022superposition,
+  title         = {Toy Models of Superposition},
+  author        = {Elhage, Nelson and Hume, Tristan and Olsson, Catherine and Schiefer, Nicholas and Henighan, Tom and Kravec, Shauna and Hatfield-Dodds, Zac and Lasenby, Robert and Drain, Dawn and Chen, Carol and Grosse, Roger and McCandlish, Sam and Kaplan, Jared and Amodei, Dario and Wattenberg, Martin and Olah, Christopher},
+  year          = {2022},
+  howpublished  = {Anthropic Transformer Circuits Thread},
+  url           = {https://transformer-circuits.pub/2022/toy_model/index.html}
+}
+
+@inproceedings{katharopoulos2020lineartransformers,
+  title         = {Transformers are {RNNs}: Fast Autoregressive Transformers with Linear Attention},
+  author        = {Katharopoulos, Angelos and Vyas, Apoorv and Pappas, Nikolaos and Fleuret, Fran{\c{c}}ois},
+  booktitle     = {Proceedings of the 37th International Conference on Machine Learning (ICML)},
+  pages         = {5156--5165},
+  year          = {2020}
+}
+
+@misc{gu2023mamba,
+  title         = {{Mamba}: Linear-Time Sequence Modeling with Selective State Spaces},
+  author        = {Gu, Albert and Dao, Tri},
+  year          = {2023},
+  eprint        = {2312.00752},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.LG},
+  url           = {https://arxiv.org/abs/2312.00752}
+}
+
+@misc{shazeer2019mqa,
+  title         = {Fast Transformer Decoding: One Write-Head is All You Need},
+  author        = {Shazeer, Noam},
+  year          = {2019},
+  eprint        = {1911.02150},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.NE},
+  url           = {https://arxiv.org/abs/1911.02150}
+}
+
+@article{olsson2022context,
+  title         = {In-context Learning and Induction Heads},
+  author        = {Olsson, Catherine and Elhage, Nelson and Nanda, Neel and Joseph, Nicholas and DasSarma, Nova and Henighan, Tom and Mann, Ben and Askell, Amanda and Bai, Yuntao and Chen, Anna and Conerly, Tom and Drain, Dawn and Ganguli, Deep and Hatfield-Dodds, Zac and Hernandez, Danny and Johnston, Scott and Jones, Andy and Kernion, Jackson and Lovitt, Liane and Ndousse, Kamal and Amodei, Dario and Brown, Tom and Clark, Jack and Kaplan, Jared and McCandlish, Sam and Olah, Chris},
+  journal       = {Transformer Circuits Thread},
+  year          = {2022},
+  url           = {https://transformer-circuits.pub/2022/in-context-learning-and-induction-heads/index.html}
+}
+
+@inproceedings{holtzman2019curious,
+  title         = {The Curious Case of Neural Text Degeneration},
+  author        = {Holtzman, Ari and Buys, Jan and Du, Li and Forbes, Maxwell and Choi, Yejin},
+  booktitle     = {International Conference on Learning Representations (ICLR)},
+  year          = {2020},
+  eprint        = {1904.09751},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL},
+  url           = {https://arxiv.org/abs/1904.09751}
 }

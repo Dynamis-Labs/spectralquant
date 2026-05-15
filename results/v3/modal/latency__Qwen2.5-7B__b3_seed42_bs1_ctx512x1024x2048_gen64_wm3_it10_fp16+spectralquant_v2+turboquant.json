@@ -1,0 +1,351 @@
+{
+  "caveats": [
+    "spectralquant_v2 / turboquant rows include MICROBENCHMARK rows (microbenchmark=true, microbenchmark_kind=kv_compress_decompress_round_trip) and HOOKED REPLAY END-TO-END rows (end_to_end_measured=true, production_kernel=false, measurement_kind=hooked_replay_end_to_end). The end-to-end rows include Python-level per-layer hook overhead and are therefore NOT a production-kernel speed claim. Compare them to fp16 only with that caveat explicit."
+  ],
+  "command": "--model Qwen/Qwen2.5-7B --output-dir /results/latency --seed 42 --device cuda --dtype float16 --avg-bits 3 --methods fp16 --methods fp16 spectralquant_v2 turboquant --batch-sizes 1 --context-lengths 512,1024,2048 --gen-tokens 64 --warmup-iters 3 --measured-iters 10 --device cuda --include-microbench --include-end-to-end-replay --status-dir /results/status/latency",
+  "commit": "197bcfb4ad54a7d7bc9430a80695c62c145371fd",
+  "evidence_ids": [
+    "RUN-LATENCY-QWEN2.5-7B"
+  ],
+  "family": "latency",
+  "hardware": {
+    "cuda": "13.0",
+    "gpu": "NVIDIA H200",
+    "gpu_total_memory_mb": 143156.06,
+    "host": "modal",
+    "platform": "Linux-4.4.0-x86_64-with-glibc2.35"
+  },
+  "methods": {
+    "fp16": {
+      "end_to_end_measured": true,
+      "evidence_ids": [
+        "RUN-LATENCY-FP16"
+      ],
+      "label": "fp16",
+      "operating_points": [
+        {
+          "batch_size": 1,
+          "context_length": 512,
+          "decode_ms_per_token_p50": 17.179975986480713,
+          "decode_ms_per_token_p95": 36.11160745620724,
+          "end_to_end_measured": true,
+          "gen_tokens": 64,
+          "measurement_kind": "fp16_end_to_end",
+          "n_iters": 10,
+          "peak_memory_mb": 14813.43,
+          "prefill_ms_p50": 18.423727989196777,
+          "prefill_ms_p95": 19.1263484954834,
+          "production_kernel": true,
+          "tokens_per_sec_p50": 58.20729905483693
+        },
+        {
+          "batch_size": 1,
+          "context_length": 1024,
+          "decode_ms_per_token_p50": 17.663000106811523,
+          "decode_ms_per_token_p95": 37.29901776313778,
+          "end_to_end_measured": true,
+          "gen_tokens": 64,
+          "measurement_kind": "fp16_end_to_end",
+          "n_iters": 10,
+          "peak_memory_mb": 15046.44,
+          "prefill_ms_p50": 29.51248073577881,
+          "prefill_ms_p95": 29.614878463745118,
+          "production_kernel": true,
+          "tokens_per_sec_p50": 56.615523634309554
+        },
+        {
+          "batch_size": 1,
+          "context_length": 2048,
+          "decode_ms_per_token_p50": 16.554519653320312,
+          "decode_ms_per_token_p95": 38.0365253448486,
+          "end_to_end_measured": true,
+          "gen_tokens": 64,
+          "measurement_kind": "fp16_end_to_end",
+          "n_iters": 10,
+          "peak_memory_mb": 15444.44,
+          "prefill_ms_p50": 55.17196846008301,
+          "prefill_ms_p95": 55.60794086456299,
+          "production_kernel": true,
+          "tokens_per_sec_p50": 60.406464273303854
+        }
+      ],
+      "production_kernel": true
+    },
+    "spectralquant_v2": {
+      "end_to_end_measured": true,
+      "evidence_ids": [
+        "RUN-LATENCY-E2E-REPLAY-SPECTRALQUANT_V2",
+        "RUN-LATENCY-MICROBENCH-SPECTRALQUANT_V2"
+      ],
+      "label": "spectralquant_v2",
+      "measurement_kind": "microbenchmark_and_hooked_replay_end_to_end",
+      "microbenchmark": true,
+      "microbenchmark_kind": "kv_compress_decompress_round_trip",
+      "operating_points": [
+        {
+          "batch_size": 1,
+          "context_length": 512,
+          "decode_ms_per_token_p50": 0.11882484331727028,
+          "decode_ms_per_token_p95": 0.11958004496991634,
+          "end_to_end_measured": false,
+          "gen_tokens": 64,
+          "measurement_kind": "microbenchmark_kv_round_trip",
+          "microbenchmark": true,
+          "microbenchmark_kind": "kv_compress_decompress_round_trip",
+          "n_iters": 10,
+          "peak_memory_mb": 0.0,
+          "prefill_ms_p50": 60.83831977844238,
+          "prefill_ms_p95": 61.224983024597165,
+          "production_kernel": false,
+          "tokens_per_sec_p50": 8415.748526004221
+        },
+        {
+          "batch_size": 1,
+          "context_length": 1024,
+          "decode_ms_per_token_p50": 0.05934251472353935,
+          "decode_ms_per_token_p95": 0.05963500812649727,
+          "end_to_end_measured": false,
+          "gen_tokens": 64,
+          "measurement_kind": "microbenchmark_kv_round_trip",
+          "microbenchmark": true,
+          "microbenchmark_kind": "kv_compress_decompress_round_trip",
+          "n_iters": 10,
+          "peak_memory_mb": 0.0,
+          "prefill_ms_p50": 60.7667350769043,
+          "prefill_ms_p95": 61.0662483215332,
+          "production_kernel": false,
+          "tokens_per_sec_p50": 16851.324967584
+        },
+        {
+          "batch_size": 1,
+          "context_length": 2048,
+          "decode_ms_per_token_p50": 0.02896338328719139,
+          "decode_ms_per_token_p95": 0.029035988543182612,
+          "end_to_end_measured": false,
+          "gen_tokens": 64,
+          "measurement_kind": "microbenchmark_kv_round_trip",
+          "microbenchmark": true,
+          "microbenchmark_kind": "kv_compress_decompress_round_trip",
+          "n_iters": 10,
+          "peak_memory_mb": 0.0,
+          "prefill_ms_p50": 59.31700897216797,
+          "prefill_ms_p95": 59.46570453643799,
+          "production_kernel": false,
+          "tokens_per_sec_p50": 34526.353157168436
+        },
+        {
+          "batch_size": 1,
+          "context_length": 512,
+          "decode_ms_per_token_p50": 664.8506164550781,
+          "decode_ms_per_token_p95": 669.3462326049805,
+          "end_to_end_measured": true,
+          "gen_tokens": 64,
+          "measurement_kind": "hooked_replay_end_to_end",
+          "n_iters": 10,
+          "peak_memory_mb": 14813.43,
+          "prefill_ms_p50": 698.3409423828125,
+          "prefill_ms_p95": 703.5158416748047,
+          "production_kernel": false,
+          "tokens_per_sec_p50": 1.5040972742597538
+        },
+        {
+          "batch_size": 1,
+          "context_length": 1024,
+          "decode_ms_per_token_p50": 630.5768280029297,
+          "decode_ms_per_token_p95": 644.2622146606445,
+          "end_to_end_measured": true,
+          "gen_tokens": 64,
+          "measurement_kind": "hooked_replay_end_to_end",
+          "n_iters": 10,
+          "peak_memory_mb": 15046.44,
+          "prefill_ms_p50": 677.1341247558594,
+          "prefill_ms_p95": 703.160595703125,
+          "production_kernel": false,
+          "tokens_per_sec_p50": 1.5858495834156372
+        },
+        {
+          "batch_size": 1,
+          "context_length": 2048,
+          "decode_ms_per_token_p50": 630.5878295898438,
+          "decode_ms_per_token_p95": 637.2949768066406,
+          "end_to_end_measured": true,
+          "gen_tokens": 64,
+          "measurement_kind": "hooked_replay_end_to_end",
+          "n_iters": 10,
+          "peak_memory_mb": 15442.44,
+          "prefill_ms_p50": 696.0926513671875,
+          "prefill_ms_p95": 707.4325714111328,
+          "production_kernel": false,
+          "tokens_per_sec_p50": 1.5858219157994768
+        }
+      ],
+      "production_kernel": false,
+      "replay_coverage": {
+        "fraction_layers_real": 1.0,
+        "missing_layers": [],
+        "n_hook_calls": 110712,
+        "n_layers_calibrated": 28,
+        "n_layers_hooked": 28,
+        "n_layers_total": 28,
+        "n_passthrough_calls": 0
+      }
+    },
+    "turboquant": {
+      "end_to_end_measured": true,
+      "evidence_ids": [
+        "RUN-LATENCY-E2E-REPLAY-TURBOQUANT",
+        "RUN-LATENCY-MICROBENCH-TURBOQUANT"
+      ],
+      "label": "turboquant",
+      "measurement_kind": "microbenchmark_and_hooked_replay_end_to_end",
+      "microbenchmark": true,
+      "microbenchmark_kind": "kv_compress_decompress_round_trip",
+      "operating_points": [
+        {
+          "batch_size": 1,
+          "context_length": 512,
+          "decode_ms_per_token_p50": 0.003169031231664121,
+          "decode_ms_per_token_p95": 0.003282349952496588,
+          "end_to_end_measured": false,
+          "gen_tokens": 64,
+          "measurement_kind": "microbenchmark_kv_round_trip",
+          "microbenchmark": true,
+          "microbenchmark_kind": "kv_compress_decompress_round_trip",
+          "n_iters": 10,
+          "peak_memory_mb": 0.0,
+          "prefill_ms_p50": 1.62254399061203,
+          "prefill_ms_p95": 1.680563175678253,
+          "production_kernel": false,
+          "tokens_per_sec_p50": 315553.84813133575
+        },
+        {
+          "batch_size": 1,
+          "context_length": 1024,
+          "decode_ms_per_token_p50": 0.001582578115630895,
+          "decode_ms_per_token_p95": 0.0016019327915273607,
+          "end_to_end_measured": false,
+          "gen_tokens": 64,
+          "measurement_kind": "microbenchmark_kv_round_trip",
+          "microbenchmark": true,
+          "microbenchmark_kind": "kv_compress_decompress_round_trip",
+          "n_iters": 10,
+          "peak_memory_mb": 0.0,
+          "prefill_ms_p50": 1.6205599904060364,
+          "prefill_ms_p95": 1.6403791785240174,
+          "production_kernel": false,
+          "tokens_per_sec_p50": 631880.3414018839
+        },
+        {
+          "batch_size": 1,
+          "context_length": 2048,
+          "decode_ms_per_token_p50": 0.0007751093653496355,
+          "decode_ms_per_token_p95": 0.0007874843868194148,
+          "end_to_end_measured": false,
+          "gen_tokens": 64,
+          "measurement_kind": "microbenchmark_kv_round_trip",
+          "microbenchmark": true,
+          "microbenchmark_kind": "kv_compress_decompress_round_trip",
+          "n_iters": 10,
+          "peak_memory_mb": 0.0,
+          "prefill_ms_p50": 1.5874239802360535,
+          "prefill_ms_p95": 1.6127680242061615,
+          "production_kernel": false,
+          "tokens_per_sec_p50": 1290140.5204269737
+        },
+        {
+          "batch_size": 1,
+          "context_length": 512,
+          "decode_ms_per_token_p50": 70.68489646911621,
+          "decode_ms_per_token_p95": 71.13613891601562,
+          "end_to_end_measured": true,
+          "gen_tokens": 64,
+          "measurement_kind": "hooked_replay_end_to_end",
+          "n_iters": 10,
+          "peak_memory_mb": 14813.43,
+          "prefill_ms_p50": 81.39384078979492,
+          "prefill_ms_p95": 82.05228157043457,
+          "production_kernel": false,
+          "tokens_per_sec_p50": 14.147293834361376
+        },
+        {
+          "batch_size": 1,
+          "context_length": 1024,
+          "decode_ms_per_token_p50": 70.7216625213623,
+          "decode_ms_per_token_p95": 71.08107013702393,
+          "end_to_end_measured": true,
+          "gen_tokens": 64,
+          "measurement_kind": "hooked_replay_end_to_end",
+          "n_iters": 10,
+          "peak_memory_mb": 15046.44,
+          "prefill_ms_p50": 91.60516738891602,
+          "prefill_ms_p95": 93.62509765624999,
+          "production_kernel": false,
+          "tokens_per_sec_p50": 14.139939084406256
+        },
+        {
+          "batch_size": 1,
+          "context_length": 2048,
+          "decode_ms_per_token_p50": 70.8296947479248,
+          "decode_ms_per_token_p95": 71.56188106536865,
+          "end_to_end_measured": true,
+          "gen_tokens": 64,
+          "measurement_kind": "hooked_replay_end_to_end",
+          "n_iters": 10,
+          "peak_memory_mb": 15442.44,
+          "prefill_ms_p50": 113.29321670532227,
+          "prefill_ms_p95": 113.99672393798828,
+          "production_kernel": false,
+          "tokens_per_sec_p50": 14.118372295107179
+        }
+      ],
+      "production_kernel": false,
+      "replay_coverage": {
+        "fraction_layers_real": 1.0,
+        "missing_layers": [],
+        "n_hook_calls": 110712,
+        "n_layers_calibrated": 28,
+        "n_layers_hooked": 28,
+        "n_layers_total": 28,
+        "n_passthrough_calls": 0
+      }
+    }
+  },
+  "mode": "full",
+  "model": {
+    "name": "Qwen/Qwen2.5-7B"
+  },
+  "operating_points": [
+    {
+      "batch_size": 1,
+      "context_length": 512,
+      "gen_tokens": 64
+    },
+    {
+      "batch_size": 1,
+      "context_length": 1024,
+      "gen_tokens": 64
+    },
+    {
+      "batch_size": 1,
+      "context_length": 2048,
+      "gen_tokens": 64
+    }
+  ],
+  "paper_valid": true,
+  "repo": "niashwin/spectralquant-v2",
+  "run_id": "latency__Qwen2.5-7B__b3_seed42_bs1_ctx512x1024x2048_gen64_wm3_it10_fp16+spectralquant_v2+turboquant",
+  "schema_version": "1",
+  "software": {
+    "datasets": "4.8.5",
+    "python": "3.12.1",
+    "torch": "2.11.0+cu130",
+    "transformers": "5.7.0"
+  },
+  "timestamp": "2026-04-30T07:08:12Z",
+  "timing": {
+    "cuda_synchronize": true,
+    "measured_iters": 10,
+    "timer": "torch.cuda.Event",
+    "warmup_iters": 3
+  }
+}

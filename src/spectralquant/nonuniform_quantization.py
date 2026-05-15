@@ -18,9 +18,15 @@ from __future__ import annotations
 import logging
 import math
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
+import numpy as np
 import torch
+
+from spectralquant.waterfill import (
+    FORMULA_VERSION as WATERFILL_FORMULA_VERSION,
+    allocate_waterfill_bits,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -66,6 +72,71 @@ class CompressedVector:
     original_shape: Tuple[int, ...]
     actual_bits_used: float = 0.0
     mse: Optional[float] = None
+    # v2: per-semantic-dim bit allocation; None when water-filling is disabled.
+    semantic_bits_per_dim: Optional[List[int]] = None
+
+
+@dataclass
+class WaterfillAllocation:
+    """Metadata for a v2 per-semantic-dimension water-fill allocation.
+
+    Stored or exposed alongside the quantizer so downstream accounting and
+    logging can record exactly how the semantic bit budget was spent. All
+    fields are JSON-safe primitives or numpy/python lists.
+
+    Attributes
+    ----------
+    use_water_fill:
+        Whether water-filling was actually applied. ``False`` means the
+        allocation is the v1 uniform vector ``[b_high] * d_eff``.
+    eigenvalues:
+        The semantic eigenvalues (length ``d_eff``) used to compute the
+        allocation. Stored as a list of floats for serialization.
+    bits_per_dim:
+        Per-semantic-dimension integer bit widths (length ``d_eff``).
+    d_eff:
+        Number of semantic dimensions.
+    total_semantic_bits:
+        Sum of ``bits_per_dim``. Equals ``b_high * d_eff`` for both v1 and
+        v2 when the same total budget is used.
+    min_bits:
+        Lower bound on per-dim bit width that was passed to the allocator.
+    max_bits:
+        Upper bound on per-dim bit width, or ``None`` for no cap.
+    formula_version:
+        Identifier of the water-filling rule (e.g. ``"waterfill-v1"``).
+    """
+
+    use_water_fill: bool
+    eigenvalues: List[float]
+    bits_per_dim: List[int]
+    d_eff: int
+    total_semantic_bits: int
+    min_bits: int
+    max_bits: Optional[int]
+    formula_version: str
+
+    @property
+    def actual_min_bits(self) -> int:
+        return int(min(self.bits_per_dim)) if self.bits_per_dim else 0
+
+    @property
+    def actual_max_bits(self) -> int:
+        return int(max(self.bits_per_dim)) if self.bits_per_dim else 0
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "use_water_fill": bool(self.use_water_fill),
+            "eigenvalues": [float(x) for x in self.eigenvalues],
+            "bits_per_dim": [int(x) for x in self.bits_per_dim],
+            "d_eff": int(self.d_eff),
+            "total_semantic_bits": int(self.total_semantic_bits),
+            "min_bits": int(self.min_bits),
+            "max_bits": None if self.max_bits is None else int(self.max_bits),
+            "actual_min_bits": int(self.actual_min_bits),
+            "actual_max_bits": int(self.actual_max_bits),
+            "formula_version": str(self.formula_version),
+        }
 
 
 # ---------------------------------------------------------------------------
@@ -385,20 +456,62 @@ class NonUniformQuantizer:
         avg_bits: float = 4.0,
         max_lloyd_iter: int = 200,
         seed: int = 0,
+        *,
+        use_water_fill: bool = False,
+        wf_min_bits: int = 0,
+        wf_max_bits: Optional[int] = None,
     ) -> None:
+        if eigenvalues.ndim != 1:
+            raise ValueError(
+                f"eigenvalues must be 1-D, got shape {tuple(eigenvalues.shape)}"
+            )
+        if not isinstance(use_water_fill, bool):
+            raise TypeError("use_water_fill must be a bool")
+        if not isinstance(wf_min_bits, int) or isinstance(wf_min_bits, bool):
+            raise TypeError("wf_min_bits must be an int")
+        if wf_min_bits < 0:
+            raise ValueError(f"wf_min_bits must be >= 0, got {wf_min_bits}")
+        if wf_max_bits is not None:
+            if not isinstance(wf_max_bits, int) or isinstance(wf_max_bits, bool):
+                raise TypeError("wf_max_bits must be an int or None")
+            if wf_max_bits < wf_min_bits:
+                raise ValueError(
+                    f"wf_max_bits ({wf_max_bits}) must be >= wf_min_bits ({wf_min_bits})"
+                )
+
         self._eigenvalues = eigenvalues.float()
         self._avg_bits = avg_bits
         self._head_dim = eigenvalues.shape[0]
         self._max_lloyd_iter = max_lloyd_iter
         self._seed = seed
+        self._use_water_fill = use_water_fill
+        self._wf_min_bits = int(wf_min_bits)
+        self._wf_max_bits = None if wf_max_bits is None else int(wf_max_bits)
 
         self._allocator = BitAllocator()
         self._semantic_quantizer: Optional[LloydMaxQuantizer] = None
         self._tail_quantizer: Optional[LloydMaxQuantizer] = None
+        # v2: per-semantic-dim quantizers and bit allocation.
+        self._per_dim_semantic_quantizers: Optional[List[LloydMaxQuantizer]] = None
+        self._semantic_bits_per_dim: Optional[List[int]] = None
+        self._waterfill_allocation: Optional[WaterfillAllocation] = None
         self._d_eff_int: int = 0
         self._b_high: int = 0
         self._b_low: int = 0
         self._is_fitted: bool = False
+
+    @property
+    def use_water_fill(self) -> bool:
+        return self._use_water_fill
+
+    @property
+    def waterfill_allocation(self) -> Optional[WaterfillAllocation]:
+        """Allocation metadata, populated after :meth:`fit` for any path."""
+        return self._waterfill_allocation
+
+    @property
+    def semantic_bits_per_dim(self) -> Optional[List[int]]:
+        return None if self._semantic_bits_per_dim is None else list(self._semantic_bits_per_dim)
 
     def fit(
         self,
@@ -431,25 +544,96 @@ class NonUniformQuantizer:
             d_eff=d_eff, avg_bits=self._avg_bits, head_dim=self._head_dim
         )
 
-        # Fit semantic codebook on the high-energy coordinates
-        semantic_data = rotated_data[:, : self._d_eff_int].float().flatten()
-        self._semantic_quantizer = LloydMaxQuantizer(
-            n_bits=self._b_high, max_iter=self._max_lloyd_iter, seed=self._seed
-        ).fit(semantic_data)
+        d_eff_int = self._d_eff_int
+        sem_eigs = self._eigenvalues[:d_eff_int].detach().cpu().numpy().astype(np.float64)
 
-        # Fit tail codebook on the low-energy coordinates
-        tail_data = rotated_data[:, self._d_eff_int :].float().flatten()
+        # Tail codebook is identical for v1 and v2.
+        tail_data = rotated_data[:, d_eff_int:].float().flatten()
         self._tail_quantizer = LloydMaxQuantizer(
             n_bits=self._b_low, max_iter=self._max_lloyd_iter, seed=self._seed + 1
         ).fit(tail_data)
 
+        if not self._use_water_fill:
+            # v1 path: single shared semantic codebook over all d_eff coords.
+            semantic_data = rotated_data[:, :d_eff_int].float().flatten()
+            self._semantic_quantizer = LloydMaxQuantizer(
+                n_bits=self._b_high, max_iter=self._max_lloyd_iter, seed=self._seed
+            ).fit(semantic_data)
+            self._per_dim_semantic_quantizers = None
+            bits_per_dim = [int(self._b_high)] * d_eff_int
+            self._semantic_bits_per_dim = bits_per_dim
+            self._waterfill_allocation = WaterfillAllocation(
+                use_water_fill=False,
+                eigenvalues=[float(x) for x in sem_eigs.tolist()],
+                bits_per_dim=bits_per_dim,
+                d_eff=d_eff_int,
+                total_semantic_bits=int(self._b_high * d_eff_int),
+                min_bits=self._wf_min_bits,
+                max_bits=self._wf_max_bits,
+                formula_version="uniform-v1",
+            )
+        else:
+            # v2 path: per-semantic-dim codebooks sized by water-fill.
+            total_semantic_bits = int(self._b_high * d_eff_int)
+            bits_arr = allocate_waterfill_bits(
+                sem_eigs,
+                total_bits=total_semantic_bits,
+                min_bits=self._wf_min_bits,
+                max_bits=self._wf_max_bits,
+            )
+            bits_per_dim = [int(b) for b in bits_arr.tolist()]
+
+            per_dim_quants: List[LloydMaxQuantizer] = []
+            for i, b_i in enumerate(bits_per_dim):
+                if b_i < 1:
+                    # LloydMaxQuantizer requires n_bits >= 1. A 0-bit dim is
+                    # represented by a degenerate single-level codebook fit on
+                    # the column data (single centroid = column mean).
+                    q = LloydMaxQuantizer(
+                        n_bits=1,
+                        max_iter=self._max_lloyd_iter,
+                        seed=self._seed + 100 + i,
+                    )
+                    q.fit(rotated_data[:, i].float().flatten())
+                    # Collapse both centroids to the column mean so dequantize
+                    # always returns the mean (effective 0 bits). Mark the
+                    # quantizer so compress() can short-circuit to zero indices.
+                    col_mean = float(rotated_data[:, i].float().mean().item())
+                    q._centroids = torch.tensor(  # type: ignore[attr-defined]
+                        [col_mean, col_mean], dtype=torch.float32
+                    )
+                    per_dim_quants.append(q)
+                else:
+                    q = LloydMaxQuantizer(
+                        n_bits=b_i,
+                        max_iter=self._max_lloyd_iter,
+                        seed=self._seed + 100 + i,
+                    ).fit(rotated_data[:, i].float().flatten())
+                    per_dim_quants.append(q)
+
+            self._per_dim_semantic_quantizers = per_dim_quants
+            self._semantic_quantizer = None  # not used on the v2 path
+            self._semantic_bits_per_dim = bits_per_dim
+            self._waterfill_allocation = WaterfillAllocation(
+                use_water_fill=True,
+                eigenvalues=[float(x) for x in sem_eigs.tolist()],
+                bits_per_dim=bits_per_dim,
+                d_eff=d_eff_int,
+                total_semantic_bits=total_semantic_bits,
+                min_bits=self._wf_min_bits,
+                max_bits=self._wf_max_bits,
+                formula_version=WATERFILL_FORMULA_VERSION,
+            )
+
         self._is_fitted = True
         logger.info(
-            "NonUniformQuantizer fitted: d_eff=%d, b_high=%d, b_low=%d, head_dim=%d",
+            "NonUniformQuantizer fitted: d_eff=%d, b_high=%d, b_low=%d, head_dim=%d, "
+            "use_water_fill=%s",
             self._d_eff_int,
             self._b_high,
             self._b_low,
             self._head_dim,
+            self._use_water_fill,
         )
         return self
 
@@ -478,12 +662,24 @@ class NonUniformQuantizer:
         if not self._is_fitted:
             raise RuntimeError("Call fit() before compress().")
 
-        # Optionally re-fit with different d_eff / avg_bits
+        # Optionally re-fit with different d_eff / avg_bits.
+        # The per-dim water-fill path was fit for one specific (d_eff, b_high)
+        # configuration, so overrides that would change either are rejected.
         if d_eff is not None or avg_bits is not None:
             _d = d_eff if d_eff is not None else float(self._d_eff_int)
             _b = avg_bits if avg_bits is not None else self._avg_bits
             d_eff_int = max(1, min(round(_d), self._head_dim - 1))
             b_high, b_low = self._allocator.allocate(_d, _b, self._head_dim)
+            if self._use_water_fill and (
+                d_eff_int != self._d_eff_int or b_high != self._b_high
+            ):
+                raise ValueError(
+                    "compress() overrides change (d_eff, b_high) but the "
+                    "water-fill quantizer was fit for "
+                    f"(d_eff={self._d_eff_int}, b_high={self._b_high}). "
+                    "Re-instantiate and re-fit the quantizer for the new "
+                    "configuration."
+                )
         else:
             d_eff_int = self._d_eff_int
             b_high, b_low = self._b_high, self._b_low
@@ -494,16 +690,23 @@ class NonUniformQuantizer:
         semantic_part = x_f[..., :d_eff_int]
         tail_part = x_f[..., d_eff_int:]
 
-        sem_idx = self._semantic_quantizer.quantize(semantic_part)  # type: ignore
+        if self._use_water_fill:
+            sem_hat, sem_idx, sem_bits_used = self._compress_semantic_per_dim(
+                semantic_part, d_eff_int
+            )
+        else:
+            sem_idx = self._semantic_quantizer.quantize(semantic_part)  # type: ignore
+            sem_hat = self._semantic_quantizer.dequantize(sem_idx)  # type: ignore
+            sem_bits_used = float(d_eff_int * b_high)
+
         tail_idx = self._tail_quantizer.quantize(tail_part)  # type: ignore
-
-        # Compute actual bits used
-        n_elements = x_f[..., 0].numel()  # number of vectors
-        actual_bits = n_elements * (d_eff_int * b_high + (self._head_dim - d_eff_int) * b_low)
-
-        # Compute MSE
-        sem_hat = self._semantic_quantizer.dequantize(sem_idx)  # type: ignore
         tail_hat = self._tail_quantizer.dequantize(tail_idx)  # type: ignore
+
+        # Total bits used across the batch.
+        n_elements = x_f[..., 0].numel()  # number of vectors
+        per_vec_bits = sem_bits_used + (self._head_dim - d_eff_int) * b_low
+        actual_bits = n_elements * per_vec_bits
+
         x_hat = torch.cat([sem_hat, tail_hat], dim=-1)
         mse_val = float((x_f - x_hat).pow(2).mean().item())
 
@@ -517,7 +720,45 @@ class NonUniformQuantizer:
             original_shape=orig_shape,
             actual_bits_used=float(actual_bits),
             mse=mse_val,
+            semantic_bits_per_dim=(
+                list(self._semantic_bits_per_dim)
+                if self._use_water_fill and self._semantic_bits_per_dim is not None
+                else None
+            ),
         )
+
+    def _compress_semantic_per_dim(
+        self,
+        semantic_part: torch.Tensor,
+        d_eff_int: int,
+    ) -> Tuple[torch.Tensor, torch.Tensor, float]:
+        """Quantize each semantic dimension with its own codebook.
+
+        Returns (reconstruction, indices, total_semantic_bits_per_vector).
+        Indices are stored as int32 in shape (..., d_eff). Bits-per-dim
+        comes from ``self._semantic_bits_per_dim``.
+        """
+        assert self._per_dim_semantic_quantizers is not None
+        assert self._semantic_bits_per_dim is not None
+        if d_eff_int != len(self._per_dim_semantic_quantizers):
+            raise ValueError(
+                f"d_eff_int={d_eff_int} does not match the number of fitted "
+                f"per-dim codebooks ({len(self._per_dim_semantic_quantizers)})"
+            )
+
+        idx_cols: List[torch.Tensor] = []
+        hat_cols: List[torch.Tensor] = []
+        for i in range(d_eff_int):
+            col = semantic_part[..., i]
+            q = self._per_dim_semantic_quantizers[i]
+            col_idx = q.quantize(col)
+            col_hat = q.dequantize(col_idx)
+            idx_cols.append(col_idx.unsqueeze(-1))
+            hat_cols.append(col_hat.unsqueeze(-1))
+        sem_idx = torch.cat(idx_cols, dim=-1).to(torch.int32)
+        sem_hat = torch.cat(hat_cols, dim=-1)
+        sem_bits = float(sum(self._semantic_bits_per_dim))
+        return sem_hat, sem_idx, sem_bits
 
     def decompress(self, compressed: CompressedVector) -> torch.Tensor:
         """Reconstruct the original (rotated) vector from a CompressedVector.
@@ -535,7 +776,23 @@ class NonUniformQuantizer:
         if not self._is_fitted:
             raise RuntimeError("Call fit() before decompress().")
 
-        sem_hat = self._semantic_quantizer.dequantize(compressed.semantic_indices)  # type: ignore
+        if self._use_water_fill:
+            assert self._per_dim_semantic_quantizers is not None
+            d_eff_int = compressed.d_eff
+            if d_eff_int != len(self._per_dim_semantic_quantizers):
+                raise ValueError(
+                    f"compressed.d_eff={d_eff_int} does not match fitted "
+                    f"per-dim codebooks ({len(self._per_dim_semantic_quantizers)})"
+                )
+            sem_idx = compressed.semantic_indices
+            cols: List[torch.Tensor] = []
+            for i in range(d_eff_int):
+                q = self._per_dim_semantic_quantizers[i]
+                cols.append(q.dequantize(sem_idx[..., i]).unsqueeze(-1))
+            sem_hat = torch.cat(cols, dim=-1)
+        else:
+            sem_hat = self._semantic_quantizer.dequantize(compressed.semantic_indices)  # type: ignore
+
         tail_hat = self._tail_quantizer.dequantize(compressed.tail_indices)  # type: ignore
         return torch.cat([sem_hat, tail_hat], dim=-1)
 

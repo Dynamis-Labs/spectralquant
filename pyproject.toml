@@ -35,6 +35,7 @@ dependencies = [
     "torch>=2.2.0",
     "transformers>=4.40.0",
     "datasets",
+    "huggingface_hub>=0.20",
     "scipy",
     "scikit-learn",
     "matplotlib",
@@ -52,6 +53,7 @@ dev = [
     "black",
     "ruff",
     "mypy",
+    "jsonschema>=4.18",
 ]
 benchmarks = [
     "rouge-score",
@@ -70,6 +72,7 @@ where = ["src"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-v --tb=short"
+pythonpath = ["src"]
 
 [tool.ruff]
 line-length = 100

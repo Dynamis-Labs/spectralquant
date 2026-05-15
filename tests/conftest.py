@@ -7,7 +7,11 @@ so no GPU is required to execute the test suite.
 
 import numpy as np
 import pytest
-import torch
+
+try:
+    import torch
+except ImportError:  # torch is heavy and not required for schema-only tests
+    torch = None  # type: ignore[assignment]
 
 
 # ---------------------------------------------------------------------------
@@ -35,6 +39,8 @@ def rng():
 @pytest.fixture(scope="session")
 def torch_rng():
     """Seeded Torch generator."""
+    if torch is None:
+        pytest.skip("torch is not installed; skipping fixtures that require it")
     gen = torch.Generator()
     gen.manual_seed(SEED)
     return gen

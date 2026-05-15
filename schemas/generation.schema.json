@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://niashwin.github.io/spectralquant-v2/schemas/generation.schema.json",
+  "title": "SpectralQuant v2 Real-Generation Quality Result",
+  "description": "Schema for JSON files produced by experiments/run_generation.py. Each file holds deterministic-prompt completions and judge-free metrics per method.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "family",
+    "run_id",
+    "timestamp",
+    "repo",
+    "commit",
+    "command",
+    "mode",
+    "paper_valid",
+    "model",
+    "hardware",
+    "software",
+    "decoding",
+    "prompts",
+    "methods",
+    "evidence_ids",
+    "caveats"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "schema_version": { "type": "string", "minLength": 1 },
+    "family":         { "type": "string", "const": "generation" },
+    "run_id":         { "type": "string", "minLength": 1 },
+    "timestamp":      { "type": "string", "minLength": 1 },
+    "repo":           { "type": "string", "minLength": 1 },
+    "commit":         { "type": "string", "minLength": 7 },
+    "command":        { "type": "string", "minLength": 1 },
+    "mode":           {
+      "type": "string",
+      "enum": ["full", "synthetic_smoke", "inline_corpus_smoke", "dry_run"]
+    },
+    "paper_valid":    { "type": "boolean" },
+    "model": {
+      "type": "object",
+      "required": ["name"],
+      "additionalProperties": true,
+      "properties": { "name": { "type": "string", "minLength": 1 } }
+    },
+    "hardware": {
+      "type": "object",
+      "required": ["gpu", "cuda"],
+      "additionalProperties": true
+    },
+    "software": {
+      "type": "object",
+      "required": ["python", "torch"],
+      "additionalProperties": true
+    },
+    "decoding": {
+      "type": "object",
+      "required": ["temperature", "top_p", "top_k", "max_new_tokens", "do_sample", "seed"],
+      "additionalProperties": true,
+      "properties": {
+        "temperature":    { "type": "number", "minimum": 0 },
+        "top_p":          { "type": "number", "minimum": 0, "maximum": 1 },
+        "top_k":          { "type": "integer", "minimum": 0 },
+        "max_new_tokens": { "type": "integer", "minimum": 1 },
+        "do_sample":      { "type": "boolean" },
+        "seed":           { "type": "integer" }
+      }
+    },
+    "prompts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "prompt"],
+        "additionalProperties": true,
+        "properties": {
+          "id":       { "type": "string", "minLength": 1 },
+          "prompt":   { "type": "string", "minLength": 1 },
+          "category": { "type": "string" }
+        }
+      }
+    },
+    "methods": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "$ref": "#/$defs/method_record" }
+    },
+    "evidence_ids": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "caveats": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    }
+  },
+  "$defs": {
+    "method_record": {
+      "type": "object",
+      "required": ["label", "completions", "metrics"],
+      "additionalProperties": true,
+      "properties": {
+        "label": { "type": "string", "minLength": 1 },
+        "completions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["prompt_id", "text", "n_tokens"],
+            "additionalProperties": true,
+            "properties": {
+              "prompt_id": { "type": "string", "minLength": 1 },
+              "text":      { "type": "string" },
+              "n_tokens":  { "type": "integer", "minimum": 0 }
+            }
+          }
+        },
+        "metrics": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "mean_logprob_vs_reference": { "type": "number" },
+            "mean_kl_vs_reference":      { "type": "number", "minimum": 0 },
+            "mean_token_overlap_f1":     { "type": "number", "minimum": 0, "maximum": 1 },
+            "mean_distinct_1":           { "type": "number", "minimum": 0, "maximum": 1 },
+            "mean_distinct_2":           { "type": "number", "minimum": 0, "maximum": 1 },
+            "judge_score":               { "type": "number" }
+          }
+        },
+        "evidence_ids": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

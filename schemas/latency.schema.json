@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://niashwin.github.io/spectralquant-v2/schemas/latency.schema.json",
+  "title": "SpectralQuant v2 End-to-End Latency Result",
+  "description": "Schema for JSON files produced by experiments/run_latency.py. Captures prefill / decode latency, throughput, and memory at one or more (batch, ctx_len, gen_len) operating points per method.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "family",
+    "run_id",
+    "timestamp",
+    "repo",
+    "commit",
+    "command",
+    "mode",
+    "paper_valid",
+    "model",
+    "hardware",
+    "software",
+    "timing",
+    "operating_points",
+    "methods",
+    "evidence_ids",
+    "caveats"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "schema_version": { "type": "string", "minLength": 1 },
+    "family":         { "type": "string", "const": "latency" },
+    "run_id":         { "type": "string", "minLength": 1 },
+    "timestamp":      { "type": "string", "minLength": 1 },
+    "repo":           { "type": "string", "minLength": 1 },
+    "commit":         { "type": "string", "minLength": 7 },
+    "command":        { "type": "string", "minLength": 1 },
+    "mode":           {
+      "type": "string",
+      "enum": ["full", "synthetic_smoke", "inline_corpus_smoke", "dry_run"]
+    },
+    "paper_valid":    { "type": "boolean" },
+    "model": {
+      "type": "object",
+      "required": ["name"],
+      "additionalProperties": true,
+      "properties": { "name": { "type": "string", "minLength": 1 } }
+    },
+    "hardware": {
+      "type": "object",
+      "required": ["gpu", "cuda"],
+      "additionalProperties": true
+    },
+    "software": {
+      "type": "object",
+      "required": ["python", "torch"],
+      "additionalProperties": true
+    },
+    "timing": {
+      "type": "object",
+      "required": ["timer", "warmup_iters", "measured_iters"],
+      "additionalProperties": true,
+      "properties": {
+        "timer":            { "type": "string", "minLength": 1 },
+        "warmup_iters":     { "type": "integer", "minimum": 0 },
+        "measured_iters":   { "type": "integer", "minimum": 1 },
+        "cuda_synchronize": { "type": "boolean" }
+      }
+    },
+    "operating_points": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["batch_size", "context_length", "gen_tokens"],
+        "additionalProperties": true,
+        "properties": {
+          "batch_size":     { "type": "integer", "minimum": 1 },
+          "context_length": { "type": "integer", "minimum": 1 },
+          "gen_tokens":     { "type": "integer", "minimum": 1 }
+        }
+      }
+    },
+    "methods": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "$ref": "#/$defs/method_record" }
+    },
+    "evidence_ids": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "caveats": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    }
+  },
+  "$defs": {
+    "method_record": {
+      "type": "object",
+      "required": ["label", "operating_points"],
+      "additionalProperties": true,
+      "properties": {
+        "label": { "type": "string", "minLength": 1 },
+        "operating_points": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "batch_size",
+              "context_length",
+              "gen_tokens",
+              "prefill_ms_p50",
+              "decode_ms_per_token_p50",
+              "tokens_per_sec_p50",
+              "n_iters"
+            ],
+            "additionalProperties": true,
+            "properties": {
+              "batch_size":              { "type": "integer", "minimum": 1 },
+              "context_length":          { "type": "integer", "minimum": 1 },
+              "gen_tokens":              { "type": "integer", "minimum": 1 },
+              "prefill_ms_p50":          { "type": "number", "minimum": 0 },
+              "prefill_ms_p95":          { "type": "number", "minimum": 0 },
+              "decode_ms_per_token_p50": { "type": "number", "minimum": 0 },
+              "decode_ms_per_token_p95": { "type": "number", "minimum": 0 },
+              "tokens_per_sec_p50":      { "type": "number", "minimum": 0 },
+              "peak_memory_mb":          { "type": "number", "minimum": 0 },
+              "n_iters":                 { "type": "integer", "minimum": 1 },
+              "microbenchmark":          { "type": "boolean" },
+              "microbenchmark_kind":     { "type": "string", "minLength": 1 },
+              "end_to_end_measured":     { "type": "boolean" },
+              "production_kernel":       { "type": "boolean" },
+              "measurement_kind":        { "type": "string", "minLength": 1 },
+              "placeholder":             { "type": "boolean" }
+            }
+          }
+        },
+        "evidence_ids": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

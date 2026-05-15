@@ -205,7 +205,32 @@ class SpectralQuantEngine(TurboQuantEngine):
         b_low: Optional[int] = None,
         seed: int = DEFAULT_SEED,
         device: str = "cpu",
+        *,
+        use_water_fill: bool = False,
+        wf_min_bits: int = 0,
+        wf_max_bits: Optional[int] = None,
     ):
+        # ------------------------------------------------------------------
+        # v2 water-fill argument validation (mirrors NonUniformQuantizer).
+        # ------------------------------------------------------------------
+        if not isinstance(use_water_fill, bool):
+            raise TypeError("use_water_fill must be a bool")
+        if not isinstance(wf_min_bits, int) or isinstance(wf_min_bits, bool):
+            raise TypeError("wf_min_bits must be an int")
+        if wf_min_bits < 0:
+            raise ValueError(f"wf_min_bits must be >= 0, got {wf_min_bits}")
+        if wf_max_bits is not None:
+            if not isinstance(wf_max_bits, int) or isinstance(wf_max_bits, bool):
+                raise TypeError("wf_max_bits must be an int or None")
+            if wf_max_bits < wf_min_bits:
+                raise ValueError(
+                    f"wf_max_bits ({wf_max_bits}) must be >= wf_min_bits ({wf_min_bits})"
+                )
+        self._use_water_fill = use_water_fill
+        self._wf_min_bits = int(wf_min_bits)
+        self._wf_max_bits = None if wf_max_bits is None else int(wf_max_bits)
+        self._waterfill_allocation_dict: Optional[dict] = None
+        self._semantic_bits_per_dim: Optional[list] = None
         # Skip super().__init__() — we build all state ourselves so that
         # we don't waste time generating a random Pi we'll immediately discard.
         self.head_dim = head_dim
@@ -314,6 +339,63 @@ class SpectralQuantEngine(TurboQuantEngine):
         self._centroids_val_low  = _solve_lloyd_max_for_sigma(sigma_low,  b_low)
 
         # ------------------------------------------------------------------
+        # v2 water-fill bit allocation (optional).
+        #
+        # The compute kernels in TurboQuant use a single per-regime codebook,
+        # so per-dim bit widths cannot drive the CUDA path here.  Instead we
+        # record the water-fill metadata (formula version, per-dim allocation,
+        # bounds) so benchmark scripts / accounting can report exactly what
+        # would have been allocated.  The actual quantization on this engine
+        # path remains regime-uniform; full per-dim execution is the job of
+        # the canonical pure-Python ``SpectralQuantEngine`` in
+        # ``spectralquant.spectralquant``.
+        # ------------------------------------------------------------------
+        if self._use_water_fill:
+            from spectralquant.waterfill import (
+                FORMULA_VERSION as _WF_FV,
+                allocate_waterfill_bits as _alloc_wf,
+            )
+            sem_eigs = ev[:d_eff].detach().cpu().numpy().astype("float64")
+            total_semantic_bits = int(self.mse_bits_high * d_eff)
+            bits_arr = _alloc_wf(
+                sem_eigs,
+                total_bits=total_semantic_bits,
+                min_bits=self._wf_min_bits,
+                max_bits=self._wf_max_bits,
+            )
+            self._semantic_bits_per_dim = [int(b) for b in bits_arr.tolist()]
+            self._waterfill_allocation_dict = {
+                "use_water_fill": True,
+                "eigenvalues": [float(x) for x in sem_eigs.tolist()],
+                "bits_per_dim": list(self._semantic_bits_per_dim),
+                "d_eff": int(d_eff),
+                "total_semantic_bits": total_semantic_bits,
+                "min_bits": int(self._wf_min_bits),
+                "max_bits": (
+                    None if self._wf_max_bits is None else int(self._wf_max_bits)
+                ),
+                "actual_min_bits": int(min(self._semantic_bits_per_dim)),
+                "actual_max_bits": int(max(self._semantic_bits_per_dim)),
+                "formula_version": _WF_FV,
+            }
+        else:
+            self._semantic_bits_per_dim = [int(self.mse_bits_high)] * d_eff
+            self._waterfill_allocation_dict = {
+                "use_water_fill": False,
+                "eigenvalues": [float(x) for x in ev[:d_eff].cpu().tolist()],
+                "bits_per_dim": list(self._semantic_bits_per_dim),
+                "d_eff": int(d_eff),
+                "total_semantic_bits": int(self.mse_bits_high * d_eff),
+                "min_bits": int(self._wf_min_bits),
+                "max_bits": (
+                    None if self._wf_max_bits is None else int(self._wf_max_bits)
+                ),
+                "actual_min_bits": int(self.mse_bits_high),
+                "actual_max_bits": int(self.mse_bits_high),
+                "formula_version": "uniform-v1",
+            }
+
+        # ------------------------------------------------------------------
         # Scalar constants
         # ------------------------------------------------------------------
         self.scale = 1.0 / math.sqrt(head_dim)
@@ -326,6 +408,25 @@ class SpectralQuantEngine(TurboQuantEngine):
             "σ_high=%.4f, σ_low=%.4f",
             head_dim, d_eff, b_high, b_low, sigma_high, sigma_low,
         )
+
+    # ------------------------------------------------------------------
+    # v2 metadata accessors
+    # ------------------------------------------------------------------
+
+    @property
+    def use_water_fill(self) -> bool:
+        """Whether v2 water-fill metadata was recorded for this engine."""
+        return bool(self._use_water_fill)
+
+    @property
+    def semantic_bits_per_dim(self) -> Optional[list]:
+        """Per-semantic-dim bit widths (water-fill or uniform), or ``None``."""
+        return None if self._semantic_bits_per_dim is None else list(self._semantic_bits_per_dim)
+
+    @property
+    def waterfill_allocation(self) -> Optional[dict]:
+        """JSON-safe water-fill allocation metadata (mirrors WaterfillAllocation.to_dict)."""
+        return None if self._waterfill_allocation_dict is None else dict(self._waterfill_allocation_dict)
 
     # ------------------------------------------------------------------
     # Bit allocation solver
@@ -490,6 +591,11 @@ class SpectralQuantEngine(TurboQuantEngine):
             "d_eff": self.d_eff,
             "b_high": self.b_high,
             "b_low":  self.b_low,
+            "use_water_fill": bool(self._use_water_fill),
+            "semantic_bits_per_dim": (
+                list(self._semantic_bits_per_dim)
+                if self._semantic_bits_per_dim is not None else None
+            ),
         }
 
     # ------------------------------------------------------------------
@@ -548,6 +654,11 @@ class SpectralQuantEngine(TurboQuantEngine):
             "d_eff":     self.d_eff,
             "b_high":    self.b_high,
             "b_low":     self.b_low,
+            "use_water_fill": bool(self._use_water_fill),
+            "semantic_bits_per_dim": (
+                list(self._semantic_bits_per_dim)
+                if self._semantic_bits_per_dim is not None else None
+            ),
         }
 
     # ------------------------------------------------------------------

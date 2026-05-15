@@ -1,0 +1,31 @@
+Note that running a local entrypoint in detached mode only keeps the last triggered Modal function alive after the parent process has been killed or disconnected.
+✓ Initialized. View run at 
+https://modal.com/apps/sentra/main/ap-GHvmUwex1Hoav4BRrnTtVi
+✓ Created objects.
+├── 🔨 Created mount /home/user/workspace/spectralquant-v2-f8d3fba9
+└── 🔨 Created function build_modal_app.<locals>.run_one.
+[launch_modal_eval] forwarding commit 1ecb578a0b02
+[launch_modal_eval] launching family=longbench model=Qwen/Qwen2.5-7B smoke=False inline_corpus_smoke=False
+[launch_modal_eval] modal timeout (kill-switch) = 43200s; family default for longbench = 43200s. Override at module load via SPECTRALQUANT_MODAL_TIMEOUT_LONGBENCH_SEC or SPECTRALQUANT_MODAL_TIMEOUT_SEC.
+[launch_modal_eval] spawned remote call: call_id=fc-01KQFKCFNP61M33NMBN7CQ4DQB
+[launch_modal_eval] poll status: modal volume ls spectralquant-v2-results /results/status/longbench/
+[launch_modal_eval] result: python3 -c "import modal; print(modal.FunctionCall.from_id('fc-01KQFKCFNP61M33NMBN7CQ4DQB').get(timeout=0))"
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.4.0
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+[launch_modal_eval] launching family=longbench model=Qwen/Qwen2.5-7B
+[modal-client] 2026-04-30T16:26:17+0000 Timed out waiting for final app logs.
+✓ App completed. View run at 
+https://modal.com/apps/sentra/main/ap-GHvmUwex1Hoav4BRrnTtVi

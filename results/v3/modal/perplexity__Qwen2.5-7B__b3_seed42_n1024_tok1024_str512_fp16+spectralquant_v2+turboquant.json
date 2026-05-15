@@ -1,0 +1,91 @@
+{
+  "caveats": [],
+  "command": "--model Qwen/Qwen2.5-7B --output-dir /results/perplexity --seed 42 --device cuda --dtype float16 --avg-bits 3 --methods fp16 --methods fp16 spectralquant_v2 turboquant --n-eval-sequences 1024 --max-eval-tokens 1024 --stride 512 --status-dir /results/status/perplexity",
+  "commit": "197bcfb4ad54a7d7bc9430a80695c62c145371fd",
+  "data": {
+    "dataset_config": "wikitext-103-raw-v1",
+    "dataset_name": "wikitext",
+    "dataset_split": "validation",
+    "eval_corpus": "wikitext/wikitext-103-raw-v1:validation",
+    "max_eval_tokens": 1024,
+    "n_eval_sequences": 1024,
+    "paper_valid_n_tokens_threshold": 64000,
+    "stride": 512
+  },
+  "evidence_ids": [
+    "RUN-PERPLEXITY-QWEN2.5-7B"
+  ],
+  "family": "perplexity",
+  "hardware": {
+    "cuda": "13.0",
+    "gpu": "NVIDIA H200",
+    "gpu_total_memory_mb": 143156.06,
+    "host": "modal",
+    "platform": "Linux-4.4.0-x86_64-with-glibc2.35"
+  },
+  "methods": {
+    "fp16": {
+      "avg_bits": 16.0,
+      "evidence_ids": [
+        "RUN-PERPLEXITY-FP16"
+      ],
+      "label": "fp16",
+      "n_tokens": 104224,
+      "nll_per_token": 1.8703741187656955,
+      "perplexity": 6.490724246850428
+    },
+    "spectralquant_v2": {
+      "avg_bits": 3.0,
+      "evidence_ids": [
+        "RUN-PERPLEXITY-SPECTRALQUANT_V2"
+      ],
+      "label": "spectralquant_v2",
+      "n_tokens": 104224,
+      "nll_per_token": 1.9426589463801702,
+      "perplexity": 6.97727853732853,
+      "replay_coverage": {
+        "fraction_layers_real": 1.0,
+        "missing_layers": [],
+        "n_hook_calls": 11368,
+        "n_layers_calibrated": 28,
+        "n_layers_hooked": 28,
+        "n_layers_total": 28,
+        "n_passthrough_calls": 0
+      }
+    },
+    "turboquant": {
+      "avg_bits": 3.0,
+      "evidence_ids": [
+        "RUN-PERPLEXITY-TURBOQUANT"
+      ],
+      "label": "turboquant",
+      "n_tokens": 104224,
+      "nll_per_token": 7.624895867080384,
+      "perplexity": 2048.5671306363815,
+      "replay_coverage": {
+        "fraction_layers_real": 1.0,
+        "missing_layers": [],
+        "n_hook_calls": 11368,
+        "n_layers_calibrated": 28,
+        "n_layers_hooked": 28,
+        "n_layers_total": 28,
+        "n_passthrough_calls": 0
+      }
+    }
+  },
+  "mode": "full",
+  "model": {
+    "name": "Qwen/Qwen2.5-7B"
+  },
+  "paper_valid": true,
+  "repo": "niashwin/spectralquant-v2",
+  "run_id": "perplexity__Qwen2.5-7B__b3_seed42_n1024_tok1024_str512_fp16+spectralquant_v2+turboquant",
+  "schema_version": "1",
+  "software": {
+    "datasets": "4.8.5",
+    "python": "3.12.1",
+    "torch": "2.11.0+cu130",
+    "transformers": "5.7.0"
+  },
+  "timestamp": "2026-04-30T06:18:33Z"
+}

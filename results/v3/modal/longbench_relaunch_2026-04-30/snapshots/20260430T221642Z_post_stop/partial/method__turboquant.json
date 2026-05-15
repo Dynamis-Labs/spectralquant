@@ -1,0 +1,62 @@
+{
+  "kind": "longbench_partial_method_record",
+  "method": "turboquant",
+  "paper_valid": false,
+  "partial": true,
+  "record": {
+    "aggregate": {
+      "macro_score": 0.0044187151755227
+    },
+    "dataset_source": "huggingface_thudm",
+    "evidence_ids": [
+      "RUN-LONGBENCH-TURBOQUANT"
+    ],
+    "label": "turboquant",
+    "per_task": [
+      {
+        "metric": "qa_f1_en",
+        "n_examples": 50,
+        "score": 0.004708994708994708,
+        "score_0_100": 0.4708994708994708,
+        "task": "narrativeqa"
+      },
+      {
+        "metric": "qa_f1_en",
+        "n_examples": 50,
+        "score": 0.0,
+        "score_0_100": 0.0,
+        "task": "qasper"
+      },
+      {
+        "metric": "qa_f1_en",
+        "n_examples": 50,
+        "score": 0.0025,
+        "score_0_100": 0.25,
+        "task": "hotpotqa"
+      },
+      {
+        "metric": "rouge_en",
+        "n_examples": 50,
+        "score": 0.014884581168618792,
+        "score_0_100": 1.4884581168618791,
+        "task": "gov_report"
+      },
+      {
+        "metric": "classification_em",
+        "n_examples": 50,
+        "score": 0.0,
+        "score_0_100": 0.0,
+        "task": "trec"
+      }
+    ],
+    "replay_coverage": {
+      "fraction_layers_real": 1.0,
+      "missing_layers": [],
+      "n_hook_calls": 1342656,
+      "n_layers_calibrated": 28,
+      "n_layers_hooked": 28,
+      "n_layers_total": 28,
+      "n_passthrough_calls": 0
+    }
+  }
+}

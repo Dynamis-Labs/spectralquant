@@ -1,0 +1,53 @@
+{
+  "kind": "longbench_partial_method_record",
+  "method": "fp16",
+  "paper_valid": false,
+  "partial": true,
+  "record": {
+    "aggregate": {
+      "macro_score": 0.1754670855553704
+    },
+    "dataset_source": "huggingface_thudm",
+    "evidence_ids": [
+      "RUN-LONGBENCH-FP16"
+    ],
+    "label": "fp16",
+    "per_task": [
+      {
+        "metric": "qa_f1_en",
+        "n_examples": 50,
+        "score": 0.13605869812774105,
+        "score_0_100": 13.605869812774104,
+        "task": "narrativeqa"
+      },
+      {
+        "metric": "qa_f1_en",
+        "n_examples": 50,
+        "score": 0.17123607818617897,
+        "score_0_100": 17.1236078186179,
+        "task": "qasper"
+      },
+      {
+        "metric": "qa_f1_en",
+        "n_examples": 50,
+        "score": 0.2713326030092843,
+        "score_0_100": 27.13326030092843,
+        "task": "hotpotqa"
+      },
+      {
+        "metric": "rouge_en",
+        "n_examples": 50,
+        "score": 0.15870804845364772,
+        "score_0_100": 15.870804845364773,
+        "task": "gov_report"
+      },
+      {
+        "metric": "classification_em",
+        "n_examples": 50,
+        "score": 0.14,
+        "score_0_100": 14.0,
+        "task": "trec"
+      }
+    ]
+  }
+}

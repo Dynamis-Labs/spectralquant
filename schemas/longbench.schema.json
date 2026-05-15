@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://niashwin.github.io/spectralquant-v2/schemas/longbench.schema.json",
+  "title": "SpectralQuant v2 LongBench Result",
+  "description": "Schema for JSON files produced by experiments/run_longbench.py. Each file holds one (model, bits, seed, subset) configuration with per-task scores per method.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "family",
+    "run_id",
+    "timestamp",
+    "repo",
+    "commit",
+    "command",
+    "mode",
+    "paper_valid",
+    "model",
+    "hardware",
+    "software",
+    "subset",
+    "tasks",
+    "methods",
+    "evidence_ids",
+    "caveats"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "schema_version": { "type": "string", "minLength": 1 },
+    "family":         { "type": "string", "const": "longbench" },
+    "run_id":         { "type": "string", "minLength": 1 },
+    "timestamp":      { "type": "string", "minLength": 1 },
+    "repo":           { "type": "string", "minLength": 1 },
+    "commit":         { "type": "string", "minLength": 7 },
+    "command":        { "type": "string", "minLength": 1 },
+    "mode":           {
+      "type": "string",
+      "enum": ["full", "synthetic_smoke", "inline_corpus_smoke", "dry_run"]
+    },
+    "paper_valid":    { "type": "boolean" },
+    "model": {
+      "type": "object",
+      "required": ["name"],
+      "additionalProperties": true,
+      "properties": { "name": { "type": "string", "minLength": 1 } }
+    },
+    "hardware": {
+      "type": "object",
+      "required": ["gpu", "cuda"],
+      "additionalProperties": true
+    },
+    "software": {
+      "type": "object",
+      "required": ["python", "torch"],
+      "additionalProperties": true
+    },
+    "subset": {
+      "type": "object",
+      "required": ["name", "n_per_task"],
+      "additionalProperties": true,
+      "properties": {
+        "name":       { "type": "string", "minLength": 1 },
+        "n_per_task": { "type": "integer", "minimum": 1 },
+        "max_input_tokens": { "type": "integer", "minimum": 1 },
+        "max_new_tokens":   { "type": "integer", "minimum": 1 },
+        "use_e_split":      { "type": "boolean" }
+      }
+    },
+    "tasks": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "methods": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "$ref": "#/$defs/method_record" }
+    },
+    "evidence_ids": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "caveats": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    }
+  },
+  "$defs": {
+    "method_record": {
+      "type": "object",
+      "required": ["label", "per_task", "aggregate"],
+      "additionalProperties": true,
+      "properties": {
+        "label": { "type": "string", "minLength": 1 },
+        "per_task": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["task", "metric", "score", "n_examples"],
+            "additionalProperties": true,
+            "properties": {
+              "task":       { "type": "string", "minLength": 1 },
+              "metric":     { "type": "string", "minLength": 1 },
+              "score":      { "type": "number" },
+              "score_0_100": { "type": "number" },
+              "n_examples": { "type": "integer", "minimum": 0 }
+            }
+          }
+        },
+        "aggregate": {
+          "type": "object",
+          "required": ["macro_score"],
+          "additionalProperties": true,
+          "properties": {
+            "macro_score": { "type": "number" }
+          }
+        },
+        "evidence_ids": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

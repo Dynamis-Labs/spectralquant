@@ -1,0 +1,62 @@
+{
+  "kind": "longbench_partial_method_record",
+  "method": "spectralquant_v2",
+  "paper_valid": false,
+  "partial": true,
+  "record": {
+    "aggregate": {
+      "macro_score": 0.20041220263712764
+    },
+    "dataset_source": "huggingface_thudm",
+    "evidence_ids": [
+      "RUN-LONGBENCH-SPECTRALQUANT_V2"
+    ],
+    "label": "spectralquant_v2",
+    "per_task": [
+      {
+        "metric": "qa_f1_en",
+        "n_examples": 50,
+        "score": 0.1647717698946514,
+        "score_0_100": 16.47717698946514,
+        "task": "narrativeqa"
+      },
+      {
+        "metric": "qa_f1_en",
+        "n_examples": 50,
+        "score": 0.3273987790772462,
+        "score_0_100": 32.73987790772462,
+        "task": "qasper"
+      },
+      {
+        "metric": "qa_f1_en",
+        "n_examples": 50,
+        "score": 0.27345800590628966,
+        "score_0_100": 27.345800590628965,
+        "task": "hotpotqa"
+      },
+      {
+        "metric": "rouge_en",
+        "n_examples": 50,
+        "score": 0.13643245830745082,
+        "score_0_100": 13.643245830745082,
+        "task": "gov_report"
+      },
+      {
+        "metric": "classification_em",
+        "n_examples": 50,
+        "score": 0.1,
+        "score_0_100": 10.0,
+        "task": "trec"
+      }
+    ],
+    "replay_coverage": {
+      "fraction_layers_real": 1.0,
+      "missing_layers": [],
+      "n_hook_calls": 853048,
+      "n_layers_calibrated": 28,
+      "n_layers_hooked": 28,
+      "n_layers_total": 28,
+      "n_passthrough_calls": 0
+    }
+  }
+}

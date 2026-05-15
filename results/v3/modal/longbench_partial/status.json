@@ -1,0 +1,22 @@
+{
+  "avg_bits": null,
+  "commit": "615417531da9e282a002698c17576e73bfd857a4",
+  "details": {
+    "completed": 23,
+    "elapsed_s": 104.75,
+    "last_completion_chars": 127,
+    "method": "turboquant",
+    "task": "trec",
+    "total": 50
+  },
+  "host": "modal",
+  "message": "turboquant task=trec 23/50 elapsed_s=104.8",
+  "model": "Qwen/Qwen2.5-7B",
+  "n_calib": null,
+  "n_eval": null,
+  "n_layers_sample": null,
+  "pid": 28,
+  "run_id": "longbench__Qwen2.5-7B__b3_seed42_subsetdeterministic_n50_in8192_out128_fp16+spectralquant_v2+turboquant",
+  "stage": "eval_progress",
+  "timestamp": "2026-04-30T16:10:25.938822Z"
+}

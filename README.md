@@ -4,15 +4,36 @@
     <strong>3% Is All You Need: Breaking TurboQuant's Compression Limit via Spectral Structure</strong>
   </p>
   <p align="center">
-    <a href="paper_output/spectralquant.pdf"><img src="https://img.shields.io/badge/Paper-PDF-red" alt="Paper PDF"></a>
+    <a href="SpectralQuant_main.pdf"><img src="https://img.shields.io/badge/Paper-PDF-red" alt="Paper PDF"></a>
+    <a href="SpectralQuant_supplement.pdf"><img src="https://img.shields.io/badge/Supplement-PDF-red" alt="Supplement PDF"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a>
     <img src="https://img.shields.io/badge/Python-3.10%2B-blue" alt="Python 3.10+">
     <img src="https://img.shields.io/badge/PyTorch-2.2%2B-orange" alt="PyTorch 2.2+">
   </p>
 </p>
 
-> **Paper submitted to arXiv.** The arXiv link will be updated here once available.
-> In the meantime, the full paper is included in this repository: [`paper_output/spectralquant.pdf`](paper_output/spectralquant.pdf)
+> **Canonical paper artifacts (NeurIPS 2026 submission):**
+> - Main paper: [`SpectralQuant_main.pdf`](SpectralQuant_main.pdf) (also at [`paper_neurips2026/spectralquant_neurips2026_main.pdf`](paper_neurips2026/spectralquant_neurips2026_main.pdf), 13 pages)
+> - Supplement: [`SpectralQuant_supplement.pdf`](SpectralQuant_supplement.pdf) (also at [`paper_neurips2026/spectralquant_neurips2026_supplement.pdf`](paper_neurips2026/spectralquant_neurips2026_supplement.pdf), 8 pages)
+> - LaTeX sources and figures: [`paper_neurips2026/`](paper_neurips2026/) (`main.tex`, `supplement.tex`, `neurips_2026.sty`, `refs_anon.bib`, `figures/`).
+> - Submission audit and round-by-round revision notes: [`paper_neurips2026/README_submission_audit.md`](paper_neurips2026/README_submission_audit.md).
+>
+> Earlier manuscripts under [`paper_output/`](paper_output/), [`paper_output_v2/`](paper_output_v2/), and [`paper_output_consolidated/`](paper_output_consolidated/) are retained for traceability only and are **not** the current paper.
+
+---
+
+## About this repository
+
+This is the canonical private full SpectralQuant repository: [`niashwin/spectralquant-full`](https://github.com/niashwin/spectralquant-full). It consolidates the original public release ([`Dynamis-Labs/spectralquant`](https://github.com/Dynamis-Labs/spectralquant)) with the expanded paper-valid evidence layer developed afterwards. The current paper is the NeurIPS 2026 submission under [`paper_neurips2026/`](paper_neurips2026/) (root-level convenience copies: `SpectralQuant_main.pdf` and `SpectralQuant_supplement.pdf`). The earlier consolidated technical report under [`paper_output_consolidated/`](paper_output_consolidated/) and the original NeurIPS-format manuscript under [`paper_output/`](paper_output/) are retained as historical artifacts only.
+
+This repository was renamed from `niashwin/spectralquant-v2` to `niashwin/spectralquant-full` on 2026-05-01. The pre-rename name `niashwin/spectralquant-v2` is preserved verbatim in:
+
+- archived JSON `repo` fields under `results/v3/modal/` (frozen experiment artifacts);
+- the Modal volume name `spectralquant-v2-results`;
+- historical filesystem paths (`paper_output_v2/`, `docs/spectralquant_v2_technical_spec.md`, `experiments/sqv2_replay.py`);
+- the JSON method key `spectralquant_v2` and evidence-catalog identifiers (`V1-*`, `V2-SPEC-*`, `RUN-*`).
+
+These historical labels are intentional traceability anchors and are documented in [`docs/consolidated_spectralquant_inventory.md`](docs/consolidated_spectralquant_inventory.md) and [`docs/claims_discipline.md`](docs/claims_discipline.md). All public-facing references to the consolidation repository should use `niashwin/spectralquant-full`.
 
 ---
 
@@ -138,7 +159,19 @@ spectralquant/
 │   ├── seqlen_sweep/            Sequence length sweep (128–2048 tokens)
 │   └── unnormalized/            Normalized vs unnormalized quantization
 │
-├── paper_output/                Paper source and figures
+├── paper_neurips2026/           Canonical NeurIPS 2026 submission (current paper)
+│   ├── main.tex / supplement.tex                      LaTeX sources
+│   ├── neurips_2026.sty                               NeurIPS 2026 style file
+│   ├── refs_anon.bib                                  Anonymized bibliography
+│   ├── spectralquant_neurips2026_main.pdf             Compiled main PDF (13 pp)
+│   ├── spectralquant_neurips2026_supplement.pdf      Compiled supplement PDF (8 pp)
+│   ├── README_submission_audit.md                     Submission/review audit
+│   └── figures/                                       Publication figures
+│
+├── SpectralQuant_main.pdf       Root-level copy of the canonical main PDF
+├── SpectralQuant_supplement.pdf Root-level copy of the canonical supplement PDF
+│
+├── paper_output/                Earlier manuscript (retained for traceability only)
 │   ├── spectralquant.tex        LaTeX source
 │   ├── spectralquant_refs.bib   Bibliography
 │   ├── spectralquant.pdf        Compiled PDF

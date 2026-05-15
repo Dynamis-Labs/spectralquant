@@ -1,0 +1,33 @@
+{
+  "completed_methods": [],
+  "completed_tasks_per_method": {
+    "turboquant": [
+      "narrativeqa",
+      "qasper",
+      "hotpotqa",
+      "gov_report"
+    ]
+  },
+  "current_method": "turboquant",
+  "current_task": "trec",
+  "kind": "longbench_partial_run",
+  "methods_planned": [
+    "fp16",
+    "spectralquant_v2",
+    "turboquant"
+  ],
+  "mode": "full",
+  "model": "Qwen/Qwen2.5-7B",
+  "n_per_task": 50,
+  "paper_valid": false,
+  "partial": true,
+  "run_id": "longbench__Qwen2.5-7B__b3_seed42_subsetdeterministic_n50_in8192_out128_fp16+spectralquant_v2+turboquant",
+  "subset": "deterministic",
+  "tasks_planned": [
+    "narrativeqa",
+    "qasper",
+    "hotpotqa",
+    "gov_report",
+    "trec"
+  ]
+}
