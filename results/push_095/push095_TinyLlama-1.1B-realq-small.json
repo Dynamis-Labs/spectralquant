@@ -1,0 +1,75 @@
+{
+  "model": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+  "short_name": "TinyLlama-1.1B-small",
+  "coverage": {
+    "n_calib": 8,
+    "n_eval": 4,
+    "seq_len": 512,
+    "layer_mode": "sampled",
+    "head_mode": "sampled",
+    "max_cached_vectors": 256,
+    "coverage_preset": "small"
+  },
+  "query_capture": {
+    "mode": "true_model_queries",
+    "head_mapping": "first_query_head_per_kv_group",
+    "attention_mode": "causal_self_attention"
+  },
+  "configs": {
+    "1bit-K_3bit-V": {
+      "attn_cos_sim": 0.47398893473049003,
+      "attn_cos_sim_std": 0.20592412362810367,
+      "key_cos_sim": 0.9170654565095901,
+      "val_cos_sim": 0.9649051427841187,
+      "key_bits": 80,
+      "val_bits": 208,
+      "total_bits": 288,
+      "total_compress": 7.111111111111111,
+      "n_evals": 12
+    },
+    "1bit-K_4bit-V": {
+      "attn_cos_sim": 0.48894164462884265,
+      "attn_cos_sim_std": 0.20419330170656116,
+      "key_cos_sim": 0.9170654565095901,
+      "val_cos_sim": 0.9902911235888799,
+      "key_bits": 80,
+      "val_bits": 272,
+      "total_bits": 352,
+      "total_compress": 5.818181818181818,
+      "n_evals": 12
+    },
+    "1bit-K_5bit-V": {
+      "attn_cos_sim": 0.49095698570211727,
+      "attn_cos_sim_std": 0.20493604446253103,
+      "key_cos_sim": 0.9170654565095901,
+      "val_cos_sim": 0.9970371077458063,
+      "key_bits": 80,
+      "val_bits": 336,
+      "total_bits": 416,
+      "total_compress": 4.923076923076923,
+      "n_evals": 12
+    },
+    "1bit-K_6bit-V": {
+      "attn_cos_sim": 0.4954307582229376,
+      "attn_cos_sim_std": 0.20400078514276254,
+      "key_cos_sim": 0.9170654565095901,
+      "val_cos_sim": 0.9988630811373392,
+      "key_bits": 80,
+      "val_bits": 400,
+      "total_bits": 480,
+      "total_compress": 4.266666666666667,
+      "n_evals": 12
+    },
+    "uniform-3bit": {
+      "attn_cos_sim": 0.5061757043004036,
+      "attn_cos_sim_std": 0.19893990903690034,
+      "key_cos_sim": 0.9171247283617655,
+      "val_cos_sim": 0.9649051427841187,
+      "key_bits": 208,
+      "val_bits": 208,
+      "total_bits": 416,
+      "total_compress": 4.923076923076923,
+      "n_evals": 12
+    }
+  }
+}

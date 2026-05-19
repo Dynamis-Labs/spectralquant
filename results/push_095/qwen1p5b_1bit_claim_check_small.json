@@ -1,0 +1,279 @@
+{
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "coverage": {
+    "n_calib": 8,
+    "n_eval": 4,
+    "seq_len": 512,
+    "layer_mode": "sampled",
+    "head_mode": "sampled",
+    "max_cached_vectors": 256,
+    "coverage_preset": "small"
+  },
+  "layers_evaluated": [
+    7,
+    14,
+    21
+  ],
+  "heads_evaluated": [
+    0,
+    1
+  ],
+  "mean_d_eff_keys": 3.8392857142857144,
+  "mean_d_eff_values": 35.07142857142857,
+  "query_capture_real_q": "true_model_queries",
+  "query_capture_proxy": "keys_as_queries",
+  "attention_mode_real_q": "causal_self_attention",
+  "attention_mode_proxy": "noncausal_self_attention_proxy",
+  "configs": {
+    "1bit-K_3bit-V": {
+      "proxy_qeqk_noncausal": {
+        "attn_cos_sim": 0.649636780222257,
+        "attn_cos_sim_std": 0.2728981431678952,
+        "key_cos_sim": 0.9062935908635458,
+        "val_cos_sim": 0.8254336913426717,
+        "key_bits": 144,
+        "val_bits": 400,
+        "total_bits": 544,
+        "total_compress": 7.529411764705882,
+        "n_evals": 6
+      },
+      "real_q_causal": {
+        "attn_cos_sim": 0.4363829667369525,
+        "attn_cos_sim_std": 0.19861484805362176,
+        "key_cos_sim": 0.9062935908635458,
+        "val_cos_sim": 0.8254336913426717,
+        "key_bits": 144,
+        "val_bits": 400,
+        "total_bits": 544,
+        "total_compress": 7.529411764705882,
+        "n_evals": 6
+      },
+      "delta_attn_cos": -0.21325381348530453
+    },
+    "1bit-K_4bit-V": {
+      "proxy_qeqk_noncausal": {
+        "attn_cos_sim": 0.6717648692429066,
+        "attn_cos_sim_std": 0.2813665016012008,
+        "key_cos_sim": 0.9062935908635458,
+        "val_cos_sim": 0.8687977194786072,
+        "key_bits": 144,
+        "val_bits": 528,
+        "total_bits": 672,
+        "total_compress": 6.095238095238095,
+        "n_evals": 6
+      },
+      "real_q_causal": {
+        "attn_cos_sim": 0.47968902190526325,
+        "attn_cos_sim_std": 0.18598941169446778,
+        "key_cos_sim": 0.9062935908635458,
+        "val_cos_sim": 0.8687977194786072,
+        "key_bits": 144,
+        "val_bits": 528,
+        "total_bits": 672,
+        "total_compress": 6.095238095238095,
+        "n_evals": 6
+      },
+      "delta_attn_cos": -0.19207584733764332
+    },
+    "1bit-K_5bit-V": {
+      "proxy_qeqk_noncausal": {
+        "attn_cos_sim": 0.7147521277268728,
+        "attn_cos_sim_std": 0.2979772684157822,
+        "key_cos_sim": 0.9062935908635458,
+        "val_cos_sim": 0.9365533093611399,
+        "key_bits": 144,
+        "val_bits": 656,
+        "total_bits": 800,
+        "total_compress": 5.12,
+        "n_evals": 6
+      },
+      "real_q_causal": {
+        "attn_cos_sim": 0.5087136526902517,
+        "attn_cos_sim_std": 0.2049756014656585,
+        "key_cos_sim": 0.9062935908635458,
+        "val_cos_sim": 0.9365533093611399,
+        "key_bits": 144,
+        "val_bits": 656,
+        "total_bits": 800,
+        "total_compress": 5.12,
+        "n_evals": 6
+      },
+      "delta_attn_cos": -0.2060384750366211
+    },
+    "1bit-K_6bit-V": {
+      "proxy_qeqk_noncausal": {
+        "attn_cos_sim": 0.7450543741385142,
+        "attn_cos_sim_std": 0.3066504123342587,
+        "key_cos_sim": 0.9062935908635458,
+        "val_cos_sim": 0.9689570963382721,
+        "key_bits": 144,
+        "val_bits": 784,
+        "total_bits": 928,
+        "total_compress": 4.413793103448276,
+        "n_evals": 6
+      },
+      "real_q_causal": {
+        "attn_cos_sim": 0.5249765266974767,
+        "attn_cos_sim_std": 0.19193184629905366,
+        "key_cos_sim": 0.9062935908635458,
+        "val_cos_sim": 0.9689570963382721,
+        "key_bits": 144,
+        "val_bits": 784,
+        "total_bits": 928,
+        "total_compress": 4.413793103448276,
+        "n_evals": 6
+      },
+      "delta_attn_cos": -0.22007784744103742
+    },
+    "1bit-K_optV-400": {
+      "proxy_qeqk_noncausal": {
+        "attn_cos_sim": 0.5912532961616913,
+        "attn_cos_sim_std": 0.2508941894516606,
+        "key_cos_sim": 0.9062935908635458,
+        "val_cos_sim": 0.7956738471984863,
+        "key_bits": 144,
+        "val_bits": 416,
+        "total_bits": 560,
+        "total_compress": 7.314285714285714,
+        "n_evals": 6
+      },
+      "real_q_causal": {
+        "attn_cos_sim": 0.43440664062897366,
+        "attn_cos_sim_std": 0.15024142809764024,
+        "key_cos_sim": 0.9062935908635458,
+        "val_cos_sim": 0.7956738471984863,
+        "key_bits": 144,
+        "val_bits": 416,
+        "total_bits": 560,
+        "total_compress": 7.314285714285714,
+        "n_evals": 6
+      },
+      "delta_attn_cos": -0.15684665553271765
+    },
+    "1bit-K_optV-500": {
+      "proxy_qeqk_noncausal": {
+        "attn_cos_sim": 0.6651112387577692,
+        "attn_cos_sim_std": 0.2759489913732797,
+        "key_cos_sim": 0.9062935908635458,
+        "val_cos_sim": 0.8773498833179474,
+        "key_bits": 144,
+        "val_bits": 516,
+        "total_bits": 660,
+        "total_compress": 6.206060606060606,
+        "n_evals": 6
+      },
+      "real_q_causal": {
+        "attn_cos_sim": 0.4864279429117839,
+        "attn_cos_sim_std": 0.17132991112025142,
+        "key_cos_sim": 0.9062935908635458,
+        "val_cos_sim": 0.8773498833179474,
+        "key_bits": 144,
+        "val_bits": 516,
+        "total_bits": 660,
+        "total_compress": 6.206060606060606,
+        "n_evals": 6
+      },
+      "delta_attn_cos": -0.17868329584598536
+    },
+    "1bit-K_optV-600": {
+      "proxy_qeqk_noncausal": {
+        "attn_cos_sim": 0.7170996777713299,
+        "attn_cos_sim_std": 0.2980135224683886,
+        "key_cos_sim": 0.9062935908635458,
+        "val_cos_sim": 0.9368999799092611,
+        "key_bits": 144,
+        "val_bits": 616,
+        "total_bits": 760,
+        "total_compress": 5.389473684210526,
+        "n_evals": 6
+      },
+      "real_q_causal": {
+        "attn_cos_sim": 0.5127837210893631,
+        "attn_cos_sim_std": 0.18490126331804174,
+        "key_cos_sim": 0.9062935908635458,
+        "val_cos_sim": 0.9368999799092611,
+        "key_bits": 144,
+        "val_bits": 616,
+        "total_bits": 760,
+        "total_compress": 5.389473684210526,
+        "n_evals": 6
+      },
+      "delta_attn_cos": -0.20431595668196678
+    },
+    "1bit-K_optV-700": {
+      "proxy_qeqk_noncausal": {
+        "attn_cos_sim": 0.7395737692713737,
+        "attn_cos_sim_std": 0.3046034646473958,
+        "key_cos_sim": 0.9062935908635458,
+        "val_cos_sim": 0.9626753330230713,
+        "key_bits": 144,
+        "val_bits": 716,
+        "total_bits": 860,
+        "total_compress": 4.7627906976744185,
+        "n_evals": 6
+      },
+      "real_q_causal": {
+        "attn_cos_sim": 0.5198984940846761,
+        "attn_cos_sim_std": 0.19114339427167445,
+        "key_cos_sim": 0.9062935908635458,
+        "val_cos_sim": 0.9626753330230713,
+        "key_bits": 144,
+        "val_bits": 716,
+        "total_bits": 860,
+        "total_compress": 4.7627906976744185,
+        "n_evals": 6
+      },
+      "delta_attn_cos": -0.2196752751866976
+    },
+    "1bit-K_optV-800": {
+      "proxy_qeqk_noncausal": {
+        "attn_cos_sim": 0.7450543741385142,
+        "attn_cos_sim_std": 0.3066504123342587,
+        "key_cos_sim": 0.9062935908635458,
+        "val_cos_sim": 0.9689570963382721,
+        "key_bits": 144,
+        "val_bits": 784,
+        "total_bits": 928,
+        "total_compress": 4.413793103448276,
+        "n_evals": 6
+      },
+      "real_q_causal": {
+        "attn_cos_sim": 0.5249765266974767,
+        "attn_cos_sim_std": 0.19193184629905366,
+        "key_cos_sim": 0.9062935908635458,
+        "val_cos_sim": 0.9689570963382721,
+        "key_bits": 144,
+        "val_bits": 784,
+        "total_bits": 928,
+        "total_compress": 4.413793103448276,
+        "n_evals": 6
+      },
+      "delta_attn_cos": -0.22007784744103742
+    },
+    "uniform-3bit": {
+      "proxy_qeqk_noncausal": {
+        "attn_cos_sim": 0.6673308735092481,
+        "attn_cos_sim_std": 0.2781717269197852,
+        "key_cos_sim": 0.9064196844895681,
+        "val_cos_sim": 0.8254336913426717,
+        "key_bits": 400,
+        "val_bits": 400,
+        "total_bits": 800,
+        "total_compress": 5.12,
+        "n_evals": 6
+      },
+      "real_q_causal": {
+        "attn_cos_sim": 0.45800502101580304,
+        "attn_cos_sim_std": 0.19474016746381387,
+        "key_cos_sim": 0.9064196844895681,
+        "val_cos_sim": 0.8254336913426717,
+        "key_bits": 400,
+        "val_bits": 400,
+        "total_bits": 800,
+        "total_compress": 5.12,
+        "n_evals": 6
+      },
+      "delta_attn_cos": -0.2093258524934451
+    }
+  }
+}

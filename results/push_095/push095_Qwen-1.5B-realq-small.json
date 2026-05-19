@@ -1,0 +1,227 @@
+{
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "short_name": "Qwen-1.5B-realq-small",
+  "head_dim": 128,
+  "n_layers": 28,
+  "n_kv_heads": 2,
+  "mean_d_eff_keys": 3.8392857142857144,
+  "mean_d_eff_values": 35.07142857142857,
+  "configs": {
+    "1bit-K_3bit-V": {
+      "config": "1bit-K_3bit-V",
+      "attn_cos_sim": 0.4363829667369525,
+      "attn_cos_sim_std": 0.19861484805362176,
+      "key_cos_sim": 0.9062935908635458,
+      "val_cos_sim": 0.8254336913426717,
+      "key_bits": 144,
+      "val_bits": 400,
+      "total_bits": 544,
+      "total_compress": 7.529411764705882,
+      "n_evals": 6
+    },
+    "1bit-K_4bit-V": {
+      "config": "1bit-K_4bit-V",
+      "attn_cos_sim": 0.47968902190526325,
+      "attn_cos_sim_std": 0.18598941169446778,
+      "key_cos_sim": 0.9062935908635458,
+      "val_cos_sim": 0.8687977194786072,
+      "key_bits": 144,
+      "val_bits": 528,
+      "total_bits": 672,
+      "total_compress": 6.095238095238095,
+      "n_evals": 6
+    },
+    "1bit-K_5bit-V": {
+      "config": "1bit-K_5bit-V",
+      "attn_cos_sim": 0.5087136526902517,
+      "attn_cos_sim_std": 0.2049756014656585,
+      "key_cos_sim": 0.9062935908635458,
+      "val_cos_sim": 0.9365533093611399,
+      "key_bits": 144,
+      "val_bits": 656,
+      "total_bits": 800,
+      "total_compress": 5.12,
+      "n_evals": 6
+    },
+    "1bit-K_6bit-V": {
+      "config": "1bit-K_6bit-V",
+      "attn_cos_sim": 0.5249765266974767,
+      "attn_cos_sim_std": 0.19193184629905366,
+      "key_cos_sim": 0.9062935908635458,
+      "val_cos_sim": 0.9689570963382721,
+      "key_bits": 144,
+      "val_bits": 784,
+      "total_bits": 928,
+      "total_compress": 4.413793103448276,
+      "n_evals": 6
+    },
+    "2bit-K_3bit-V": {
+      "config": "2bit-K_3bit-V",
+      "attn_cos_sim": 0.4433211386203766,
+      "attn_cos_sim_std": 0.19752652296671636,
+      "key_cos_sim": 0.9063248038291931,
+      "val_cos_sim": 0.8254336913426717,
+      "key_bits": 272,
+      "val_bits": 400,
+      "total_bits": 672,
+      "total_compress": 6.095238095238095,
+      "n_evals": 6
+    },
+    "2bit-K_4bit-V": {
+      "config": "2bit-K_4bit-V",
+      "attn_cos_sim": 0.4871279299259186,
+      "attn_cos_sim_std": 0.18471991338205915,
+      "key_cos_sim": 0.9063248038291931,
+      "val_cos_sim": 0.8687977194786072,
+      "key_bits": 272,
+      "val_bits": 528,
+      "total_bits": 800,
+      "total_compress": 5.12,
+      "n_evals": 6
+    },
+    "2bit-K_5bit-V": {
+      "config": "2bit-K_5bit-V",
+      "attn_cos_sim": 0.5165007710456848,
+      "attn_cos_sim_std": 0.20428202329736883,
+      "key_cos_sim": 0.9063248038291931,
+      "val_cos_sim": 0.9365533093611399,
+      "key_bits": 272,
+      "val_bits": 656,
+      "total_bits": 928,
+      "total_compress": 4.413793103448276,
+      "n_evals": 6
+    },
+    "1bit-K_optV-400": {
+      "config": "1bit-K_optV-400",
+      "attn_cos_sim": 0.43440664062897366,
+      "attn_cos_sim_std": 0.15024142809764024,
+      "key_cos_sim": 0.9062935908635458,
+      "val_cos_sim": 0.7956738471984863,
+      "key_bits": 144,
+      "val_bits": 416,
+      "total_bits": 560,
+      "total_compress": 7.314285714285714,
+      "n_evals": 6
+    },
+    "1bit-K_optV-500": {
+      "config": "1bit-K_optV-500",
+      "attn_cos_sim": 0.4864279429117839,
+      "attn_cos_sim_std": 0.17132991112025142,
+      "key_cos_sim": 0.9062935908635458,
+      "val_cos_sim": 0.8773498833179474,
+      "key_bits": 144,
+      "val_bits": 516,
+      "total_bits": 660,
+      "total_compress": 6.206060606060606,
+      "n_evals": 6
+    },
+    "1bit-K_optV-600": {
+      "config": "1bit-K_optV-600",
+      "attn_cos_sim": 0.5127837210893631,
+      "attn_cos_sim_std": 0.18490126331804174,
+      "key_cos_sim": 0.9062935908635458,
+      "val_cos_sim": 0.9368999799092611,
+      "key_bits": 144,
+      "val_bits": 616,
+      "total_bits": 760,
+      "total_compress": 5.389473684210526,
+      "n_evals": 6
+    },
+    "1bit-K_optV-700": {
+      "config": "1bit-K_optV-700",
+      "attn_cos_sim": 0.5198984940846761,
+      "attn_cos_sim_std": 0.19114339427167445,
+      "key_cos_sim": 0.9062935908635458,
+      "val_cos_sim": 0.9626753330230713,
+      "key_bits": 144,
+      "val_bits": 716,
+      "total_bits": 860,
+      "total_compress": 4.7627906976744185,
+      "n_evals": 6
+    },
+    "1bit-K_optV-800": {
+      "config": "1bit-K_optV-800",
+      "attn_cos_sim": 0.5249765266974767,
+      "attn_cos_sim_std": 0.19193184629905366,
+      "key_cos_sim": 0.9062935908635458,
+      "val_cos_sim": 0.9689570963382721,
+      "key_bits": 144,
+      "val_bits": 784,
+      "total_bits": 928,
+      "total_compress": 4.413793103448276,
+      "n_evals": 6
+    },
+    "2bit-K_optV-500": {
+      "config": "2bit-K_optV-500",
+      "attn_cos_sim": 0.4944220185279846,
+      "attn_cos_sim_std": 0.17071813167870073,
+      "key_cos_sim": 0.9063248038291931,
+      "val_cos_sim": 0.8773498833179474,
+      "key_bits": 272,
+      "val_bits": 516,
+      "total_bits": 788,
+      "total_compress": 5.197969543147208,
+      "n_evals": 6
+    },
+    "2bit-K_optV-600": {
+      "config": "2bit-K_optV-600",
+      "attn_cos_sim": 0.5209204604228338,
+      "attn_cos_sim_std": 0.18433921180295004,
+      "key_cos_sim": 0.9063248038291931,
+      "val_cos_sim": 0.9368999799092611,
+      "key_bits": 272,
+      "val_bits": 616,
+      "total_bits": 888,
+      "total_compress": 4.612612612612613,
+      "n_evals": 6
+    },
+    "uniform-3bit": {
+      "config": "uniform-3bit",
+      "attn_cos_sim": 0.45800502101580304,
+      "attn_cos_sim_std": 0.19474016746381387,
+      "key_cos_sim": 0.9064196844895681,
+      "val_cos_sim": 0.8254336913426717,
+      "key_bits": 400,
+      "val_bits": 400,
+      "total_bits": 800,
+      "total_compress": 5.12,
+      "n_evals": 6
+    },
+    "uniform-4bit": {
+      "config": "uniform-4bit",
+      "attn_cos_sim": 0.5537208368380865,
+      "attn_cos_sim_std": 0.1722633167754241,
+      "key_cos_sim": 0.9068147341410319,
+      "val_cos_sim": 0.8687977194786072,
+      "key_bits": 528,
+      "val_bits": 528,
+      "total_bits": 1056,
+      "total_compress": 3.878787878787879,
+      "n_evals": 6
+    }
+  },
+  "benchmark_note": "1-bit keys here means per-dimension scalar quantization in the rotated spectral basis, plus a separately stored vector norm. It is not a raw sign-only key in the original basis.",
+  "query_capture": {
+    "mode": "true_model_queries",
+    "head_mapping": "first_query_head_per_kv_group",
+    "attention_mode": "causal_self_attention"
+  },
+  "coverage": {
+    "preset": "small",
+    "n_calib": 8,
+    "n_eval": 4,
+    "seq_len": 512,
+    "max_cached_vectors": 256,
+    "layer_mode": "sampled",
+    "head_mode": "sampled",
+    "layers_evaluated": [
+      7,
+      14,
+      21
+    ],
+    "heads_evaluated": [
+      0,
+      1
+    ]
+  }
+}

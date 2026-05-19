@@ -29,6 +29,17 @@ PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 sys.path.insert(0, str(PROJECT_ROOT / "baseline" / "turboquant_cutile"))
 
+from benchmark_utils import (
+    add_coverage_args,
+    build_benchmark_note,
+    causal_attention_output,
+    collect_eval_qkv,
+    noncausal_attention_output,
+    resolve_coverage_args,
+    select_head_indices,
+    select_layer_indices,
+)
+
 log = logging.getLogger("push095")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s - %(message)s")
 
@@ -44,6 +55,8 @@ if HF_TOKEN:
 
 N_CALIB = 64
 N_EVAL = 32
+SEQ_LEN = 512
+MAX_CACHED_VECTORS = 512
 
 
 def save_result(filename, data):
@@ -109,9 +122,37 @@ def load_model_tokenizer(model_name, device):
     needs_token = any(x in model_name for x in ["llama", "Llama", "gemma", "Gemma"])
     token = HF_TOKEN if needs_token else None
     log.info("Loading %s ...", model_name)
-    tokenizer = AutoTokenizer.from_pretrained(model_name, token=token)
+    try:
+        tokenizer = AutoTokenizer.from_pretrained(model_name, token=token)
+    except Exception as exc:
+        log.warning("Tokenizer load failed, retrying from local cache only: %s", exc)
+        tokenizer = AutoTokenizer.from_pretrained(model_name, token=token, local_files_only=True)
     if tokenizer.pad_token is None: tokenizer.pad_token = tokenizer.eos_token
-    model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16, device_map=device, token=token)
+    model_kwargs = {"token": token}
+    if device == "cpu":
+        model_kwargs["torch_dtype"] = torch.float32
+        try:
+            model = AutoModelForCausalLM.from_pretrained(model_name, **model_kwargs)
+        except Exception as exc:
+            log.warning("Model load failed, retrying from local cache only: %s", exc)
+            model = AutoModelForCausalLM.from_pretrained(model_name, local_files_only=True, **model_kwargs)
+        model.to(device)
+    elif device == "mps":
+        model_kwargs["torch_dtype"] = torch.float16
+        try:
+            model = AutoModelForCausalLM.from_pretrained(model_name, **model_kwargs)
+        except Exception as exc:
+            log.warning("Model load failed, retrying from local cache only: %s", exc)
+            model = AutoModelForCausalLM.from_pretrained(model_name, local_files_only=True, **model_kwargs)
+        model.to(device)
+    else:
+        model_kwargs["torch_dtype"] = torch.float16
+        model_kwargs["device_map"] = device
+        try:
+            model = AutoModelForCausalLM.from_pretrained(model_name, **model_kwargs)
+        except Exception as exc:
+            log.warning("Model load failed, retrying from local cache only: %s", exc)
+            model = AutoModelForCausalLM.from_pretrained(model_name, local_files_only=True, **model_kwargs)
     model.eval()
     cfg = model.config; n_layers = cfg.num_hidden_layers
     n_kv = getattr(cfg, "num_key_value_heads", cfg.num_attention_heads)
@@ -223,13 +264,12 @@ class AsymEngine:
         qr = compressed["qr"].float(); norms = compressed["norms"].float()
         return (qr @ VT.to(qr.device)) * norms.unsqueeze(-1)
     
-    def evaluate(self, Q, K, V, fp16_output):
+    def evaluate(self, Q, K, V, fp16_output, *, attention_fn):
         ck = self.compress_keys(K); cv = self.compress_values(V)
         K_hat = self.decompress(ck, self.VkT); V_hat = self.decompress(cv, self.VvT)
         key_cos = F.cosine_similarity(K.float(), K_hat.float(), dim=-1).mean().item()
         val_cos = F.cosine_similarity(V.float(), V_hat.float(), dim=-1).mean().item()
-        scale = 1.0 / math.sqrt(self.hd)
-        output = F.softmax(Q.float() @ K_hat.T * scale, dim=-1) @ V_hat
+        output = attention_fn(Q, K_hat, V_hat, self.hd)
         attn_cos = F.cosine_similarity(fp16_output.float(), output.float(), dim=-1).mean().item()
         return {"attn_cos_sim": attn_cos, "key_cos_sim": key_cos, "val_cos_sim": val_cos,
                 "key_bits": self.key_total_bits, "val_bits": self.val_total_bits,
@@ -237,41 +277,55 @@ class AsymEngine:
                 "total_compress": (2*self.hd*16) / (self.key_total_bits + self.val_total_bits)}
 
 
-def run_model(model_name, short_name, device):
+def run_model(model_name, short_name, device, coverage, *, query_mode: str, attention_mode: str):
     log.info("=" * 70)
     log.info("MODEL: %s", model_name)
     
     model, tokenizer, n_layers, n_kv, hd = load_model_tokenizer(model_name, device)
-    eigen_keys, eigen_vals = calibrate(model, tokenizer, N_CALIB, device, n_layers, n_kv, hd)
+    n_calib = coverage["n_calib"]
+    n_eval = coverage["n_eval"]
+    seq_len = coverage["seq_len"]
+    max_cached_vectors = coverage["max_cached_vectors"]
+    layer_indices = select_layer_indices(n_layers, coverage["layer_mode"])
+    head_indices = select_head_indices(n_kv, coverage["head_mode"])
+
+    eigen_keys, eigen_vals = calibrate(model, tokenizer, n_calib, device, n_layers, n_kv, hd)
     
     deff_k = np.mean([eigen_keys[(l,h)]["d_eff"] for l in range(n_layers) for h in range(n_kv)])
     deff_v = np.mean([eigen_vals[(l,h)]["d_eff"] for l in range(n_layers) for h in range(n_kv)])
     log.info("d_eff: keys=%.1f, values=%.1f", deff_k, deff_v)
     
-    layer_indices = sorted(set([n_layers//4, n_layers//2, 3*n_layers//4]))
-    head_indices = list(range(min(n_kv, 4)))
-    
-    from datasets import load_dataset
-    ds = load_dataset("wikitext", "wikitext-103-raw-v1", split=f"train[{N_CALIB*5}:{(N_CALIB+N_EVAL)*5}]")
-    eval_keys = {(l,h): [] for l in layer_indices for h in head_indices}
-    eval_vals = {(l,h): [] for l in layer_indices for h in head_indices}
-    nd = 0
-    for item in ds:
-        text = item.get("text","")
-        if len(text.strip()) < 100: continue
-        enc = tokenizer(text, return_tensors="pt", max_length=512, truncation=True).to(device)
-        if enc["input_ids"].shape[1] < 32: continue
-        with torch.no_grad():
-            out = model(**enc, use_cache=True); kv = out.past_key_values
-        for l in layer_indices:
-            try: k_l, v_l = extract_kv_layer(kv, l)
-            except: continue
-            k_l = k_l.float().cpu(); v_l = v_l.float().cpu()
-            for h in head_indices:
-                if h < k_l.shape[1]:
-                    eval_keys[(l,h)].append(k_l[0,h]); eval_vals[(l,h)].append(v_l[0,h])
-        nd += 1
-        if nd >= N_EVAL: break
+    eval_bundle = collect_eval_qkv(
+        model,
+        tokenizer,
+        device,
+        n_eval=n_eval,
+        seq_len=seq_len,
+        head_dim=hd,
+        layer_indices=layer_indices,
+        head_indices=head_indices,
+        extract_kv_layer=extract_kv_layer,
+        split_start=n_calib * 5,
+    )
+    eval_queries = eval_bundle["queries"]
+    eval_keys = eval_bundle["keys"]
+    eval_vals = eval_bundle["values"]
+    log.info("Collected eval data from %d sequences", eval_bundle["n_sequences"])
+
+    if query_mode == "proxy_qeqk":
+        eval_queries = eval_keys
+        query_mode_label = "proxy_keys_as_queries"
+        query_head_mapping = None
+    else:
+        query_mode_label = eval_bundle["query_mode"]
+        query_head_mapping = eval_bundle["query_head_mapping"]
+
+    if attention_mode == "causal":
+        attention_fn = causal_attention_output
+        attention_mode_label = "causal_self_attention"
+    else:
+        attention_fn = noncausal_attention_output
+        attention_mode_label = "noncausal_self_attention_proxy"
     
     # Define configs: (name, key_bits_per_dim, val_mode, val_param)
     configs = [
@@ -303,15 +357,15 @@ def run_model(model_name, short_name, device):
         
         for l in layer_indices:
             for h in head_indices:
+                qq = eval_queries.get((l,h),[])
                 kk = eval_keys.get((l,h),[]); vv = eval_vals.get((l,h),[])
-                if not kk or not vv: continue
-                K_all = torch.cat(kk, dim=0)[:512].to(device).float()
-                V_all = torch.cat(vv, dim=0)[:512].to(device).float()
-                Q_all = K_all.clone()
+                if not qq or not kk or not vv: continue
+                Q_all = torch.cat(qq, dim=0)[:max_cached_vectors].to(device).float()
+                K_all = torch.cat(kk, dim=0)[:max_cached_vectors].to(device).float()
+                V_all = torch.cat(vv, dim=0)[:max_cached_vectors].to(device).float()
                 if K_all.shape[0] < 32: continue
                 
-                scale = 1.0 / math.sqrt(hd)
-                fp16_output = F.softmax(Q_all @ K_all.T * scale, dim=-1) @ V_all
+                fp16_output = attention_fn(Q_all, K_all, V_all, hd)
                 
                 v_ev = eigen_vals[(l,h)]["ev"].cpu().numpy()
                 if val_mode == "uniform":
@@ -324,7 +378,7 @@ def run_model(model_name, short_name, device):
                     eigen_vals[(l,h)]["evec"].to(device), eigen_vals[(l,h)]["ev"].to(device),
                     key_bpd, val_alloc, hd)
                 
-                m = engine.evaluate(Q_all, K_all, V_all, fp16_output)
+                m = engine.evaluate(Q_all, K_all, V_all, fp16_output, attention_fn=attention_fn)
                 metrics_list.append(m)
         
         if metrics_list:
@@ -350,6 +404,23 @@ def run_model(model_name, short_name, device):
         "head_dim": hd, "n_layers": n_layers, "n_kv_heads": n_kv,
         "mean_d_eff_keys": float(deff_k), "mean_d_eff_values": float(deff_v),
         "configs": all_results,
+        "benchmark_note": build_benchmark_note(1),
+        "query_capture": {
+            "mode": query_mode_label,
+            "head_mapping": query_head_mapping,
+            "attention_mode": attention_mode_label,
+        },
+        "coverage": {
+            "preset": coverage["coverage_preset"],
+            "n_calib": n_calib,
+            "n_eval": n_eval,
+            "seq_len": seq_len,
+            "max_cached_vectors": max_cached_vectors,
+            "layer_mode": coverage["layer_mode"],
+            "head_mode": coverage["head_mode"],
+            "layers_evaluated": layer_indices,
+            "heads_evaluated": head_indices,
+        },
     }
     save_result(f"push095_{short_name}.json", result)
     
@@ -361,12 +432,41 @@ def run_model(model_name, short_name, device):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
+    parser.add_argument("--model-name", default=None, help="Optional single model to run.")
+    parser.add_argument("--short-name", default=None, help="Required when --model-name is set.")
+    parser.add_argument(
+        "--query-mode",
+        choices=["real_q", "proxy_qeqk"],
+        default="real_q",
+        help="Use captured model queries or the Q=K proxy.",
+    )
+    parser.add_argument(
+        "--attention-mode",
+        choices=["causal", "noncausal"],
+        default="causal",
+        help="Evaluate attention with a causal mask or a non-causal proxy.",
+    )
+    add_coverage_args(parser, default_preset="medium")
     args = parser.parse_args()
+    coverage = resolve_coverage_args(args)
+
+    models = MODELS
+    if args.model_name:
+        if not args.short_name:
+            parser.error("--short-name is required when --model-name is set")
+        models = [(args.model_name, args.short_name)]
     
     all_results = {}; t0 = time.time()
-    for model_name, short_name in MODELS:
+    for model_name, short_name in models:
         try:
-            result = run_model(model_name, short_name, args.device)
+            result = run_model(
+                model_name,
+                short_name,
+                args.device,
+                coverage,
+                query_mode=args.query_mode,
+                attention_mode=args.attention_mode,
+            )
             all_results[short_name] = result
         except Exception as e:
             log.error("FAILED on %s: %s", model_name, e)
